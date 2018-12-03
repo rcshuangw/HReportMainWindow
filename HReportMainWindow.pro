@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     hfontset.cpp \
     hreportmaiwidget.cpp \
     hreportbrowserwidget.cpp \
-    hgridreportmgr.cpp
+    hgridreportmgr.cpp \
+    hreporttreewidget.cpp
 
 HEADERS  += \
     mainwindow.h \ 
@@ -32,7 +33,8 @@ HEADERS  += \
     hfontset.h \
     hreportmaiwidget.h \
     hreportbrowserwidget.h \
-    hgridreportmgr.h
+    hgridreportmgr.h \
+    hreporttreewidget.h
 
 RESOURCES += \
     saribbonresouce.qrc
