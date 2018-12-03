@@ -1,0 +1,28 @@
+﻿#ifndef HGRIDREPORTMGR_H
+#define HGRIDREPORTMGR_H
+
+#include <QObject>
+class HGridCtrlFile;
+class HReportMainWidget;
+class HGridReportMgr : public QObject
+{
+    Q_OBJECT
+public:
+    explicit HGridReportMgr(QObject *parent = 0);
+
+public:
+    HGridCtrlFile* gridCtrlFile() const;
+    HReportMainWidget *reportMainWidget() const;
+public:
+    bool loadGridCtrlFile();
+    bool saveGridCtrlFile();
+signals:
+
+public slots:
+
+private:
+    HGridCtrlFile* m_pGridCtrlFile;
+    HReportMainWidget* m_pReportMainWidget;
+};
+
+#endif // HGRIDREPORTMGR_H
