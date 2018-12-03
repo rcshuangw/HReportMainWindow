@@ -11,8 +11,8 @@ public:
     explicit HReportManager(QObject *parent = 0);
 
 public:
-    HGridCtrlFile* gridCtrlFile() const;
-    HReportMainWidget *reportMainWidget() const;
+    HGridCtrlFile* gridCtrlFile() ;
+    HReportMainWidget *reportMainWidget() ;
 public:
     bool loadGridCtrlFile();
     bool saveGridCtrlFile();

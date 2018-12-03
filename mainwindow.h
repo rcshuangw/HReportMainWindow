@@ -5,8 +5,9 @@ class SARibbonBar;
 class SARibbonCategory;
 class SARibbonContextCategory;
 class QTextEdit;
-class HGridReportMgr;
+class HReportManager;
 class HReportMaiWidget;
+class HReportTreeWidget;
 //报表窗口
 class HReportMainWindow : public QMainWindow
 {
@@ -21,8 +22,9 @@ public:
     HReportMainWindow(QWidget* par=nullptr);
 
 public:
+    void initReportTreeWidget();
     void initSARibbonBar();
-    void setGridReportMgr(HGridReportMgr* mgr);
+    void setReportManager(HReportManager* mgr);
 private slots:
     void onShowContextCategory(bool on);
     void onWpsStyle(bool on);
@@ -52,11 +54,18 @@ private:
     SARibbonBar* m_ribbonMenuBar;
     RibbonTheme m_currentRibbonTheme;
 public:
-    HGridReportMgr* m_pGridReportMgr;
+    HReportManager* m_pGridReportMgr;
     HReportMaiWidget* m_pReportMainWidget;
+    HReportTreeWidget* m_pReportTreeWidget;
 
 
 public slots:
+
+    void New(const QString&);
+    void Open(const QString&,const int graphID);
+    void Del(const QString&,const int graphID);
+    void ImportFile(const QString&);
+
     void paste_click();
     void cut_click();
     void copy_click();

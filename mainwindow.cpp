@@ -1,18 +1,23 @@
 ﻿#include "mainwindow.h"
 #include <QTextEdit>
 #include <QAbstractButton>
-#include "SARibbonBar.h"
-#include "SARibbonCategory.h"
-#include <QPushButton>
-#include "SARibbonPannel.h"
-#include "SARibbonToolButton.h"
-#include "SARibbonApplicationButton.h"
-#include "SARibboniconstyle.h"
 #include <QAction>
 #include <QMenu>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFile>
+#include <QSplitter>
+#include <QVBoxLayout>
+#include <QTreeWidget>
+#include <QStatusBar>
+#include <QPushButton>
+
+#include "SARibbonBar.h"
+#include "SARibbonCategory.h"
+#include "SARibbonPannel.h"
+#include "SARibbonToolButton.h"
+#include "SARibbonApplicationButton.h"
+#include "SARibboniconstyle.h"
 #include "FramelessHelper.h"
 #include "SARibbonMenu.h"
 #include "SARibbonComboBox.h"
@@ -22,21 +27,16 @@
 #include "SARibbonQuickAccessBar.h"
 #include "SARibbonButtonGroupWidget.h"
 #include "hreportmaiwidget.h"
-#include <QSplitter>
-#include <QVBoxLayout>
-#include <QTreeWidget>
-#include <QStatusBar>
+#include "hreporttreewidget.h"
 HReportMainWindow::HReportMainWindow(QWidget *par):QMainWindow(par),m_currentRibbonTheme(RibbonTheme::NormalTheme)
 {
     setWindowTitle(QStringLiteral("报表设计"));
-
-
-
     QSplitter* splitter =new QSplitter(this);
 
     //树
-    QTreeWidget *tree = new QTreeWidget(this);
+    HReportTreeWidget *tree = new HReportTreeWidget(m_pGridReportMgr,this);
     splitter->addWidget(tree);
+
     //这里应该是一个表格控件
     m_pReportMainWidget = new HReportMaiWidget(this);
     splitter->addWidget(m_pReportMainWidget);
@@ -48,11 +48,19 @@ HReportMainWindow::HReportMainWindow(QWidget *par):QMainWindow(par),m_currentRib
     m_ribbonMenuBar->quickAccessBar()->addButton(newAct);
     m_ribbonMenuBar->quickAccessBar()->addButton(closeAct);
     m_ribbonMenuBar->quickAccessBar()->addButton(informationAct);
-
     statusBar()->showMessage(QStringLiteral("报表设计"));
     setCentralWidget(splitter);
     showMaximized();
 
+}
+
+void HReportMainWindow::initReportTreeWidget()
+{
+    //树相关的消息
+    connect(m_pReportTreeWidget,SIGNAL(reportNew(const QString&)),this,SLOT(New(const QString&)));//新建
+    connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
+    connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
+    connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
 }
 
 //

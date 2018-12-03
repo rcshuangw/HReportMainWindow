@@ -1,6 +1,8 @@
-#include "hreporttreewidget.h"
+﻿#include "hreporttreewidget.h"
 #include "hgridctrlhelper.h"
 #include "hgridreportmgr.h"
+#include <QAction>
+#include <QMenu>
 HReportTreeWidget::HReportTreeWidget(HReportManager* mgr,QWidget *parent)
     :m_pReportMgr(mgr),QTreeWidget(parent)
 {
@@ -14,7 +16,7 @@ void HReportTreeWidget::initReportTreeWidget()
     QTreeWidgetItem* rootItem = new QTreeWidgetItem(this,0);
     rootItem->setText(0,QStringLiteral("厂站五防画面总览"));
     rootItem->setIcon(0,QIcon(":/images/Folder.png"));
-    rootItem->setGraphTreeID(9999);
+    //rootItem->setGraphTreeID(9999);
     addTopLevelItem(rootItem);
     //expandItem(rootItem);
 
@@ -27,7 +29,7 @@ void HReportTreeWidget::initReportTreeWidget()
         if(!gridCtrlInfo)
             continue;
         QTreeWidgetItem* newItem = new QTreeWidgetItem(rootItem,1);
-        newItem->setGraphTreeID(gridCtrlInfo->m_GridCtrlItem.wReportID);
+        //newItem->setGraphTreeID(gridCtrlInfo->m_GridCtrlItem.wReportID);
         newItem->setText(0,gridCtrlInfo->m_GridCtrlItem.strReportName);
         newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
         rootItem->addChild(newItem);
@@ -47,7 +49,7 @@ void HReportTreeWidget::addReportTreeWidgetItem()
     HGridCtrlInfo* pInfo = m_pReportMgr->gridCtrlFile()->getCurGridCtrlInfo();
 
     QTreeWidgetItem* newItem = new QTreeWidgetItem(parentItem,1);
-    newItem->setGraphTreeID(pInfo->m_GridCtrlItem.wReportID);
+    //newItem->setGraphTreeID(pInfo->m_GridCtrlItem.wReportID);
     newItem->setText(0,pInfo->m_GridCtrlItem.strReportName);
     newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
     parentItem->addChild(newItem);
@@ -72,6 +74,11 @@ void HReportTreeWidget::delReportTreeWidgetItem()
 }
 
 void HReportTreeWidget::importReportTreeWigetItem()
+{
+
+}
+
+void HReportTreeWidget::contextMenuEvent(QContextMenuEvent *event)
 {
 
 }

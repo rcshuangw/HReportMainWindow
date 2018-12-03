@@ -1,4 +1,4 @@
-#ifndef HREPORTTREEWIDGET_H
+﻿#ifndef HREPORTTREEWIDGET_H
 #define HREPORTTREEWIDGET_H
 #include <QTreeWidget>
 class HReportManager;

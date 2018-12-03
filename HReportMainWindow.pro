@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     hreportmaiwidget.cpp \
     hreportbrowserwidget.cpp \
     hgridreportmgr.cpp \
-    hreporttreewidget.cpp
+    hreporttreewidget.cpp \
+    hreportnewdlg.cpp
 
 HEADERS  += \
     mainwindow.h \ 
@@ -34,7 +35,8 @@ HEADERS  += \
     hreportmaiwidget.h \
     hreportbrowserwidget.h \
     hgridreportmgr.h \
-    hreporttreewidget.h
+    hreporttreewidget.h \
+    hreportnewdlg.h
 
 RESOURCES += \
     saribbonresouce.qrc
@@ -46,4 +48,5 @@ FORMS += \
     formatsetdlg.ui \
     hborderset.ui \
     hfontset.ui \
-    hreportmaiwidget.ui
+    hreportmaiwidget.ui \
+    hreportnewdlg.ui

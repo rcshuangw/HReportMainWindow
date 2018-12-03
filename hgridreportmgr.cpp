@@ -7,7 +7,7 @@ HReportManager::HReportManager(QObject *parent) : QObject(parent)
     //m_pReportMainWidget = new H
 }
 
-HGridCtrlFile* HReportManager::gridCtrlFile() const
+HGridCtrlFile* HReportManager::gridCtrlFile()
 {
     return m_pGridCtrlFile;
 }

@@ -1,5 +1,48 @@
 ﻿#include "mainwindow.h"
 #include "hformatsetdlg.h"
+#include "hreportnewdlg.h"
+#include "hgridreportmgr.h"
+#include "hgridctrlhelper.h"
+#include "hreporttreewidget.h"
+#include "hreportmaiwidget.h"
+#include "hgridcelldef.h"
+void HReportMainWindow::New(const QString& str)
+{
+    if(!m_pGridReportMgr || m_pGridReportMgr->gridCtrlFile())
+        return;
+    HReportNewDlg reportNewdlg;
+    if(QDialog::Accepted == reportNewdlg.exec())//如果找到名称
+    {
+        GC_ITEM item;
+        item.strReportName = reportNewdlg.strReportName;
+        item.nMaxCol = reportNewdlg.nMaxCol;
+        item.nMaxRow = reportNewdlg.nMaxRow;
+        item.btType = 0;
+        item.wReportID = 0;
+        m_pGridReportMgr->gridCtrlFile()->addGridCtrlInfo(&item);
+    }
+    else
+        return;
+    m_pReportTreeWidget->addReportTreeWidgetItem();
+    //m_pReportMainWidget->up
+}
+
+void HReportMainWindow::Open(const QString&,const int graphID)
+{
+
+}
+
+void HReportMainWindow::Del(const QString&,const int graphID)
+{
+
+}
+
+void HReportMainWindow::ImportFile(const QString&)
+{
+
+}
+
+
 void HReportMainWindow::paste_click()
 {
 
