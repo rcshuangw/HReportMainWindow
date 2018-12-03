@@ -4,11 +4,11 @@
 #include <QObject>
 class HGridCtrlFile;
 class HReportMainWidget;
-class HGridReportMgr : public QObject
+class HReportManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit HGridReportMgr(QObject *parent = 0);
+    explicit HReportManager(QObject *parent = 0);
 
 public:
     HGridCtrlFile* gridCtrlFile() const;

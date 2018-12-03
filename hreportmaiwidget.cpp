@@ -4,17 +4,17 @@
 #include "hgridcelldef.h"
 #include "hgridreport.h"
 #include <QHBoxLayout>
-QString strStyleSheet = " QTabWidget::pane {border-top: 1px solid #C2C7CB;} \
-                          QTabWidget::tab-bar {left: 5px; } \
+//"#3892ED"border-color: #9B9B9B;border-bottom-color: #C2C7CB;
+QString strStyleSheet = " QTabWidget::pane {border-top: 1px solid #C9D9ED;} \
+                          QTabWidget::tab-bar {left: 2px; } \
         QTabBar::tab {  background-color:#D5E4F2; \
-        border: 2px solid #C4C4C3; min-width: 200px;margin-left: 5px; \
-        border-bottom-color: #C2C7CB; border-top-left-radius: 4px; \
-        border-top-right-radius: 4px;min-width: 8ex;padding: 2px;} \
+        border: 1px solid #C9D9ED; min-width: 200px;margin-left: 2px; border-top-left-radius: 4px; \
+        border-top-right-radius: 4px;padding: 2px;} \
         QTabBar::tab:selected, QTabBar::tab:hover { \
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \
         stop: 0 #fafafa, stop: 0.4 #f4f4f4,stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);} \
-        QTabBar::tab:selected {border-color: #9B9B9B;border-bottom-color: #C2C7CB; } \
-        QTabBar::tab:!selected {margin-top: 2px; }";
+        QTabBar::tab:selected {background-color:#BFDBFF; color: #3892ED } \
+        QTabBar::tab:!selected {margin-top: 2px; background-color:#D5E4F2;}";
 
 HReportMaiWidget::HReportMaiWidget(QWidget *parent) :
     QWidget(parent),
@@ -48,5 +48,7 @@ void HReportMaiWidget::createReportEditorWidget()
 {
     m_pReportEditorWidget = new HGridReportWidget(m_pTabWidget);
     m_pReportEditorWidget->setGridReportType(GRIDREPORT_TYPE_EDITOR);
+    m_pReportEditorWidget->setNumSheet(1);
+    m_pReportEditorWidget->updateGridReportWidget();
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
