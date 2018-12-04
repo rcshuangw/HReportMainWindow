@@ -21,7 +21,7 @@ void HGridReportWidget::initGridReportWidget()
 {
     m_tabWidget = new QTabWidget(this);
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
     mainLayout->addWidget(m_tabWidget);
     m_tabWidget->setTabPosition(QTabWidget::South);
 
@@ -51,6 +51,7 @@ void HGridReportWidget::updateGridReportWidget()
     }
     else
     {
+        int num = m_tabWidget->count();
         for(int i = 0; i < nAddCount; i++)
         {
             HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
@@ -58,7 +59,7 @@ void HGridReportWidget::updateGridReportWidget()
             w->initReportWidget(m_uGridReportType);
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             w->setGridCtrlItem(pInfo);
-            QString str = QString("第%1页").arg(i);
+            QString str = QString(QStringLiteral("第%1页")).arg(num+1);
             m_tabWidget->insertTab(i,w,str);
         }
     }
@@ -96,7 +97,9 @@ void HGridReportWidget::setEditGridReportAttr()
 
 void HGridReportWidget::setBrowserGridReportAttr()
 {
-
+    enableShowEditBar(false);
+    enableShowTab(true);
+    enableEditor(false);
 }
 
 bool HGridReportWidget::loadGridCtrlFile(const char* filename)
@@ -194,9 +197,12 @@ void HGridReportWidget::enableShowGridLines(bool)
 
 }
 
-void HGridReportWidget::enableShowTab(bool)
+void HGridReportWidget::enableShowTab(bool bShow)
 {
-
+    if(bShow)
+         m_tabWidget->tabBar()->show();
+    else
+         m_tabWidget->tabBar()->hide();
 }
 
 void HGridReportWidget::enableSelectRange(bool)

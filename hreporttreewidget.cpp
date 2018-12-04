@@ -3,18 +3,20 @@
 #include "hgridreportmgr.h"
 #include <QAction>
 #include <QMenu>
+#include <QHeaderView>
 HReportTreeWidget::HReportTreeWidget(HReportManager* mgr,QWidget *parent)
     :m_pReportMgr(mgr),QTreeWidget(parent)
 {
-
+    initReportTreeWidget();
 }
 
 void HReportTreeWidget::initReportTreeWidget()
 {
     if(!m_pReportMgr)
         return;
+    headerItem()->setText(0,QStringLiteral("报表模板"));
     QTreeWidgetItem* rootItem = new QTreeWidgetItem(this,0);
-    rootItem->setText(0,QStringLiteral("厂站五防画面总览"));
+    rootItem->setText(0,QStringLiteral("厂站报表模板总览"));
     rootItem->setIcon(0,QIcon(":/images/Folder.png"));
     //rootItem->setGraphTreeID(9999);
     addTopLevelItem(rootItem);

@@ -50,8 +50,8 @@ void HReportMaiWidget::createReportEditorWidget()
 {
     m_pReportEditorWidget = new HGridReportWidget(m_pReportManager,m_pTabWidget);
     m_pReportEditorWidget->setGridReportType(GRIDREPORT_TYPE_EDITOR);
-    m_pReportEditorWidget->setNumSheet(1);
-    m_pReportEditorWidget->updateGridReportWidget();
+    //m_pReportEditorWidget->setNumSheet(1);
+    //m_pReportEditorWidget->updateGridReportWidget();
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
