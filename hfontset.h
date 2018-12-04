@@ -39,7 +39,7 @@ public slots:
     void onFontStyleitemChanged();
     void onFontUnderlineCurrentIndexChanged(int index);
     void onFontClrCurrentIndexChanged(int index);
-    void onMoreColorBtn_click();
+    void onMoreColorBtn_clicked();
 private:
     Ui::HFontSet *ui;
     QFont m_curFont;

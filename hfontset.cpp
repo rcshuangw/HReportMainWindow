@@ -96,7 +96,7 @@ void HFontSet::initFontFamilies()
     ui->fontColorComboBox->setSizeAdjustPolicy( QComboBox::AdjustToContents );
     updateColorListSet();
     connect(ui->fontColorComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onFontClrCurrentIndexChanged(int)));
-    connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_click()));
+    connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_clicked()));
    //如果单元格不为空 则这里调整单元格初始化配置
     update();
 }
@@ -227,7 +227,7 @@ void HFontSet::updateColorListSet()
     ui->fontColorComboBox->setModel(model);
 }
 
-void HFontSet::onMoreColorBtn_click()
+void HFontSet::onMoreColorBtn_clicked()
 {
     QColor clr = QColorDialog::getColor(QColor(m_strFontColor),this,QStringLiteral("选择颜色"));
     while(m_recentColorList.count() > 5)

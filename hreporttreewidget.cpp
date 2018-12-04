@@ -41,9 +41,9 @@ void HReportTreeWidget::addReportTreeWidgetItem()
 {
     if(!m_pReportMgr || !m_pReportMgr->gridCtrlFile())
         return;
-    QTreeWidgetItem *parentItem = (QTreeWidgetItem*)currentItem();
-    int type = parentItem->type();
-    if(!parentItem || type > 0)
+    QTreeWidgetItem *parentItem = (QTreeWidgetItem*)topLevelItem(0);
+    //int type = parentItem->type();
+    if(!parentItem )
         return;
 
     HGridCtrlInfo* pInfo = m_pReportMgr->gridCtrlFile()->getCurGridCtrlInfo();
@@ -54,7 +54,8 @@ void HReportTreeWidget::addReportTreeWidgetItem()
     newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
     parentItem->addChild(newItem);
     expandItem(newItem);
-    emit itemClicked(newItem,0);
+    setCurrentItem(newItem);
+    //emit itemClicked(newItem,0);
 }
 
 void HReportTreeWidget::delReportTreeWidgetItem()

@@ -49,7 +49,7 @@ public slots:
     //改变
     void changedReportItem(QTreeWidgetItem*,QTreeWidgetItem*);
 signals:
-    void reportNew(const QString&);
+    void reportNew();
     void reportOpen(const QString&,const int graphID);
     void reportDel(const QString&,const int graphID);
     void reportImport(const QString&);

@@ -69,7 +69,5 @@
         <file>icon/OpSheet.png</file>
         <file>icon/HideRibbon.png</file>
     </qresource>
-    <qresource prefix="/tree">
-        <file>icon/spreadsheets.png</file>
-    </qresource>
+    <qresource prefix="/tree"/>
 </RCC>

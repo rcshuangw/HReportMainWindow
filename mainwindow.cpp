@@ -28,17 +28,18 @@
 #include "SARibbonButtonGroupWidget.h"
 #include "hreportmaiwidget.h"
 #include "hreporttreewidget.h"
-HReportMainWindow::HReportMainWindow(QWidget *par):QMainWindow(par),m_currentRibbonTheme(RibbonTheme::NormalTheme)
+HReportMainWindow::HReportMainWindow(HReportManager* mgr,QWidget *par):
+    m_pReportManager(mgr),QMainWindow(par),m_currentRibbonTheme(RibbonTheme::NormalTheme)
 {
     setWindowTitle(QStringLiteral("报表设计"));
     QSplitter* splitter =new QSplitter(this);
 
     //树
-    HReportTreeWidget *tree = new HReportTreeWidget(m_pGridReportMgr,this);
-    splitter->addWidget(tree);
+    m_pReportTreeWidget = new HReportTreeWidget(m_pReportManager,this);
+    splitter->addWidget(m_pReportTreeWidget);
 
     //这里应该是一个表格控件
-    m_pReportMainWidget = new HReportMaiWidget(this);
+    m_pReportMainWidget = new HReportMaiWidget(m_pReportManager,this);
     splitter->addWidget(m_pReportMainWidget);
     splitter->setStretchFactor(0,3);
     splitter->setStretchFactor(1,7);
@@ -50,17 +51,25 @@ HReportMainWindow::HReportMainWindow(QWidget *par):QMainWindow(par),m_currentRib
     m_ribbonMenuBar->quickAccessBar()->addButton(informationAct);
     statusBar()->showMessage(QStringLiteral("报表设计"));
     setCentralWidget(splitter);
+    initReportConnect();
     showMaximized();
 
 }
 
-void HReportMainWindow::initReportTreeWidget()
+void HReportMainWindow::setReportManager(HReportManager *mgr)
+{
+    m_pReportManager = mgr;
+}
+
+void HReportMainWindow::initReportConnect()
 {
     //树相关的消息
-    connect(m_pReportTreeWidget,SIGNAL(reportNew(const QString&)),this,SLOT(New(const QString&)));//新建
+    connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
     connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
     connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
     connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
+
+    connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
 }
 
 //
@@ -397,12 +406,12 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     /////////////////////////////////////////操作票设置///////////////////////////////////////////////////////////////
     SARibbonPannel* opSheetPannel = page->addPannel(QStringLiteral("操作票设置"));
     opSheetAct = new QAction(QIcon(":/icon/icon/OpSheet.png"),QStringLiteral("操作票设置"));
-    connect(opSheetAct,&QAction::triggered,this,&HReportMainWindow::option_click);
+    connect(opSheetAct,&QAction::triggered,this,&HReportMainWindow::option_clicked);
     opSheetPannel->addLargeAction(opSheetAct);
 
 
     optAct = new QAction(this);
-    connect(optAct,&QAction::triggered,this,&HReportMainWindow::option_click);
+    connect(optAct,&QAction::triggered,this,&HReportMainWindow::option_clicked);
     optAct->setToolTip(QStringLiteral("单元格格式"));
     pannel->addOptionAction(optAct);
     fontPannel->addOptionAction(optAct);

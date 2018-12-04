@@ -20,7 +20,7 @@ public:
     void initDigitalSet();//未单独设置qwidget 数字设置
 
 public slots:
-    void onCatagoryListWidget_click();
+    void onCatagoryListWidget_clicked();
 private:
     Ui::HFormatSetDlg *ui;
 };

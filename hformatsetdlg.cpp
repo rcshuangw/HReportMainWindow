@@ -47,7 +47,7 @@ void HFormatSetDlg::initDigitalSet()
     item = new QListWidgetItem(ui->catagoryListWidget);
     item->setText(QStringLiteral("时间"));
     item->setData(Qt::UserRole,QVariant(QCATAGORY_TIME));
-    connect(ui->catagoryListWidget,SIGNAL(itemSelectionChanged()),this,SLOT(onCatagoryListWidget_click()));
+    connect(ui->catagoryListWidget,SIGNAL(itemSelectionChanged()),this,SLOT(onCatagoryListWidget_clicked()));
 }
 
 void HFormatSetDlg::initBaseSet()
@@ -60,7 +60,7 @@ void HFormatSetDlg::initBaseSet()
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignRight.png"),QStringLiteral("右对齐"),QVariant(QDT_RIGHT));
 }
 
-void HFormatSetDlg::onCatagoryListWidget_click()
+void HFormatSetDlg::onCatagoryListWidget_clicked()
 {
     QListWidgetItem* item = ui->catagoryListWidget->currentItem();
     if(NULL == item)

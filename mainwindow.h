@@ -19,10 +19,10 @@ public:
         NormalTheme  ///< 普通主题
           };
 public:
-    HReportMainWindow(QWidget* par=nullptr);
+    HReportMainWindow(HReportManager* mgr,QWidget* par=nullptr);
 
 public:
-    void initReportTreeWidget();
+    void initReportConnect();
     void initSARibbonBar();
     void setReportManager(HReportManager* mgr);
 private slots:
@@ -54,71 +54,71 @@ private:
     SARibbonBar* m_ribbonMenuBar;
     RibbonTheme m_currentRibbonTheme;
 public:
-    HReportManager* m_pGridReportMgr;
+    HReportManager* m_pReportManager;
     HReportMaiWidget* m_pReportMainWidget;
     HReportTreeWidget* m_pReportTreeWidget;
 
 
 public slots:
 
-    void New(const QString&);
+    void new_clicked();
     void Open(const QString&,const int graphID);
     void Del(const QString&,const int graphID);
     void ImportFile(const QString&);
 
-    void paste_click();
-    void cut_click();
-    void copy_click();
-    void formatPainter_click();
-    void bold_click();
-    void italic_click();
-    void underline_click();
-    void fontColor_click();
-    void fontbkColor_click();
-    void borderBottom_click();
-    void borderTop_click();
-    void borderLeft_click();
-    void borderRight_click();
-    void borderNone_click();
-    void borderAll_click();
-    void borderOutSide_click();
-    void borderInside_click();
-    void borderInsideHor_click();
-    void borderInsideVer_click();
-    void fontSizeIncrease_click();
-    void fontSizeDecrease_click();
-    void clearAllFormat_click();
-    void clearFormats_click();
-    void clearFommating_click();
-    void alignTop_click();
-    void alignMiddle_click();
-    void alignBottom_click();
-    void alignLeft_click();
-    void alignCenter_click();
-    void alignRight_click();
-    void autoWrapText_click();
-    void mergeCenter_click();
-    void mergeCells_click();
-    void mergeSplit_click();
-    void cellInsert_click();
-    void cellInsertRow_click();
-    void cellInsertCol_click();
-    void cellDelete_click();
-    void cellRemoveRow_click();
-    void cellRemoveCol_click();
-    void cellRowHeight_click();
-    void cellAutoRowHeight_click();
-    void cellColWidth_click();
-    void cellAutoColWidth_click();
-    void cellDefaultColWidth_click();
-    void cellSetFormat_click();
-    void option_click();
-    void printDialog_click();
-    void printOption_click();
-    void printPreview_click();
-    void opSheet_click();
-    void hideRibbon_click();
-    void information_click();
+    void paste_clicked();
+    void cut_clicked();
+    void copy_clicked();
+    void formatPainter_clicked();
+    void bold_clicked();
+    void italic_clicked();
+    void underline_clicked();
+    void fontColor_clicked();
+    void fontbkColor_clicked();
+    void borderBottom_clicked();
+    void borderTop_clicked();
+    void borderLeft_clicked();
+    void borderRight_clicked();
+    void borderNone_clicked();
+    void borderAll_clicked();
+    void borderOutSide_clicked();
+    void borderInside_clicked();
+    void borderInsideHor_clicked();
+    void borderInsideVer_clicked();
+    void fontSizeIncrease_clicked();
+    void fontSizeDecrease_clicked();
+    void clearAllFormat_clicked();
+    void clearFormats_clicked();
+    void clearFommating_clicked();
+    void alignTop_clicked();
+    void alignMiddle_clicked();
+    void alignBottom_clicked();
+    void alignLeft_clicked();
+    void alignCenter_clicked();
+    void alignRight_clicked();
+    void autoWrapText_clicked();
+    void mergeCenter_clicked();
+    void mergeCells_clicked();
+    void mergeSplit_clicked();
+    void cellInsert_clicked();
+    void cellInsertRow_clicked();
+    void cellInsertCol_clicked();
+    void cellDelete_clicked();
+    void cellRemoveRow_clicked();
+    void cellRemoveCol_clicked();
+    void cellRowHeight_clicked();
+    void cellAutoRowHeight_clicked();
+    void cellColWidth_clicked();
+    void cellAutoColWidth_clicked();
+    void cellDefaultColWidth_clicked();
+    void cellSetFormat_clicked();
+    void option_clicked();
+    void printDialog_clicked();
+    void printOption_clicked();
+    void printPreview_clicked();
+    void opSheet_clicked();
+    void hideRibbon_clicked();
+    void information_clicked();
 
 public:
 

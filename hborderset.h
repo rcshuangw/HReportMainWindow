@@ -42,17 +42,17 @@ public:
     void updateColorListSet();
 
 public slots:
-    void currentIndexChanged_click(int index);
-    void onBorderLeftBtn_click();
-    void onBorderVerBtn_click();
-    void onBorderRightBtn_click();
-    void onBorderTopBtn_click();
-    void onBorderHorBtn_click();
-    void onBorderBottomBtn_click();
-    void onBorderNoBtn_click();
-    void onBorderAllBtn_click();
-    void onBorderOutSideBtn_click();
-    void onMoreColorBtn_click();
+    void currentIndexChanged_clicked(int index);
+    void onBorderLeftBtn_clicked();
+    void onBorderVerBtn_clicked();
+    void onBorderRightBtn_clicked();
+    void onBorderTopBtn_clicked();
+    void onBorderHorBtn_clicked();
+    void onBorderBottomBtn_clicked();
+    void onBorderNoBtn_clicked();
+    void onBorderAllBtn_clicked();
+    void onBorderOutSideBtn_clicked();
+    void onMoreColorBtn_clicked();
 protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);

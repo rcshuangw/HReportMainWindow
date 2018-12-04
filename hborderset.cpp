@@ -64,13 +64,13 @@ void HBorderSet::initBorderSet()
     ui->borderAllBtn->setEnabled(false);
     ui->borderHorBtn->setEnabled(false);
     ui->borderVerBtn->setEnabled(false);
-    connect(ui->borderLeftBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderLeftBtn_click()));
-    connect(ui->borderRightBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderRightBtn_click()));
-    connect(ui->borderTopBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderTopBtn_click()));
-    connect(ui->borderBottomBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderBottomBtn_click()));
-    connect(ui->borderNoBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderNoBtn_click()));
-    connect(ui->borderAllBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderAllBtn_click()));
-    connect(ui->borderOutSideBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderOutSideBtn_click()));
+    connect(ui->borderLeftBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderLeftBtn_clicked()));
+    connect(ui->borderRightBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderRightBtn_clicked()));
+    connect(ui->borderTopBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderTopBtn_clicked()));
+    connect(ui->borderBottomBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderBottomBtn_clicked()));
+    connect(ui->borderNoBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderNoBtn_clicked()));
+    connect(ui->borderAllBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderAllBtn_clicked()));
+    connect(ui->borderOutSideBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderOutSideBtn_clicked()));
 }
 
 QPixmap HBorderSet::createPenStyleIcon(Qt::PenStyle penStyle)
@@ -141,8 +141,8 @@ void HBorderSet::initColorSet()
     ui->lineColorComboBox->setIconSize( QSize( 100, 20 ) );
     ui->lineColorComboBox->setSizeAdjustPolicy( QComboBox::AdjustToContents );
     updateColorListSet();
-    QObject::connect(ui->lineColorComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(currentIndexChanged_click(int)));
-    connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_click()));
+    QObject::connect(ui->lineColorComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(currentIndexChanged_clicked(int)));
+    connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_clicked()));
 }
 
 void HBorderSet::updateColorListSet()
@@ -308,7 +308,7 @@ void HBorderSet::paintEvent(QPaintEvent *event)
     //painter.drawText();
 }
 
-void HBorderSet::currentIndexChanged_click(int index)
+void HBorderSet::currentIndexChanged_clicked(int index)
 {
     if((int)-1 == index)
         return;
@@ -321,7 +321,7 @@ void HBorderSet::currentIndexChanged_click(int index)
     updateLineStyleSet();
 }
 
-void HBorderSet::onBorderLeftBtn_click()
+void HBorderSet::onBorderLeftBtn_clicked()
 {
     if(m_strLineColor != m_strBorderLeftLineColor && m_bBorderLeft)
     {
@@ -336,12 +336,12 @@ void HBorderSet::onBorderLeftBtn_click()
     update();
 }
 
-void HBorderSet::onBorderVerBtn_click()
+void HBorderSet::onBorderVerBtn_clicked()
 {
 
 }
 
-void HBorderSet::onBorderRightBtn_click()
+void HBorderSet::onBorderRightBtn_clicked()
 {
 
     if(m_strLineColor != m_strBorderRightLineColor && m_bBorderRight)
@@ -357,7 +357,7 @@ void HBorderSet::onBorderRightBtn_click()
     update();
 }
 
-void HBorderSet::onBorderTopBtn_click()
+void HBorderSet::onBorderTopBtn_clicked()
 {
     if(m_strLineColor != m_strBorderTopLineColor && m_bBorderTop)
     {
@@ -373,12 +373,12 @@ void HBorderSet::onBorderTopBtn_click()
 
 }
 
-void HBorderSet::onBorderHorBtn_click()
+void HBorderSet::onBorderHorBtn_clicked()
 {
 
 }
 
-void HBorderSet::onBorderBottomBtn_click()
+void HBorderSet::onBorderBottomBtn_clicked()
 {
     if(m_strLineColor != m_strBorderBottomLineColor && m_bBorderBottom)
     {
@@ -394,7 +394,7 @@ void HBorderSet::onBorderBottomBtn_click()
 
 }
 
-void HBorderSet::onBorderNoBtn_click()
+void HBorderSet::onBorderNoBtn_clicked()
 {
     m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = false;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
@@ -404,12 +404,12 @@ void HBorderSet::onBorderNoBtn_click()
     update();
 }
 
-void HBorderSet::onBorderAllBtn_click()
+void HBorderSet::onBorderAllBtn_clicked()
 {
 
 }
 
-void HBorderSet::onBorderOutSideBtn_click()
+void HBorderSet::onBorderOutSideBtn_clicked()
 {
     m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = true;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
@@ -423,7 +423,7 @@ void HBorderSet::onBorderOutSideBtn_click()
     update();
 }
 
-void HBorderSet::onMoreColorBtn_click()
+void HBorderSet::onMoreColorBtn_clicked()
 {
     QColor clr = QColorDialog::getColor(QColor(m_strLineColor),this,QStringLiteral("选择颜色"));
     while(m_recentColorList.count() > 5)
