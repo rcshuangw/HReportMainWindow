@@ -20,13 +20,12 @@ HGridCtrlWidget::~HGridCtrlWidget()
     }
 }
 
-void HGridCtrlWidget::initReportWidget(quint8 type)
+
+void HGridCtrlWidget::initReportWidget()
 {
-    //
-    m_uGridReportType = type;
     QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
     vBoxLayout->setContentsMargins(0, 0, 0, 0);
-    if(m_uGridReportType == GRIDREPORT_TYPE_EDITOR)
+    if(m_bEnableShowEditBar)
     {
         QHBoxLayout* hBoxLayout = new QHBoxLayout();
         m_rowColLabel = new QLabel(this);
@@ -53,7 +52,7 @@ void HGridCtrlWidget::initReportWidget(quint8 type)
         vBoxLayout->setStretch(0,1);
         vBoxLayout->setStretch(1,9);
     }
-    else if(m_uGridReportType == GRIDREPORT_TYPE_BROWSER)
+    else
     {
         vBoxLayout->addWidget(m_pGridCtrl);
     }
@@ -70,16 +69,17 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
     m_pGridCtrl->setFixedColumnCount(0);
     m_pGridCtrl->setFixedRowCount(0);
     int row ,col = 0;
-    if(m_uGridReportType == GRIDREPORT_TYPE_EDITOR)
+    if(m_bEnableShowHorHeader || m_bEnableShowVerHeader)
     {
         //设置固定行列
-        m_pGridCtrl->setFixedColumnCount(1);
-        m_pGridCtrl->setFixedRowCount(1);
+        if(m_bEnableShowHorHeader)
+            m_pGridCtrl->setFixedColumnCount(1);
+        if(m_bEnableShowVerHeader)
+            m_pGridCtrl->setFixedRowCount(1);
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
             HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
             if(pInfo) continue;
-            //GV_ITEM Item = pInfo->m_GridCellItem;
             pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
             row = pInfo->m_GridCellItem.row;
             col = pInfo->m_GridCellItem.col;
@@ -100,7 +100,7 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
-    else if(m_uGridReportType == GRIDREPORT_TYPE_BROWSER)
+    else if(!m_bEnableShowHorHeader && !m_bEnableShowVerHeader)
     {
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
@@ -113,7 +113,6 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
-
 }
 
 void HGridCtrlWidget::getGridCtrlItem(HGridCtrlInfo* pItem)
@@ -134,5 +133,49 @@ void HGridCtrlWidget::gridCell_clicked(HGridCell* pCell)
     emit gridcellclickded(pCell);
 }
 
+void HGridCtrlWidget::enableShowEditBar(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableShowHorizontalHeader(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableShowVerticalHeader(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableAutoSize(bool b)
+{
+
+}
+
+void HGridCtrlWidget::setFillRange(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableEditor(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableShowGridLines(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableShowTab(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableSelectRange(bool b)
+{
+
+}
 
 

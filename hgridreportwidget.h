@@ -1,10 +1,10 @@
-﻿#ifndef HGRIDREPORT_H
-#define HGRIDREPORT_H
+﻿#ifndef HGRIDREPORTWIDGET_H
+#define HGRIDREPORTWIDGET_H
 
+#include <QWidget>
+//管理多个HGridCtrlWidget具体tab页面的
 #include <QTabWidget>
-//#include <QLabel>
 #include <hgridctrl.h>
-
 class HReportManager;
 class HGridReportWidget : public QWidget
 {
@@ -12,12 +12,11 @@ class HGridReportWidget : public QWidget
 public:
     HGridReportWidget(HReportManager* mgr,QWidget *parent = 0);
     ~HGridReportWidget();
-
 public:
     void initGridReportWidget();
     void updateGridReportWidget();
-    void setGridReportType(quint8 uGridReportType);
-    void setEditGridReportAttr();
+    void setGridReportType(QWidget* w);
+    void setEditorGridReportAttr();
     void setBrowserGridReportAttr();
     void clearGridReportWidget();
     bool loadGridCtrlFile(const char* filename);
@@ -26,7 +25,6 @@ public:
     void setTabName(const QString& tableName);
     //void setShowTable(bool bshow);
    // bool isShowTable();
-
     QString sheetName(short nSheet);
     void setSheetName(short nSheet, const QString& lpszNewValue);
     void setNumSheet(long num);
@@ -44,22 +42,24 @@ public:
     void enableShowGridLines(bool);
     void enableShowTab(bool);
     void enableSelectRange(bool);
-
 signals:
     void gridcellclickded(HGridCell*);
+
 public slots:
     void gridCell_clicked(HGridCell*);
 
 public:
     HReportManager* m_pReportManager;
-    HGridCtrl* m_pGridCtrlTemplate;
     QTabWidget* m_tabWidget;
+private:
     long m_nNumSheets;
-    quint8 m_uGridReportType;
-    bool m_bShowEditorBar;
-    bool m_bShowTab;
-
-
+    bool m_bEnableShowEditBar;
+    bool m_bEnableShowHorHeader;
+    bool m_bEnableShowVerHeader;
+    bool m_bEnableAutoSize;
+    bool m_bEnableEditor;
+    bool m_bEnableShowGridLines;
+    bool m_bEnableShowTab;
+    bool m_bEnableSelectRange;
 };
-
-#endif // HGRIDREPORT_H
+#endif // HGRIDREPORTWIDGET_H

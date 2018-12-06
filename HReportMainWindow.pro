@@ -7,7 +7,7 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QT += printsupport
 TARGET = SARibbonMainWindowExample
 TEMPLATE = app
 DESTDIR = ..\..\bin
@@ -26,9 +26,11 @@ SOURCES += main.cpp\
     hgridreportmgr.cpp \
     hreporttreewidget.cpp \
     hreportnewdlg.cpp \
-    hgridreport.cpp \
     hgridctrlhelper.cpp \
-    hgridctrlwidget.cpp
+    hgridctrlwidget.cpp \
+    hreportprint.cpp \
+    hreporteditorwidget.cpp \
+    hgridreportwidget.cpp
 
 HEADERS  += \
     mainwindow.h \ 
@@ -40,9 +42,11 @@ HEADERS  += \
     hgridreportmgr.h \
     hreporttreewidget.h \
     hreportnewdlg.h \
-    hgridreport.h \
     hgridctrlhelper.h \
-    hgridctrlwidget.h
+    hgridctrlwidget.h \
+    hreportprint.h \
+    hreporteditorwidget.h \
+    hgridreportwidget.h
 
 RESOURCES += \
     saribbonresouce.qrc

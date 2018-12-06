@@ -36,7 +36,7 @@ void HReportTreeWidget::initReportTreeWidget()
         newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
         rootItem->addChild(newItem);
     }
-    connect(this,SIGNAL(itemClicked(QTreeWidgetItem*,int)),SLOT(clickReportItem(QTreeWidgetItem*,int)));
+    //connect(this,SIGNAL(itemClicked(QTreeWidgetItem*,int)),SLOT(clickReportItem(QTreeWidgetItem*,int)));
 }
 
 void HReportTreeWidget::addReportTreeWidgetItem()

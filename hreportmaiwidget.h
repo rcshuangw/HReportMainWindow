@@ -7,7 +7,8 @@ namespace Ui {
 class HReportMaiWidget;
 }
 class HGridCtrl;
-class HGridReportWidget;
+class HReportBrowserWidget;
+class HReportEditorWidget;
 class HReportManager;
 class HReportMaiWidget : public QWidget
 {
@@ -25,8 +26,8 @@ public:
 private:
     Ui::HReportMaiWidget *ui;
     QTabWidget* m_pTabWidget;
-    HGridReportWidget* m_pReportBrowserWidget;
-    HGridReportWidget* m_pReportEditorWidget;
+    HReportBrowserWidget* m_pReportBrowserWidget;
+    HReportEditorWidget* m_pReportEditorWidget;
     HReportManager* m_pReportManager;
 
 };

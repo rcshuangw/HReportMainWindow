@@ -3,7 +3,9 @@
 #include "hgridctrl.h"
 #include "hgridcelldef.h"
 #include "hgridctrlhelper.h"
-#include "hgridreport.h"
+#include "hreporteditorwidget.h"
+#include "hreportbrowserwidget.h"
+#include "hgridreportwidget.h"
 #include "hgridreportmgr.h"
 #include <QHBoxLayout>
 //"#3892ED"border-color: #9B9B9B;border-bottom-color: #C2C7CB;
@@ -26,8 +28,6 @@ HReportMaiWidget::HReportMaiWidget(HReportManager* mgr,QWidget *parent) :
     m_pTabWidget = new QTabWidget(this);
     m_pTabWidget->setTabPosition(QTabWidget::North);
     m_pTabWidget->setStyleSheet(strStyleSheet);
-    //m_pTabWidget->setContentsMargins(0, 0, 0, 0);
-    //QHBoxLayout* layout = new QHBoxLayout(this);
     ui->verticalLayout->addWidget(m_pTabWidget);
     createReportBrowserWidget();
     createReportEditorWidget();
@@ -41,17 +41,13 @@ HReportMaiWidget::~HReportMaiWidget()
 
 void HReportMaiWidget::createReportBrowserWidget()
 {
-    m_pReportBrowserWidget = new HGridReportWidget(m_pReportManager,m_pTabWidget);
-    m_pReportBrowserWidget->setGridReportType(GRIDREPORT_TYPE_BROWSER);
+    m_pReportBrowserWidget = new HReportBrowserWidget(m_pReportManager,m_pTabWidget);
     m_pTabWidget->insertTab(0,m_pReportBrowserWidget,QStringLiteral("浏览窗"));
 }
 
 void HReportMaiWidget::createReportEditorWidget()
 {
-    m_pReportEditorWidget = new HGridReportWidget(m_pReportManager,m_pTabWidget);
-    m_pReportEditorWidget->setGridReportType(GRIDREPORT_TYPE_EDITOR);
-    //m_pReportEditorWidget->setNumSheet(1);
-    //m_pReportEditorWidget->updateGridReportWidget();
+    m_pReportEditorWidget = new HReportEditorWidget(m_pReportManager,m_pTabWidget);
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
@@ -59,12 +55,8 @@ void HReportMaiWidget::newReportWidget()
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->clearGridReportWidget();
-    m_pReportEditorWidget->clearGridReportWidget();
-    m_pReportBrowserWidget->setNumSheet(1);
-    m_pReportEditorWidget->setNumSheet(1);
-    m_pReportBrowserWidget->updateGridReportWidget();
-    m_pReportEditorWidget->updateGridReportWidget();
+    m_pReportBrowserWidget->newReportWidget();
+    m_pReportEditorWidget->newReportWidget();
 }
 
 void HReportMaiWidget::updateReportWidget()
@@ -73,5 +65,4 @@ void HReportMaiWidget::updateReportWidget()
         return;
     HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
     if(!pInfo) return;
-    //m_pReportEditorWidget->setG
 }
