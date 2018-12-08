@@ -4,9 +4,9 @@
 HReportBrowserWidget::HReportBrowserWidget(HReportManager* mgr,QWidget* parent)
     :m_pReportManager(mgr),QWidget(parent)
 {
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
-    layout->addWidget(m_pGridReportWidget);
+    //QHBoxLayout *layout = new QHBoxLayout(this);
+    //m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
+   // layout->addWidget(m_pGridReportWidget);
 }
 
 void HReportBrowserWidget::newReportWidget()

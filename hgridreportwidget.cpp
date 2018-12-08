@@ -64,12 +64,17 @@ void HGridReportWidget::updateGridReportWidget()
             HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
             //要把表格模板拷贝到每个页面
             setGridReportType(w);
+            w->initReportWidget();
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             w->setGridCtrlItem(pInfo);
             QString str = QString(QStringLiteral("第%1页")).arg(num+1);
             m_tabWidget->insertTab(i,w,str);
         }
     }
+    if(!m_bEnableShowTab)
+        m_tabWidget->tabBar()->hide();
+    else
+        m_tabWidget->tabBar()->show();
 }
 
 void HGridReportWidget::clearGridReportWidget()
@@ -106,6 +111,8 @@ void HGridReportWidget::setEditorGridReportAttr()
     enableShowEditBar(true);
     enableShowTab(false);
     enableEditor(true);
+    enableShowHorizontalHeader(true);
+    enableShowVerticalHeader(true);
     //统一设置属性
 }
 

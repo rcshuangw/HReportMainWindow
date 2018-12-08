@@ -8,6 +8,14 @@
 HGridCtrlWidget::HGridCtrlWidget(HReportManager* mgr,QWidget* parent)
  :m_pReportManager(mgr),QWidget(parent)
 {
+    m_bEnableShowEditBar = false;
+    m_bEnableShowHorHeader = false;
+    m_bEnableShowVerHeader = false;
+    //m_bEnableAutoSize = false;
+    m_bEnableEditor = false;
+    m_bEnableShowGridLines = false;
+    m_bEnableShowTab = false;
+    m_bEnableSelectRange = false;
     m_pGridCtrl = new HGridCtrl;
 }
 
@@ -135,22 +143,22 @@ void HGridCtrlWidget::gridCell_clicked(HGridCell* pCell)
 
 void HGridCtrlWidget::enableShowEditBar(bool b)
 {
-
+    m_bEnableShowEditBar = b;
 }
 
 void HGridCtrlWidget::enableShowHorizontalHeader(bool b)
 {
-
+    m_bEnableShowHorHeader = b;
 }
 
 void HGridCtrlWidget::enableShowVerticalHeader(bool b)
 {
-
+    m_bEnableShowVerHeader = b;
 }
 
 void HGridCtrlWidget::enableAutoSize(bool b)
 {
-
+    //m_bE
 }
 
 void HGridCtrlWidget::setFillRange(bool b)
@@ -160,22 +168,22 @@ void HGridCtrlWidget::setFillRange(bool b)
 
 void HGridCtrlWidget::enableEditor(bool b)
 {
-
+    m_bEnableEditor = b;
 }
 
 void HGridCtrlWidget::enableShowGridLines(bool b)
 {
-
+    m_bEnableShowGridLines = b;
 }
 
 void HGridCtrlWidget::enableShowTab(bool b)
 {
-
+    m_bEnableShowTab = b;
 }
 
 void HGridCtrlWidget::enableSelectRange(bool b)
 {
-
+    m_bEnableSelectRange = b;
 }
 
 

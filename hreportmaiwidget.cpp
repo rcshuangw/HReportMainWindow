@@ -41,13 +41,18 @@ HReportMaiWidget::~HReportMaiWidget()
 
 void HReportMaiWidget::createReportBrowserWidget()
 {
+    //QHBoxLayout *layout = new QHBoxLayout(m_pTabWidget);
     m_pReportBrowserWidget = new HReportBrowserWidget(m_pReportManager,m_pTabWidget);
+    //layout->addWidget(m_pReportBrowserWidget);
+
     m_pTabWidget->insertTab(0,m_pReportBrowserWidget,QStringLiteral("浏览窗"));
 }
 
 void HReportMaiWidget::createReportEditorWidget()
 {
+    //QHBoxLayout *layout = new QHBoxLayout(m_pTabWidget);
     m_pReportEditorWidget = new HReportEditorWidget(m_pReportManager,m_pTabWidget);
+    //layout->addWidget(m_pReportEditorWidget);
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
@@ -55,7 +60,7 @@ void HReportMaiWidget::newReportWidget()
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->newReportWidget();
+    //m_pReportBrowserWidget->newReportWidget();
     m_pReportEditorWidget->newReportWidget();
 }
 

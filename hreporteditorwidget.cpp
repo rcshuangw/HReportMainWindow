@@ -1,10 +1,15 @@
 ﻿#include "hreporteditorwidget.h"
 #include "hgridreportwidget.h"
 #include "hgridreportmgr.h"
+#include <QHBoxLayout>
 HReportEditorWidget::HReportEditorWidget(HReportManager* mgr,QWidget *parent)
    :m_pReportManager(mgr),QWidget(parent)
 {
-   // m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
+    m_pGridReportWidget->setEditorGridReportAttr();
+    layout->addWidget(m_pGridReportWidget);
+    setLayout(layout);
 }
 
 HReportEditorWidget::~HReportEditorWidget()
