@@ -6,10 +6,10 @@ class QPrinter;
 class QPainter;
 class HGridCtrl;
 
-struct CPrintInfo // Printing information structure
+struct HPrintInfo // Printing information structure
 {
-    CPrintInfo();
-    ~CPrintInfo();
+    HPrintInfo();
+    ~HPrintInfo();
 /*
     CPrintDialog* m_pPD;     // pointer to print dialog
 
@@ -21,7 +21,7 @@ struct CPrintInfo // Printing information structure
     UINT m_nNumPreviewPages; // Desired number of preview pages
     CString m_strPageDesc;   // Format string for page number display
     LPVOID m_lpUserData;     // pointer to user created struct
-    CRect m_rectDraw;        // rectangle defining current usable page area
+
     int m_nJobNumber;			 // job number (after StartDoc)
 
     // these only valid if m_bDocObject
@@ -35,6 +35,7 @@ struct CPrintInfo // Printing information structure
     UINT GetFromPage() const;
     UINT GetToPage() const;
     UINT GetOffsetPage() const;*/
+    QRect m_rectDraw;        // rectangle defining current usable page area
 };
 
 class HReportPrint : QObject
@@ -54,6 +55,21 @@ public:
 public slots:
     void printPriview();//外部调用
     void printPriview(QPrinter*); //内部调用
+
+public:
+    HGridCtrl* m_pCurGridCtrl;
+    QFont       m_PrinterFont;  // for the printer
+    int         m_nHeaderHeight, m_nFooterHeight, m_nLeftMargin,m_nRightMargin, m_nTopMargin, m_nBottomMargin, m_nGap;
+    QSize       m_CharSize;
+    int         m_nPageHeight;
+    QSize       m_LogicalPageSize,      // Page size in gridctrl units.
+               m_PaperSize;            // Page size in device units.
+    // additional properties to support Wysiwyg printing
+    int         m_nPageWidth;
+    int         m_nPrintColumn;
+    int         m_nCurrPrintRow;
+    int         m_nNumPages;
+    int         m_nPageMultiplier;
 
 };
 
