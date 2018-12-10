@@ -3,9 +3,13 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 #include "hgridctrl.h"
+#include "QDateTime"
+#include "hgridreportwidget.h"
+#include "hgridctrlwidget.h"
 HReportPrint::HReportPrint()
 {
-
+    m_PrintInfo.m_pGridCtrl = NULL;
+    m_PrintInfo.m_rectDraw = QRect();
 }
 
 void HReportPrint::onPrintBegin(QPainter *pDC, HPrintInfo *pInfo)
@@ -106,11 +110,12 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
 {
     if (!pDC || !pInfo)
         return;
-
+    //打印的原点仍然在左上角
     //CRect rcPage(pInfo->m_rectDraw);
     //CFont *pOldFont = pDC->SelectObject(&m_PrinterFont);
     pDC->setFont(m_PrinterFont);
-
+    HGridCtrl* pGridCtrl = pInfo->m_pGridCtrl;
+    if(!pGridCtrl) return;
     // Set the page map mode to use GridCtrl units, and setup margin
     //pDC->SetMapMode(MM_ANISOTROPIC);
     //pDC->SetWindowExt(m_LogicalPageSize);
@@ -134,12 +139,12 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pDC->translate(0, m_nGap * m_CharSize.height());
 
     //再移动一个固定行的高度，注意浏览框是没有固定行列(行列头的)
-    pDC->translate(0, m_pCurGridCtrl->fixedRowHeight());
+    pDC->translate(0, pGridCtrl->fixedRowHeight());
 
     // We need to find out which row to start printing for this page.
     int nTotalRowHeight = 0;
     uint nNumPages = 1;
-    m_nCurrPrintRow = m_pCurGridCtrl->fixedRowCount();
+    m_nCurrPrintRow = pGridCtrl->fixedRowCount();
 
 
     // Not only the row, but we need to figure out column, too
@@ -175,7 +180,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
         m_nCurrPrintRow++;
     }
     */
-    m_nPrintColumn = m_pCurGridCtrl->fixedColumnCount();
+    m_nPrintColumn = pGridCtrl->fixedColumnCount();
     /*int iTotalRowWidth = 0;
     int i1, i2;
 
@@ -235,7 +240,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     }
 
 
-    if (m_nCurrPrintRow >= m_pCurGridCtrl->rowCount()) return;
+    if (m_nCurrPrintRow >= pGridCtrl->rowCount()) return;
 
     // Draw as many rows as will fit on the printed page.
     // Clip the printed page so that there is no partially shown
@@ -264,25 +269,25 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
         Row++;
     }*/
 
-    while (m_nCurrPrintRow < m_pCurGridCtrl->rowCount())
+    while (m_nCurrPrintRow < pGridCtrl->rowCount())
     {
         rect.setTop(rect.bottom()+1);
-        rect.setBottom(rect.top() + m_pCurGridCtrl->rowHeight(m_nCurrPrintRow) - 1);
+        rect.setBottom(rect.top() + pGridCtrl->rowHeight(m_nCurrPrintRow) - 1);
 
         if (rect.bottom() > m_nPageHeight) break;            // Gone past end of page
 
         rect.setRight(-1);
 
         // modified to allow printing of wide grids on multiple pages
-        for (int col = m_nPrintColumn; col < m_pCurGridCtrl->columnCount(); col++)
+        for (int col = m_nPrintColumn; col < pGridCtrl->columnCount(); col++)
         {
             rect.setLeft(rect.right() + 1);
-            rect.setRight(rect.left()) + m_pCurGridCtrl->columnWidth(col) - 1;
+            rect.setRight(rect.left()) + pGridCtrl->columnWidth(col) - 1;
 
             if( rect.right() > m_nPageWidth)
                 break;
 
-            HGridCellBase* pCell = m_pCurGridCtrl->getCell(m_nCurrPrintRow, col);
+            HGridCellBase* pCell = pGridCtrl->getCell(m_nCurrPrintRow, col);
             /*if (pCell)
             {
                 //Used for merge cells
@@ -341,7 +346,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
 
     // Footer
     pInfo->m_rectDraw.setBottom(m_nFooterHeight * m_CharSize.height());
-    pDC->translate(-m_nLeftMargin * m_CharSize.width(), -m_LogicalPageSize.height() + m_nFooterHeight * m_CharSize.height());
+    pDC->translate(m_nLeftMargin * m_CharSize.width(), m_LogicalPageSize.height() + m_nFooterHeight * m_CharSize.height());
     printFooter(pDC, pInfo);
 
     // SetWindowOrg back for next page
@@ -355,56 +360,61 @@ void HReportPrint::onPrintEnd(QPainter *p, HPrintInfo *pInfo)
 
 }
 
-void HReportPrint::printHeader(QPainter *p, HPrintInfo *pInfo)
+void HReportPrint::printHeader(QPainter *pDC, HPrintInfo *pInfo)
 {
+    QString strRight;
+    //strRight.LoadString(AFX_IDS_APP_TITLE);
 
+    // print parent window title in the centre (Gert Rijs)
+    QString strCenter;
+
+
+    QRect   rc(pInfo->m_rectDraw);
+    if( !strCenter.IsEmpty() )
+        pDC->drawText( rc, QDT_CENTER | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strCenter);
+    if( !strRight.IsEmpty() )
+        pDC->DrawText( rc, QDT_RIGHT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strRight);
+
+    // draw ruled-line across top
+    pDC->setPen(Qt::black);
+    pDC->drawLine(QPoint(rc.left(), rc.bottom()),QPoint(rc.right(), rc.bottom()));
+
+    pDC->restore();
 }
 
-void HReportPrint::printFooter(QPainter *p, HPrintInfo *pInfo)
+void HReportPrint::printFooter(QPainter *pDC, HPrintInfo *pInfo)
 {
+    if(!pDC || !pInfo)
+        return;
+    //获取页尾文字
     QString strLeft;
     strLeft = QString(("Page %1 of %2").arg(pInfo->m_nCurPage).arg(pInfo->GetMaxPage()));
 
     // date and time on the right
-    CString strRight;
-    COleDateTime t = COleDateTime::GetCurrentTime();
-    strRight = t.Format(_T("%c"));
+    QString strRight;
+    QDateTime dt = QDateTime::currentDateTime();
+    strRight = dt.toString("yyyy-MM-dd hh:mm:ss");
 
     QRect rc(pInfo->m_rectDraw);
 
     // draw ruled line on bottom
-    pDC->SelectStockObject(BLACK_PEN);
-    pDC->MoveTo(rc.left, rc.top);
-    pDC->LineTo(rc.right, rc.top);
+    //先画条线 如果不需要可以删除
+    pDC->setPen(Qt::black);
+    pDC->drawLine(QPoint(rc.left(), rc.top()),QPoint(rc.right(), rc.top()));
 
-    CFont BoldFont;
-    LOGFONT lf;
+    if( !strLeft.isEmpty() )
+       pDC->drawText(rc,QDT_LEFT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER,strLeft);
+    if( !strRight.isEmpty() )
+       pDC->drawText( rc, QDT_RIGHT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER,strRight);
 
-    //create bold font for header and footer
-    m_PrinterFont.GetLogFont(&lf);
-    lf.lfWeight = FW_BOLD;
-    BoldFont.CreateFontIndirect(&lf);
-
-    CFont *pNormalFont = pDC->SelectObject(&BoldFont);
-    int nPrevBkMode = pDC->SetBkMode(TRANSPARENT);
-
-    // EFW - Bug fix - Force text color to black.  It doesn't always
-    // get set to a printable color when it gets here.
-    pDC->SetTextColor(RGB(0, 0, 0));
-
-    if( !strLeft.IsEmpty() )
-       pDC->DrawText( strLeft, &rc, DT_LEFT | DT_SINGLELINE | DT_NOPREFIX | DT_VCENTER);
-    if( !strRight.IsEmpty() )
-       pDC->DrawText( strRight, &rc, DT_RIGHT | DT_SINGLELINE | DT_NOPREFIX | DT_VCENTER);
-
-    pDC->SetBkMode(nPrevBkMode);
-    pDC->SelectObject(pNormalFont);
-    BoldFont.DeleteObject();
+    pDC->restore();
 }
 
-void HReportPrint::printPage(QPainter* p,HGridCtrl* pGridCtrl,int pageNumber)
+void HReportPrint::printPage(QPainter* p)
 {
-
+    onPrintBegin(p,&m_PrintInfo);
+    onPrint(p,&m_PrintInfo);
+    onPrintEnd(p,&m_PrintInfo);
 }
 
 void HReportPrint::printPriview()
@@ -418,14 +428,47 @@ void HReportPrint::printPriview()
 void HReportPrint::printPriview(QPrinter* p)
 {
     QPainter painter(p);
+    //预览打印是支持分页打印的
+    int firstPage = p->fromPage() - 1;
+    if(firstPage >= m_pGridReportWidget->numSheet())
+        return;
+    if(firstPage == (int)-1)
+        firstPage = 0;
+    int lastPage = p->toPage() - 1;
+    if(lastPage == -1 || lastPage >= m_pGridReportWidget->numSheet())
+        lastPage = m_pGridReportWidget->numSheet();
+    int numPages = lastPage - firstPage - 1;
     for(int i = 0;i < p->numCopies();i++)
     {
-        for(int j= 0;j < 2;j++) //页数
+        for(int j= 0;j < numPages ;j++) //页数
         {
           if(i != 0 || j != 0)
               p->newPage();
-          //painter.drawText(painter.window(),Qt::AlignHCenter,"test");
-            printPage();
+
+          int index = firstPage + j;
+          HGridCtrl* pGridCtrl = (HGridCtrlWidget*)(m_pGridReportWidget->m_tabWidget->widget(index))->gridCtrl();
+          if(!pGridCtrl) continue;
+          m_PrintInfo.m_pGridCtrl = pGridCtrl;
+          m_PrintInfo.m_nCurPage = j;
+          printPage(painter);
+        }
+    }
+}
+
+void HReportPrint::printPages(QPrinter* p)
+{
+    QPainter painter(p);
+    for(int i = 0;i < p->numCopies();i++)
+    {
+        for(int j= 0;j < m_pGridReportWidget->numSheet();j++) //页数
+        {
+          if(i != 0 || j != 0)
+              p->newPage();
+          HGridCtrl* pGridCtrl = (HGridCtrlWidget*)(m_pGridReportWidget->m_tabWidget->widget(j))->gridCtrl();
+          if(!pGridCtrl) continue;
+          m_PrintInfo.m_pGridCtrl = pGridCtrl;
+          m_PrintInfo.m_nCurPage = j;
+          printPage(painter);
         }
     }
 }

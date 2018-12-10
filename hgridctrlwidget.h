@@ -34,6 +34,9 @@ public:
     void enableShowTab(bool);
     void enableSelectRange(bool);
 
+public:
+    HGridCtrl* gridCtrl() {return m_pGridCtrl;}
+
 signals:
     void gridcellclickded(HGridCell*);
 public slots:

@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -197,7 +197,7 @@
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
-     <string>页</string>
+     <string>打印显示</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="geometry">
@@ -353,6 +353,11 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QWidget" name="tab_4">
+    <attribute name="title">
+     <string>打印设置</string>
+    </attribute>
    </widget>
   </widget>
  </widget>

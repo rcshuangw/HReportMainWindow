@@ -5,7 +5,7 @@
 class QPrinter;
 class QPainter;
 class HGridCtrl;
-
+class HGridReportWidget;
 struct HPrintInfo // Printing information structure
 {
     HPrintInfo();
@@ -35,6 +35,8 @@ struct HPrintInfo // Printing information structure
     UINT GetFromPage() const;
     UINT GetToPage() const;
     UINT GetOffsetPage() const;*/
+    uint m_nCurPage;         // Current page
+    HGridCtrl* m_pGridCtrl;
     QRect m_rectDraw;        // rectangle defining current usable page area
 };
 
@@ -45,19 +47,23 @@ public:
     HReportPrint();
 
 public:
-    void onPrintBegin(QPainter *p, CPrintInfo *pInfo);
-    void onPrint(QPainter *p, CPrintInfo *pInfo);
-    void onPrintEnd(QPainter *p, CPrintInfo *pInfo);
-    void printHeader(QPainter *p, CPrintInfo *pInfo);
-    void printFooter(QPainter *p, CPrintInfo *pInfo);
+    void onPrintBegin(QPainter *p, HPrintInfo *pInfo);
+    void onPrint(QPainter *p, HPrintInfo *pInfo);
+    void onPrintEnd(QPainter *p, HPrintInfo *pInfo);
+    void printHeader(QPainter *p, HPrintInfo *pInfo);
+    void printFooter(QPainter *p, HPrintInfo *pInfo);
 
-    void printPage(QPainter* p,HGridCtrl* pGridCtrl,int pageNumber);
+    void printPage(QPainter* p);
 public slots:
     void printPriview();//外部调用
-    void printPriview(QPrinter*); //内部调用
+    void printPriview(QPrinter*); //内部调用 打印预览
+    void printPages(QPrinter*); //直接打印
 
 public:
+    HGridReportWidget *m_pGridReportWidget;
     HGridCtrl* m_pCurGridCtrl;
+    HPrintInfo m_PrintInfo;
+
     QFont       m_PrinterFont;  // for the printer
     int         m_nHeaderHeight, m_nFooterHeight, m_nLeftMargin,m_nRightMargin, m_nTopMargin, m_nBottomMargin, m_nGap;
     QSize       m_CharSize;
