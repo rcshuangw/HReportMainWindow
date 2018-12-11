@@ -91,7 +91,6 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     // We need to find out which row to start printing for this page.
     m_nCurrPrintRow = pGridCtrl->fixedRowCount();
     m_nPrintColumn = pGridCtrl->fixedColumnCount();
-    int iTotalRowWidth = 0;
     int i1, i2;
 
     // now, calculate which print column to start displaying
