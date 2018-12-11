@@ -2,6 +2,9 @@
 #define HREPORTPRINT_H
 //打印类
 #include <QObject>
+#include <QRect>
+#include <QFont>
+#include <QSize>
 class QPrinter;
 class QPainter;
 class HGridCtrl;
@@ -52,6 +55,7 @@ public:
     void onPrintEnd(QPainter *p, HPrintInfo *pInfo);
     void printHeader(QPainter *p, HPrintInfo *pInfo);
     void printFooter(QPainter *p, HPrintInfo *pInfo);
+    void PrintColumnHeadings(QPainter *p, HPrintInfo *pInfo);
 
     void printPage(QPainter* p);
 public slots:

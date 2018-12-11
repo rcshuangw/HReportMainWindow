@@ -2,10 +2,23 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
+#include <QFontMetrics>
 #include "hgridctrl.h"
 #include "QDateTime"
 #include "hgridreportwidget.h"
 #include "hgridctrlwidget.h"
+
+HPrintInfo::HPrintInfo()
+{
+
+}
+
+HPrintInfo::~HPrintInfo()
+{
+
+}
+
+
 HReportPrint::HReportPrint()
 {
     m_PrintInfo.m_pGridCtrl = NULL;
@@ -17,91 +30,36 @@ void HReportPrint::onPrintBegin(QPainter *pDC, HPrintInfo *pInfo)
     //本函数只是求出页面宽度和表格宽度和页面高度
     Q_ASSERT(pDC && pInfo);
     if (!pDC || !pInfo) return;
-
-    // Get a DC for the current window (will be a screen DC for print previewing)
-    //CSize PaperPixelsPerInch(pDC->GetDeviceCaps(LOGPIXELSX), pDC->GetDeviceCaps(LOGPIXELSY));
-    //CSize ScreenPixelsPerInch(pCurrentDC->GetDeviceCaps(LOGPIXELSX), pCurrentDC->GetDeviceCaps(LOGPIXELSY));
-
     // Create the printer font
     pDC->save();
-    int nFontSize = -10;
+    int nFontSize = 10;
     QString strFontName = "Arial";
     m_PrinterFont = QFont(strFontName,nFontSize);
 
     pDC->setFont(m_PrinterFont);
 
     // Get the average character width (in GridCtrl units) and hence the margins
-    QFontMetrics fontMetrics(m_PrintFont);
+    QFontMetrics fontMetrics(m_PrinterFont);
     m_CharSize = fontMetrics.size(Qt::TextSingleLine,("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSATUVWXYZ"));
     m_CharSize.setWidth(m_CharSize.width()/52);
-    int nMargins = (m_nLeftMargin+m_nRightMargin)*m_CharSize.width();
+    int nMargins = (m_nLeftMargin+m_nRightMargin)*m_CharSize.width(); //边距
 
-    // Get the page sizes (physical and logical)
+    // 页面大小
     m_PaperSize = QSize(pDC->window().width(),pDC->window().height());
-
-    bool m_bWysiwygPrinting = false;
-    if( m_bWysiwygPrinting)
-    {
-        //m_LogicalPageSize.cx = ScreenPixelsPerInch.cx * m_PaperSize.cx / PaperPixelsPerInch.cx * 3 / 4;
-        //m_LogicalPageSize.cy = ScreenPixelsPerInch.cy * m_PaperSize.cy / PaperPixelsPerInch.cy * 3 / 4;
-    }
-    else
-    {
-        m_PaperSize = QSize(pDC->window().width(),pDC->window().height());//CSize(pDC->GetDeviceCaps(HORZRES), pDC->GetDeviceCaps(VERTRES));
-
-        m_LogicalPageSize.setWidth(m_pCurGridCtrl->virtualWidth()+nMargins);
-        m_LogicalPageSize.setHeight(int(m_LogicalPageSize.cx*m_PaperSize.cy/m_PaperSize.cx));
-
-    }
-
+    m_LogicalPageSize.setWidth(m_pCurGridCtrl->virtualWidth()+nMargins);
+    m_LogicalPageSize.setHeight(int(m_LogicalPageSize.width()*m_PaperSize.height()/m_PaperSize.height()));
     m_nPageHeight = m_LogicalPageSize.height() - (m_nHeaderHeight+m_nFooterHeight + 2*m_nGap)*m_CharSize.height();
 
-    // Get the number of pages. Assumes no row is bigger than the page size.
-    //暂时取消 --huangw
-    /*int nTotalRowHeight = 0;
-    m_nNumPages = 1;
-    for (int row = GetFixedRowCount(); row < GetRowCount(); row++)
-    {
-        nTotalRowHeight += GetRowHeight(row);
-        if (nTotalRowHeight > m_nPageHeight) {
-            m_nNumPages++;
-            nTotalRowHeight = GetRowHeight(row);
-        }
-    }*/
-
-    // now, figure out how many additional pages must print out if rows ARE bigger
-    //  than page size
+    //获取固定列宽
     int iColumnOffset = 0;
     int i1;
     for( i1=0; i1 < m_pCurGridCtrl->fixedColumnCount(); i1++)
     {
         iColumnOffset += m_pCurGridCtrl->columnWidth( i1);
     }
-    m_nPageWidth = m_LogicalPageSize.cx - iColumnOffset - nMargins;
+    //页面宽度 = 逻辑页面宽度 - 固定列宽 - 边距
+    m_nPageWidth = m_LogicalPageSize.width() - iColumnOffset - nMargins;
     m_nPageMultiplier = 1;
-
-    if( m_bWysiwygPrinting)
-    {
-        /*int iTotalRowWidth = 0;
-        for( i1 = GetFixedColumnCount(); i1 < GetColumnCount(); i1++)
-        {
-            iTotalRowWidth += GetColumnWidth( i1);
-            if( iTotalRowWidth > m_nPageWidth)
-            {
-                m_nPageMultiplier++;
-                iTotalRowWidth = GetColumnWidth( i1);
-            }
-        }
-        m_nNumPages *= m_nPageMultiplier;
-        */
-    }
-
-    // Set up the print info
-    //pInfo->SetMaxPage(m_nNumPages);
-    //pInfo->m_nCurPage = 1;                        // start printing at page# 1
-
-    //ReleaseDC(pCurrentDC);
-    //pDC->SelectObject(pOldFont);
     pDC->restore();
 }
 
@@ -111,16 +69,9 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     if (!pDC || !pInfo)
         return;
     //打印的原点仍然在左上角
-    //CRect rcPage(pInfo->m_rectDraw);
-    //CFont *pOldFont = pDC->SelectObject(&m_PrinterFont);
     pDC->setFont(m_PrinterFont);
     HGridCtrl* pGridCtrl = pInfo->m_pGridCtrl;
     if(!pGridCtrl) return;
-    // Set the page map mode to use GridCtrl units, and setup margin
-    //pDC->SetMapMode(MM_ANISOTROPIC);
-    //pDC->SetWindowExt(m_LogicalPageSize);
-    //pDC->SetViewportExt(m_PaperSize);
-    //pDC->SetWindowOrg(-m_nLeftMargin * m_CharSize.cx, 0);
 
     // Header
     pInfo->m_rectDraw.setTop(0);
@@ -129,63 +80,22 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pInfo->m_rectDraw.setBottom(m_nHeaderHeight * m_CharSize.height());
 
     //报表头文字
-    PrintHeader(pDC, pInfo);
+    printHeader(pDC, pInfo);
 
     //移动原点到报表头下面
     pDC->translate(0, m_nHeaderHeight * m_CharSize.height());
 
-    // Gap between header and column headings
-    //再移动一点空间 如果不需要可以取消掉
+    //头和表格之间的空间
     pDC->translate(0, m_nGap * m_CharSize.height());
 
-    //再移动一个固定行的高度，注意浏览框是没有固定行列(行列头的)
-    pDC->translate(0, pGridCtrl->fixedRowHeight());
-
     // We need to find out which row to start printing for this page.
-    int nTotalRowHeight = 0;
-    uint nNumPages = 1;
     m_nCurrPrintRow = pGridCtrl->fixedRowCount();
-
-
-    // Not only the row, but we need to figure out column, too
-
-    // Can print 4 pages, where page 1 and 2 represent the same rows but
-    // with different WIDE columns.
-    //
-    // .......
-    // .1 .2 .  If representing page 3  -->    iPageIfIgnoredWideCols = 2
-    // .......                                 iWideColPageOffset = 0
-    // .3 .4 .  If representing page 2  -->    iPageIfIgnoredWideCols = 1
-    // .......                                 iWideColPageOffset = 1
-    /*
-    int iPageIfIgnoredWideCols = pInfo->m_nCurPage / m_nPageMultiplier;
-    int iWideColPageOffset = pInfo->m_nCurPage - ( iPageIfIgnoredWideCols * m_nPageMultiplier);
-    if( iWideColPageOffset > 0)
-        iPageIfIgnoredWideCols++;
-
-    if( iWideColPageOffset == 0)
-        iWideColPageOffset = m_nPageMultiplier;
-    iWideColPageOffset--;
-
-    // calculate current print row based on iPageIfIgnoredWideCols
-    while(  m_nCurrPrintRow < GetRowCount()
-            && (int)nNumPages < iPageIfIgnoredWideCols)
-    {
-        nTotalRowHeight += GetRowHeight(m_nCurrPrintRow);
-        if (nTotalRowHeight > m_nPageHeight) {
-            nNumPages++;
-            if ((int)nNumPages == iPageIfIgnoredWideCols) break;
-            nTotalRowHeight = GetRowHeight(m_nCurrPrintRow);
-        }
-        m_nCurrPrintRow++;
-    }
-    */
     m_nPrintColumn = pGridCtrl->fixedColumnCount();
-    /*int iTotalRowWidth = 0;
+    int iTotalRowWidth = 0;
     int i1, i2;
 
     // now, calculate which print column to start displaying
-    for( i1 = 0; i1 < iWideColPageOffset; i1++)
+    /*for( i1 = 0; i1 < iWideColPageOffset; i1++)
     {
         for( i2 = m_nPrintColumn; i2 < GetColumnCount(); i2++)
         {
@@ -201,55 +111,37 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
 
 
     PrintRowButtons( pDC, pInfo);   // print row buttons on each page
+    */
     int iColumnOffset = 0;
-    for( i1=0; i1 < GetFixedColumnCount(); i1++)
+
+    //固定列宽
+    for( i1=0; i1 < pGridCtrl->fixedColumnCount(); i1++)
     {
-        iColumnOffset += GetColumnWidth( i1);
+        iColumnOffset += pGridCtrl->columnWidth( i1);
     }
 
     // Print the column headings
-    pInfo->m_rectDraw.bottom = GetFixedRowHeight();
-
-    if( m_nPrintColumn == GetFixedColumnCount())
+    bool bEnableShowCol = false;
+    if(bEnableShowCol)
     {
-        // have the column headings fcn draw the upper left fixed cells
-        //  for the very first columns, only
-        pDC->OffsetWindowOrg( 0, +GetFixedRowHeight());
+        pInfo->m_rectDraw.setBottom(pGridCtrl->fixedRowHeight());
 
+        pDC->translate( 0, pGridCtrl->fixedRowHeight());
         m_nPageWidth += iColumnOffset;
         m_nPrintColumn = 0;
         PrintColumnHeadings(pDC, pInfo);
         m_nPageWidth -= iColumnOffset;
-        m_nPrintColumn = GetFixedColumnCount();
+        m_nPrintColumn = pGridCtrl->fixedColumnCount();
+        pDC->translate( -iColumnOffset, -pGridCtrl->fixedRowHeight());
 
-        pDC->OffsetWindowOrg( -iColumnOffset, -GetFixedRowHeight());
-    }
-    else*/
-    {
-        // changed all of this here to match above almost exactly same
-        //pDC->OffsetWindowOrg( 0, +GetFixedRowHeight());
-
-        //m_nPageWidth += iColumnOffset;
-
-        // print from column 0 ... last column that fits on the current page
-        //PrintColumnHeadings(pDC, pInfo);
-
-        //m_nPageWidth -= iColumnOffset;
-
-        //pDC->OffsetWindowOrg( -iColumnOffset, -GetFixedRowHeight());
     }
 
 
     if (m_nCurrPrintRow >= pGridCtrl->rowCount()) return;
 
-    // Draw as many rows as will fit on the printed page.
-    // Clip the printed page so that there is no partially shown
-    // row at the bottom of the page (the same row which will be fully
-    // shown at the top of the next page).
-
     bool bFirstPrintedRow = true;
     QRect rect;
-    rect.bottom = -1;
+    rect.setBottom(-1);
 
     //Used for merge cells
     //by Huang Wei
@@ -282,7 +174,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
         for (int col = m_nPrintColumn; col < pGridCtrl->columnCount(); col++)
         {
             rect.setLeft(rect.right() + 1);
-            rect.setRight(rect.left()) + pGridCtrl->columnWidth(col) - 1;
+            rect.setRight(rect.left() + pGridCtrl->columnWidth(col) - 1);
 
             if( rect.right() > m_nPageWidth)
                 break;
@@ -316,7 +208,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 pCell->printCell(pDC, m_nCurrPrintRow, col, rect);
 
             //增加列和行是否允许绘制
-            if (m_nGridLines == GVL_BOTH || m_nGridLines == GVL_HORZ)
+            if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_HORZ)
             {
                 int Overlap = (col == 0)? 0:1;
                 pDC->drawLine(QPoint(rect.left()-Overlap, rect.bottom()),QPoint(rect.right(), rect.bottom()));
@@ -325,7 +217,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 }
             }
 
-            if (m_nGridLines == GVL_BOTH || m_nGridLines == GVL_VERT)
+            if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_VERT)
             {
                 int Overlap = (bFirstPrintedRow)? 0:1;
                 pDC->drawLine(QPoint(rect.right(), rect.top()-Overlap),QPoint(rect.right(), rect.bottom()));
@@ -355,6 +247,46 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pDC->restore();
 }
 
+void HReportPrint::PrintColumnHeadings(QPainter *pDC, HPrintInfo* /*pInfo*/)
+{
+   /* CFont *pOldFont = pDC->SelectObject(&m_PrinterFont);
+
+    CRect rect;
+    rect.bottom = -1;
+
+    BOOL bFirst = TRUE;
+    BOOL bOriginal;
+
+
+    // modified to allow column hdr printing of multi-page wide grids
+    for (int row = 0; row < GetFixedRowCount(); row++)
+    {
+        rect.top = rect.bottom+1;
+        rect.bottom = rect.top + GetRowHeight(row) - 1;
+
+        rect.right = -1;
+
+        // if printColumn > fixedcolumncount we are on page 2 or more
+        // lets printout those fixed cell headings again the 1 or more that would be missed
+        // added by M.Fletcher 12/17/00
+        if(m_nPrintColumn>= GetFixedColumnCount())
+        {
+           bOriginal=bFirst;
+           // lets print the missing fixed cells on left first out to last fixed column
+           PrintFixedRowCells(0,GetFixedColumnCount(), row, rect, pDC, bFirst);
+           bFirst=bOriginal;
+        }
+
+        // now back to normal business print cells in heading after all fixed columns
+        PrintFixedRowCells(m_nPrintColumn, GetColumnCount(), row, rect, pDC, bFirst);
+
+    } // end of Row Loop
+
+    pDC->SelectObject(pOldFont);
+    */
+} // end of CGridCtrl::PrintColumnHeadings
+
+
 void HReportPrint::onPrintEnd(QPainter *p, HPrintInfo *pInfo)
 {
 
@@ -370,10 +302,10 @@ void HReportPrint::printHeader(QPainter *pDC, HPrintInfo *pInfo)
 
 
     QRect   rc(pInfo->m_rectDraw);
-    if( !strCenter.IsEmpty() )
+    if( !strCenter.isEmpty() )
         pDC->drawText( rc, QDT_CENTER | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strCenter);
-    if( !strRight.IsEmpty() )
-        pDC->DrawText( rc, QDT_RIGHT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strRight);
+    if( !strRight.isEmpty() )
+        pDC->drawText( rc, QDT_RIGHT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strRight);
 
     // draw ruled-line across top
     pDC->setPen(Qt::black);
@@ -388,7 +320,7 @@ void HReportPrint::printFooter(QPainter *pDC, HPrintInfo *pInfo)
         return;
     //获取页尾文字
     QString strLeft;
-    strLeft = QString(("Page %1 of %2").arg(pInfo->m_nCurPage).arg(pInfo->GetMaxPage()));
+    //strLeft = QString(("Page %1 of %2").arg(pInfo->m_nCurPage).arg(pInfo->GetMaxPage()));
 
     // date and time on the right
     QString strRight;
@@ -446,11 +378,11 @@ void HReportPrint::printPriview(QPrinter* p)
               p->newPage();
 
           int index = firstPage + j;
-          HGridCtrl* pGridCtrl = (HGridCtrlWidget*)(m_pGridReportWidget->m_tabWidget->widget(index))->gridCtrl();
+          HGridCtrl* pGridCtrl = ((HGridCtrlWidget*)m_pGridReportWidget->m_tabWidget->widget(index))->gridCtrl();
           if(!pGridCtrl) continue;
           m_PrintInfo.m_pGridCtrl = pGridCtrl;
           m_PrintInfo.m_nCurPage = j;
-          printPage(painter);
+          printPages(p);
         }
     }
 }
@@ -464,11 +396,11 @@ void HReportPrint::printPages(QPrinter* p)
         {
           if(i != 0 || j != 0)
               p->newPage();
-          HGridCtrl* pGridCtrl = (HGridCtrlWidget*)(m_pGridReportWidget->m_tabWidget->widget(j))->gridCtrl();
+          HGridCtrl* pGridCtrl = ((HGridCtrlWidget*)m_pGridReportWidget->m_tabWidget->widget(j))->gridCtrl();
           if(!pGridCtrl) continue;
           m_PrintInfo.m_pGridCtrl = pGridCtrl;
           m_PrintInfo.m_nCurPage = j;
-          printPage(painter);
+          printPages(p);
         }
     }
 }

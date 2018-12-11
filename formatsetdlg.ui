@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -645,20 +645,20 @@
      <widget class="QCheckBox" name="checkBox_8">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>120</x>
         <y>23</y>
         <width>91</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>显示行列</string>
+       <string>显示行</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_9">
       <property name="geometry">
        <rect>
-        <x>220</x>
+        <x>330</x>
         <y>23</y>
         <width>91</width>
         <height>21</height>
@@ -666,6 +666,19 @@
       </property>
       <property name="text">
        <string>彩色打印</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_10">
+      <property name="geometry">
+       <rect>
+        <x>221</x>
+        <y>23</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>显示列</string>
       </property>
      </widget>
     </widget>
