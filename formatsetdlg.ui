@@ -233,6 +233,12 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="geometry">
@@ -242,6 +248,12 @@
         <width>130</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_4">
@@ -279,6 +291,12 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_4">
       <property name="geometry">
@@ -288,6 +306,12 @@
         <width>130</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_6">
@@ -309,19 +333,19 @@
       <rect>
        <x>3</x>
        <y>103</y>
-       <width>491</width>
-       <height>141</height>
+       <width>501</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="title">
-      <string>操作任务设置</string>
+      <string>任务长度设置</string>
      </property>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>111</width>
+        <width>131</width>
         <height>16</height>
        </rect>
       </property>
@@ -332,26 +356,119 @@
      <widget class="QLineEdit" name="lineEdit_9">
       <property name="geometry">
        <rect>
-        <x>117</x>
-        <y>18</y>
+        <x>147</x>
+        <y>19</y>
         <width>61</width>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_11">
+     <widget class="QLineEdit" name="lineEdit_10">
       <property name="geometry">
        <rect>
-        <x>12</x>
-        <y>50</y>
-        <width>71</width>
+        <x>367</x>
+        <y>19</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>20</y>
+        <width>131</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>CheckBox</string>
+       <string>操作项目(汉字/行)</string>
       </property>
      </widget>
+     <widget class="QLineEdit" name="lineEdit_11">
+      <property name="geometry">
+       <rect>
+        <x>367</x>
+        <y>49</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>50</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>流水号长度</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_12">
+      <property name="geometry">
+       <rect>
+        <x>147</x>
+        <y>49</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>状态转换(汉字/行)</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_9">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>190</y>
+       <width>511</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>自定义显示</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
@@ -383,7 +500,7 @@
        <string>上：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="topMargin">
       <property name="geometry">
        <rect>
         <x>45</x>
@@ -412,7 +529,7 @@
        <string>下：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="bottomMargin">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -428,7 +545,7 @@
        </font>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_7">
+     <widget class="QLineEdit" name="rightMargin">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -457,7 +574,7 @@
        <string>左：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_8">
+     <widget class="QLineEdit" name="leftMargin">
       <property name="geometry">
        <rect>
         <x>45</x>
@@ -486,7 +603,7 @@
        <string>右：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_10">
+     <widget class="QLineEdit" name="tailMargin">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -502,7 +619,7 @@
        </font>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_11">
+     <widget class="QLineEdit" name="headMargin">
       <property name="geometry">
        <rect>
         <x>45</x>
@@ -583,7 +700,7 @@
        <string>页头：</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QTextEdit" name="headText">
       <property name="geometry">
        <rect>
         <x>11</x>
@@ -606,7 +723,7 @@
        <string>页尾：</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit_2">
+     <widget class="QTextEdit" name="tailText">
       <property name="geometry">
        <rect>
         <x>12</x>
@@ -629,7 +746,7 @@
      <property name="title">
       <string>其他设置</string>
      </property>
-     <widget class="QCheckBox" name="checkBox_7">
+     <widget class="QCheckBox" name="gridCheck">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -642,7 +759,7 @@
        <string>网格线</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_8">
+     <widget class="QCheckBox" name="rowCheck">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -655,7 +772,7 @@
        <string>显示行</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_9">
+     <widget class="QCheckBox" name="clrColor">
       <property name="geometry">
        <rect>
         <x>330</x>
@@ -668,7 +785,7 @@
        <string>彩色打印</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_10">
+     <widget class="QCheckBox" name="colCheck">
       <property name="geometry">
        <rect>
         <x>221</x>

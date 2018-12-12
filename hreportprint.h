@@ -56,6 +56,7 @@ public:
     void printHeader(QPainter *p, HPrintInfo *pInfo);
     void printFooter(QPainter *p, HPrintInfo *pInfo);
 
+    void printFixedRowCells(int nStartColumn, int nStopColumn, int& row, QRect& rect,QPainter *pDC, bool& bFirst,HPrintInfo* pInfo);
     void printRowHeadings(QPainter *p, HPrintInfo* pInfo);
     void PrintColumnHeadings(QPainter *p, HPrintInfo *pInfo);
 
