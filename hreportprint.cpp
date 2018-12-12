@@ -246,6 +246,62 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pDC->restore();
 }
 
+void HReportPrint::printRowHeadings(QPainter *pDC, HPrintInfo* pInfo)
+{
+    if(!p || !pInfo)
+        return;
+    pDC->save();
+    pDC->setFont(m_PrinterFont);
+
+    QRect rect;
+    rect.setRight(-1);
+
+    bool bFirst = true;
+    for( int iCol = 0; iCol < pInfo->m_pGridCtrl->fixedColumnCount(); iCol++)
+    {
+        rect.setLeft(rect.right() + 1);
+        rect.setRight(rect.left() + pInfo->m_pGridCtrl->columnWidth( iCol) - 1);
+
+        rect.setBottom(-1);
+        for( int iRow = m_nCurrPrintRow; iRow < pInfo->m_pGridCtrl->rowCount(); iRow++)
+        {
+            rect.setTop(rect.bottom() + 1);
+            rect.setBottom(rect.top() + pInfo->m_pGridCtrl->rowHeight( iRow) - 1);
+
+            if( rect.bottom() > m_nPageHeight)
+                break;
+
+            HGridCellBase* pCell = pInfo->m_pGridCtrl->getCell(iRow, iCol);
+            if (pCell)
+                pCell->printCell(pDC, iRow, iCol, rect);
+
+            if (pInfo->m_pGridCtrl->gridLines() == GVL_BOTH || pInfo->m_pGridCtrl->gridLines() == GVL_HORZ)
+            {
+                int Overlap = (iCol == 0)? 0:1;
+                pDC->MoveTo(rect.left-Overlap, rect.bottom);
+                pDC->LineTo(rect.right, rect.bottom);
+                if( bFirst) {
+                    pDC->MoveTo(rect.left-Overlap, rect.top-1);
+                    pDC->LineTo(rect.right, rect.top-1);
+                    bFirst = FALSE;
+                }
+            }
+            if (m_nGridLines == GVL_BOTH || m_nGridLines == GVL_VERT)
+            {
+                int Overlap = (iRow == 0)? 0:1;
+                pDC->MoveTo(rect.right, rect.top-Overlap);
+                pDC->LineTo(rect.right, rect.bottom);
+                if (iCol == 0) {
+                    pDC->MoveTo(rect.left, rect.top-Overlap);
+                    pDC->LineTo(rect.left, rect.bottom);
+                }
+            }
+
+        }
+    }
+    pDC->SelectObject(pOldFont);
+}
+
 void HReportPrint::PrintColumnHeadings(QPainter *pDC, HPrintInfo* /*pInfo*/)
 {
    /* CFont *pOldFont = pDC->SelectObject(&m_PrinterFont);

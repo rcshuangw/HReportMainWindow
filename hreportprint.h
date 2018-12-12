@@ -55,6 +55,8 @@ public:
     void onPrintEnd(QPainter *p, HPrintInfo *pInfo);
     void printHeader(QPainter *p, HPrintInfo *pInfo);
     void printFooter(QPainter *p, HPrintInfo *pInfo);
+
+    void printRowHeadings(QPainter *p, HPrintInfo* pInfo);
     void PrintColumnHeadings(QPainter *p, HPrintInfo *pInfo);
 
     void printPage(QPainter* p);
