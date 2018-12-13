@@ -4,6 +4,7 @@
 #include "hgridctrlwidget.h"
 #include "hgridctrlhelper.h"
 #include "hgridreportmgr.h"
+#include "hreportprint.h"
 HGridReportWidget::HGridReportWidget(HReportManager* mgr,QWidget *parent)
    :m_pReportManager(mgr),QWidget(parent)
 {
@@ -297,6 +298,12 @@ void HGridReportWidget::enableSelectRange(bool b)
             w->enableSelectRange(b);
         }
     }
+}
+
+void HGridReportWidget::printPreview()
+{
+    HReportPrint print(this);
+    print.printPreview();
 }
 
 void HGridReportWidget::gridCell_clicked(HGridCell* pCell)

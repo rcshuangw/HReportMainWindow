@@ -42,6 +42,9 @@ public:
     void enableShowGridLines(bool);
     void enableShowTab(bool);
     void enableSelectRange(bool);
+
+    //打印
+    void printPreview();
 signals:
     void gridcellclickded(HGridCell*);
 

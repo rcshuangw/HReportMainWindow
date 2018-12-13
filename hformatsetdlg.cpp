@@ -18,6 +18,7 @@
 #define QCATAGORY_DATE     1
 #define QCATAGORY_TIME     2
 
+//注意具体配置需要从xml里面读取
 HFormatSetDlg::HFormatSetDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::HFormatSetDlg)
@@ -58,6 +59,16 @@ void HFormatSetDlg::initBaseSet()
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignLeft.png"),QStringLiteral("左对齐"),QVariant(QDT_LEFT));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignCenter.png"),QStringLiteral("水平居中"),QVariant(QDT_HCENTER));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignRight.png"),QStringLiteral("右对齐"),QVariant(QDT_RIGHT));
+}
+
+void HFormatSetDlg::initPrintSheetSet()
+{
+
+}
+
+void HFormatSetDlg::initPrintSet()
+{
+
 }
 
 void HFormatSetDlg::onCatagoryListWidget_clicked()

@@ -60,9 +60,17 @@ void HReportMaiWidget::newReportWidget()
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->newReportWidget();
+    m_pReportBrowserWidget->newReportWidget();
     m_pReportEditorWidget->newReportWidget();
 }
+
+void HReportMaiWidget::printReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pReportBrowserWidget->printReportWidget();
+}
+
 
 void HReportMaiWidget::updateReportWidget()
 {

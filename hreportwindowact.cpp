@@ -291,7 +291,9 @@ void HReportMainWindow::printOption_clicked()
 
 void HReportMainWindow::printPreview_clicked()
 {
-
+    if(!m_pReportMainWidget || !m_pReportManager)
+        return;
+    m_pReportMainWidget->printReportWidget();
 }
 
 void HReportMainWindow::opSheet_clicked()

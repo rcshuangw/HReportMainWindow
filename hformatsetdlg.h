@@ -18,6 +18,8 @@ public:
 public:
     void initBaseSet();//未单独设置qwidget
     void initDigitalSet();//未单独设置qwidget 数字设置
+    void initPrintSheetSet();// 主要是大约操作票的相关设置
+    void initPrintSet();//打印相关设置
 
 public slots:
     void onCatagoryListWidget_clicked();

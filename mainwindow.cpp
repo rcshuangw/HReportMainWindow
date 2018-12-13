@@ -70,6 +70,12 @@ void HReportMainWindow::initReportConnect()
     connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
 
     connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
+
+
+    //打印部分
+    connect(printPreviewAct,SIGNAL(triggered(bool)),this,SLOT(printPreview_clicked()));
+    connect(printOptionAct,SIGNAL(triggered(bool)),this,SLOT(printOption_clicked()));
+    connect(printDialogAct,SIGNAL(triggered(bool)),this,SLOT(printDialog_clicked()));
 }
 
 //

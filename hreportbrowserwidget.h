@@ -11,6 +11,7 @@ public:
 
 public:
     void newReportWidget();
+    void printReportWidget();
     /*void initGridReportWidget();
     void updateGridReportWidget();
     void setGridReportType(quint8 uGridReportType);

@@ -47,7 +47,7 @@ class HReportPrint : QObject
 {
     Q_OBJECT
 public:
-    HReportPrint();
+    HReportPrint(HGridReportWidget* widget);
 
 public:
     void onPrintBegin(QPainter *p, HPrintInfo *pInfo);
@@ -61,14 +61,15 @@ public:
     void PrintColumnHeadings(QPainter *p, HPrintInfo *pInfo);
 
     void printPage(QPainter* p);
+
+    void printPreview();//外部调用
 public slots:
-    void printPriview();//外部调用
-    void printPriview(QPrinter*); //内部调用 打印预览
+
+    void printPreview(QPrinter*); //内部调用 打印预览
     void printPages(QPrinter*); //直接打印
 
 public:
     HGridReportWidget *m_pGridReportWidget;
-    HGridCtrl* m_pCurGridCtrl;
     HPrintInfo m_PrintInfo;
 
     QFont       m_PrinterFont;  // for the printer

@@ -1,5 +1,6 @@
 ﻿#include "hgridreportmgr.h"
 #include "hgridctrlhelper.h"
+#include "hreportprint.h"
 HReportManager::HReportManager(QObject *parent) : QObject(parent)
 {
     m_pGridCtrlFile = new HGridCtrlFile;

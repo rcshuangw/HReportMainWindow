@@ -22,6 +22,8 @@ public:
     void createReportBrowserWidget();
     void createReportEditorWidget();
     void newReportWidget();
+    void printReportWidget();
+
     void updateReportWidget();
 private:
     Ui::HReportMaiWidget *ui;
