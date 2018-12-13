@@ -2,6 +2,8 @@
 #include "ui_formatsetdlg.h"
 #include "hborderset.h"
 #include "hfontset.h"
+#include <QDoubleValidator>
+
 #define QDT_TOP                      Qt::AlignTop
 #define QDT_LEFT                     Qt::AlignLeft
 #define QDT_HCENTER                  Qt::AlignHCenter
@@ -28,8 +30,10 @@ HFormatSetDlg::HFormatSetDlg(QWidget *parent) :
     initBaseSet();
     HFontSet* font = new HFontSet(this);
     HBorderSet* border = new HBorderSet(this);
-    ui->tabWidget->insertTab(3,font,QStringLiteral("字体"));
-    ui->tabWidget->insertTab(4,border,QStringLiteral("边框"));
+    ui->tabWidget->insertTab(2,font,QStringLiteral("字体"));
+    ui->tabWidget->insertTab(3,border,QStringLiteral("边框"));
+    initPrintSheetSet();
+    initPrintSet();
 }
 
 HFormatSetDlg::~HFormatSetDlg()
@@ -68,7 +72,26 @@ void HFormatSetDlg::initPrintSheetSet()
 
 void HFormatSetDlg::initPrintSet()
 {
+    QDoubleValidator *doubleValidator = new QDoubleValidator(0,50,2);
+    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
+    ui->leftMargin->setValidator(doubleValidator);
+    ui->rightMargin->setValidator(doubleValidator);
+    ui->topMargin->setValidator(doubleValidator);
+    ui->bottomMargin->setValidator(doubleValidator);
+    ui->headMargin->setValidator(doubleValidator);
+    ui->tailMargin->setValidator(doubleValidator);
 
+    ui->leftMargin->setText("0");
+    ui->rightMargin->setText("0");
+    ui->topMargin->setText("0");
+    ui->bottomMargin->setText("0");
+    ui->headMargin->setText("0");
+    ui->tailMargin->setText("0");
+
+    ui->gridCheck->setChecked(false);
+    ui->rowCheck->setChecked(false);
+    ui->colCheck->setChecked(false);
+    ui->clrColor->setChecked(false);
 }
 
 void HFormatSetDlg::onCatagoryListWidget_clicked()
