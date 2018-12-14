@@ -9,11 +9,128 @@ class HFormatSet : public QObject
 public:
     explicit HFormatSet(QObject *parent = 0);
 
+public:
+    void loadDefaultFormatSet(int v,QDataStream* ds);
+    void saveDefaultFormatSet(int v,QDataStream* ds);
+
+public:
+    //基本
+    void setHorizontalAlign(quint32 hAlign);
+    quint32 horizontalAlign();
+    void setVerticalAlign(quint32 vAlign);
+    quint32 verticalAlign();
+    void enableAutoWrapText(bool bAutoWrapText);
+    bool isAutoWrapText();
+    void enableMergeCell(bool bMergCell);
+    bool isMergeCell();
+
+    //字体
+    void setFontFamily(const QString& fontFamily);
+    QString fontFamily();
+    void setFontStyle(quint8);
+    quint8 fontStyle();
+    void setFontSize(quint8);
+    quint8 fontSize();
+    void enableFontUnderline(bool);
+    bool isFontUnderline();
+    void enableFontBold(bool);
+    bool isFontBold();
+    void enableFontItalic(bool);
+    bool isFontItalic();
+    void setTextColor(const QString&);
+    QString textColor();
+    void setTextBkColor(const QString&);
+    QString textBkColor();
+
+    //边框
+    void setBorderPenStyle(quint16);
+    quint16 borderPenStyle();
+    void enableBorderLeft(bool);
+    bool isBorderLeft();
+    void enableBorderRight(bool);
+    bool isBorderRight();
+    void enableBorderTop(bool);
+    bool isBorderTop();
+    void enableBorderBottom(bool);
+    bool isBorderBottom();
+    void setBorderLineColor(const QString&);
+    QString borderLineColor();
+    void setBorderLeftLineColor(const QString&);
+    QString borderLeftLineColor();
+    void setBorderRightLineColor(const QString&);
+    QString borderRightLineColor();
+    void setBorderTopLineColor(const QString&);
+    QString borderTopLineColor();
+    void setBorderBottomLineColor(const QString&);
+    QString borderBottomLineColor();
+
+    //表格
+    void setCellRowHeight(int);
+    int cellRowHeight();
+    void setCellColWidth(int);
+    int cellColWidth();
+
+    //打印相关
+    void enableSheetNoPrefix(bool);
+    bool isSheetNoPrefix();
+    void enableSheetNoSuffix(bool);
+    bool isSheetNoSuffix();
+    void enableSheetNoLength(bool);
+    bool isSheetNoLength();
+    void enableSheetTempNo(bool);
+    bool isSheetTempNo();
+    void setSheetNoPrefix(const QString&);
+    QString sheetNoPrefix();
+    void setSheetNoSuffix(const QString&);
+    QString sheetNoSuffix();
+    void setSheetNoLength(const QString&);
+    QString sheetNoLength();
+    void setSheetTempNo(const QString&);
+    QString sheetTempNo();
+
+    void setOpTaskWordCount(quint16);
+    quint16 opTaskWordCount();
+    void setOpTermWordCount(quint16);
+    quint16 opTermWordCount();
+    void setStateChangeWordCount(quint16);
+    quint16 stateChangeWordCount();
+    void setSerialNumWordCount(quint16);
+    quint16 serialNumWordCount();
+
+
+    //打印设置
+    void setPageLeftMargin(double);
+    double pageLeftMargin();
+    void setPageRightMarin(double);
+    double pageRightMargin();
+    void setPageTopMargin(double);
+    double pageTopMargin();
+    void setPageBottomMargin(double);
+    double pageBottomMargin();
+    void setPageHeaderHeight(double);
+    double pageHeaderHeight();
+    void setPageFooterHeight(double);
+    double pageFooterHeight();
+
+    void setPageHeaderText(const QString&);
+    QString pageHeaderText();
+    void setPageFooterText(const QString&);
+    QString pageFooterText();
+
+    void enablePageShowGrid(bool);
+    bool isPageShowGrid();
+    void setPageShowColumnHeader(bool);
+    bool isPageShowColumnHeader();
+    void setPageShowRowHeader(bool);
+    bool isPageShowRowHeader();
+    void setPagePrintColour(bool);
+    bool isPagePrintColour();
+
 signals:
 
 public slots:
 
-public:
+private:
 
     //基本
     quint32   m_nHorizontalAlign;       //水平对齐
@@ -25,11 +142,14 @@ public:
     QString m_strFontFamily;            //字体
     quint8  m_nFontStyle;               //字体风格
     quint8  m_nFontSize;                //字体大小
-    quint8  m_nFontUnderline;           //字体下划线
-    QString m_strFontColor;             //字体颜色
+    bool    m_bFontUnderline;           //字体下划线
+    bool    m_bFontBold;                //字体加粗
+    bool    m_bFontItalic;              //字体倾斜
+    QString m_strTextColor;             //字体颜色
+    QString m_strTextBkColor;           //字体背景颜色
 
     //边框
-    quint16 m_nPenStyle;                 //边框线形
+    quint16 m_nBorderPenStyle;                 //边框线形
     bool m_bBorderLeft;                  //左边框
     bool m_bBorderTop;                   //上边框
     bool m_bBorderRight;                 //右边框
@@ -39,6 +159,10 @@ public:
     QString m_strBorderRightLineColor;   //右边框颜色
     QString m_strBorderTopLineColor;     //上边框颜色
     QString m_strBorderBottomLineColor;  //下边框颜色
+
+    //表格
+    int m_nCellRowHeight;                //默认表格行高
+    int m_nCellColWidth;                 //默认表格列宽
 
     //打印显示
     bool m_bSheetNoPrefix;               //票号前缀
@@ -56,22 +180,20 @@ public:
     quint16 m_nSerialNumWordCount;       //流水号字符长度
 
     //打印设置
-    double m_dLeftMargin;                //左边距
-    double m_dRightMargin;               //右边距
-    double m_dTopMargin;                 //上边距
-    double m_dBottomMargin;              //下边距
-    double m_dHeadMargin;                //头边距
-    double m_dTailMargin;                //尾边距
+    double m_dPageLeftMargin;                //左边距
+    double m_dPageRightMargin;               //右边距
+    double m_dPageTopMargin;                 //上边距
+    double m_dPageBottomMargin;              //下边距
+    double m_dPageHeaderHeight;              //头边距
+    double m_dPageFooterHeight;              //尾边距
 
-    QString m_strPageHead;               //头文字
-    QString m_strPageTail;               //尾文字
+    QString m_strPageHeaderText;             //头文字
+    QString m_strPageFooterText;             //尾文字
 
-    bool m_bEnableShowGrid;              //显示网格
-    bool m_bEnableShowCol;               //显示列
-    bool m_bEnableShowRow;               //显示行
-    bool m_bEnableShowColor;             //彩色打印
-
-
+    bool m_bPageShowGrid;              //显示网格
+    bool m_bPageShowCol;               //显示列
+    bool m_bPageShowRow;               //显示行
+    bool m_bPagePrintColour;           //彩色打印
 };
 
 #endif // HFORMATSET_H
