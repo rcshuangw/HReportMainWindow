@@ -27,6 +27,7 @@ HReportPrint::HReportPrint(HGridReportWidget* widget)
     m_nRightMargin = 1;
     m_nGap = 0;
     m_nHeaderHeight = 2;
+    m_nFooterHeight = 1;
 }
 
 void HReportPrint::onPrintBegin(QPainter *pDC, HPrintInfo *pInfo)
@@ -54,15 +55,8 @@ void HReportPrint::onPrintBegin(QPainter *pDC, HPrintInfo *pInfo)
     m_LogicalPageSize.setHeight(int(m_LogicalPageSize.width()*m_PaperSize.height()/m_PaperSize.height()));
     m_nPageHeight = m_LogicalPageSize.height() - (m_nHeaderHeight+m_nFooterHeight + 2*m_nGap)*m_CharSize.height();
 
-    //获取固定列宽
-    int iColumnOffset = 0;
-    int i1;
-    for( i1=0; i1 < pInfo->m_pGridCtrl->fixedColumnCount(); i1++)
-    {
-        iColumnOffset += pInfo->m_pGridCtrl->columnWidth( i1);
-    }
     //页面宽度 = 逻辑页面宽度 - 固定列宽 - 边距
-    m_nPageWidth = m_LogicalPageSize.width() - iColumnOffset - nMargins;
+    m_nPageWidth = m_LogicalPageSize.width() - nMargins;
     m_nPageMultiplier = 1;
     pDC->restore();
 }
@@ -75,91 +69,71 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     //打印的原点仍然在左上角
     int transPointX = 0;
     int transPointY = 0;
+    bool bEnableShowRow = false;
+    bool bEnableShowCol = false;
+
     pDC->translate(0,0);
     pDC->setWindow(QRect(QPoint(0,0),m_LogicalPageSize));
     pDC->setViewport(QRect(QPoint(0,0),m_PaperSize));
     transPointX = m_nLeftMargin * m_CharSize.width();
-    pDC->translate(transPointX, 0);
-
     pDC->setFont(m_PrinterFont);
     HGridCtrl* pGridCtrl = pInfo->m_pGridCtrl;
     if(!pGridCtrl) return;
 
     // Header
     pInfo->m_rectDraw.setTop(0);
-    pInfo->m_rectDraw.setLeft(0);
-    pInfo->m_rectDraw.setRight(m_LogicalPageSize.width() - (m_nLeftMargin + m_nRightMargin) * m_CharSize.width());
+    pInfo->m_rectDraw.setLeft(m_nLeftMargin * m_CharSize.width());
+    pInfo->m_rectDraw.setRight(m_LogicalPageSize.width() - (0 + m_nRightMargin) * m_CharSize.width());
     pInfo->m_rectDraw.setBottom(m_nHeaderHeight * m_CharSize.height());
 
     //报表头文字
     printHeader(pDC, pInfo);
 
     //移动原点到报表头下面
-
-    transPointY = m_nHeaderHeight * m_CharSize.height();
-    pDC->translate(transPointX, transPointY);
+    transPointY += m_nHeaderHeight * m_CharSize.height();
 
     //头和表格之间的空间
-    transPointY += m_nGap * m_CharSize.height();
-    pDC->translate(transPointX, transPointY);
+    transPointY += 5;//m_nGap * m_CharSize.height();
 
-    // We need to find out which row to start printing for this page.
-    m_nCurrPrintRow = pGridCtrl->fixedRowCount();
-    m_nPrintColumn = pGridCtrl->fixedColumnCount();
-    int i1, i2;
-
-    // now, calculate which print column to start displaying
-    /*for( i1 = 0; i1 < iWideColPageOffset; i1++)
-    {
-        for( i2 = m_nPrintColumn; i2 < GetColumnCount(); i2++)
-        {
-            iTotalRowWidth += GetColumnWidth( i2);
-            if( iTotalRowWidth > m_nPageWidth)
-            {
-                m_nPrintColumn = i2;
-                iTotalRowWidth = 0;
-                break;
-            }
-        }
-    }
-*/
-    //如果要打印列则打印
-    bool bEnableShowRow = false;
-    if(bEnableShowRow && pGridCtrl->fixedRowCount() > 0)
-        printRowHeadings(pDC, pInfo);   // print row buttons on each page
-
+    //表格居中打印
     int iColumnOffset = 0;
-
-    //固定列宽
-    for( i1=0; i1 < pGridCtrl->fixedColumnCount(); i1++)
+    int nColumnCount = 0;
+    if(bEnableShowCol)
+        nColumnCount = pGridCtrl->columnCount();
+    else
+        nColumnCount = pGridCtrl->columnCount() - pGridCtrl->fixedColumnCount();
+    for(int i1=0; i1 < nColumnCount; i1++)
     {
         iColumnOffset += pGridCtrl->columnWidth( i1);
     }
 
-    // Print the column headings
-    bool bEnableShowCol = false;
-    if(bEnableShowCol && pGridCtrl->fixedColumnCount() > 0)
-    {
-        //如果打印列
-        pInfo->m_rectDraw.setBottom(pGridCtrl->fixedRowHeight());
+    int deltaX = m_nPageWidth - iColumnOffset;
+    if(deltaX > 0)
+        deltaX = deltaX / 2;
+    transPointX += deltaX;
 
-        //pDC->translate( 0, pGridCtrl->fixedRowHeight());
-        m_nPageWidth += iColumnOffset;
-        m_nPrintColumn = 0;
-        PrintColumnHeadings(pDC, pInfo);
-        m_nPageWidth -= iColumnOffset;
-        m_nPrintColumn = pGridCtrl->fixedColumnCount();
-        transPointX += iColumnOffset;
-        transPointY += pGridCtrl->fixedRowHeight();
-        pDC->translate( transPointX, transPointY);
+    //移动绘制表格原点到transPointX,transPointY处
+    pDC->translate(transPointX,transPointY);
+
+    //初始行列为0
+    m_nCurrPrintRow = 0;
+    m_nPrintColumn = 0;
+
+    //如果要打印固定列则打印
+    if(bEnableShowRow && pGridCtrl->fixedRowCount() > 0)
+        printRowHeadings(pDC, pInfo);   // 打印每行的表头
+    else
+        m_nCurrPrintRow += pGridCtrl->fixedRowCount();//如果不打印固定行头 则行移动到第一个非固定列出
+
+
+    if(bEnableShowCol && pGridCtrl->fixedColumnCount() > 0)
+    {       
+       PrintColumnHeadings(pDC, pInfo);
     }
     else
     {
-        transPointX += iColumnOffset;
-        pDC->translate( transPointX,transPointY);
+        m_nPrintColumn = pGridCtrl->fixedColumnCount();
     }
-
-    if (m_nCurrPrintRow >= pGridCtrl->rowCount()) return;
 
     bool bFirstPrintedRow = true;
     QRect rect;
@@ -182,7 +156,6 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
         }
         Row++;
     }*/
-
     while (m_nCurrPrintRow < pGridCtrl->rowCount())
     {
         rect.setTop(rect.bottom()+1);
@@ -230,21 +203,24 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 pCell->printCell(pDC, m_nCurrPrintRow, col, rect);
 
             //增加列和行是否允许绘制
-
             if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_HORZ)
             {
-                int Overlap = (col == 0)? 0:1;
+                int Overlap = (col == 0 || m_nCurrPrintRow == pGridCtrl->fixedRowCount())? 0:0;
                 pDC->drawLine(QPoint(rect.left()-Overlap, rect.bottom()),QPoint(rect.right(), rect.bottom()));
-                if (m_nCurrPrintRow == 0) {
+                if (m_nCurrPrintRow == 0 || m_nCurrPrintRow == pGridCtrl->fixedRowCount()){
                     pDC->drawLine(QPoint(rect.left()-Overlap, rect.top()),QPoint(rect.right(), rect.top()));
+                }
+                else if(m_nCurrPrintRow == pGridCtrl->fixedRowCount())
+                {
+
                 }
             }
 
             if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_VERT)
             {
-                int Overlap = (bFirstPrintedRow)? 0:1;
+                int Overlap = (bFirstPrintedRow )? 0:0;
                 pDC->drawLine(QPoint(rect.right(), rect.top()-Overlap),QPoint(rect.right(), rect.bottom()));
-                if (col == 0) {
+                if (col == 0 || col == pGridCtrl->fixedColumnCount()) {
                     pDC->drawLine(QPoint(rect.left(), rect.top()-Overlap),QPoint(rect.left(), rect.bottom()));
                 }
             }
@@ -260,12 +236,14 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pDC->FillSolidRect(white_rect,RGB(255,255,255));*/
 
     // Footer
-    pInfo->m_rectDraw.setBottom(m_nFooterHeight * m_CharSize.height());
-    pDC->translate(m_nLeftMargin * m_CharSize.width(), m_LogicalPageSize.height() + m_nFooterHeight * m_CharSize.height());
+    pDC->translate(-transPointX,-transPointY);
+    pInfo->m_rectDraw.setTop(m_LogicalPageSize.height() - m_nFooterHeight * m_CharSize.height());
+    pInfo->m_rectDraw.setLeft(0);
+    pInfo->m_rectDraw.setRight(m_LogicalPageSize.width() - (0 + m_nRightMargin) * m_CharSize.width());
+    pInfo->m_rectDraw.setBottom(m_LogicalPageSize.height());
+    int fx = m_LogicalPageSize.height() + m_nFooterHeight * m_CharSize.height();
+    //pDC->translate(m_nLeftMargin * m_CharSize.width(), 300);
     printFooter(pDC, pInfo);
-
-    // SetWindowOrg back for next page
-    pDC->translate(0,0);
 
     pDC->restore();
 }
@@ -280,7 +258,6 @@ void HReportPrint::printRowHeadings(QPainter *pDC, HPrintInfo* pInfo)
     QRect rect;
     rect.setRight(-1);
 
-    bool bFirst = true;
     for( int iCol = 0; iCol < pInfo->m_pGridCtrl->fixedColumnCount(); iCol++)
     {
         rect.setLeft(rect.right() + 1);
@@ -298,90 +275,9 @@ void HReportPrint::printRowHeadings(QPainter *pDC, HPrintInfo* pInfo)
             HGridCellBase* pCell = pInfo->m_pGridCtrl->getCell(iRow, iCol);
             if (pCell)
                 pCell->printCell(pDC, iRow, iCol, rect);
-
-            if (pInfo->m_pGridCtrl->gridLines() == GVL_BOTH || pInfo->m_pGridCtrl->gridLines() == GVL_HORZ)
-            {
-                int Overlap = (iCol == 0)? 0:1;
-                pDC->drawLine(QPoint(rect.left()-Overlap, rect.bottom()),QPoint(rect.right(), rect.bottom()));
-                if( bFirst) {
-                    pDC->drawLine(QPoint(rect.left()-Overlap, rect.top()-1),QPoint(rect.right(), rect.top()-1));
-                    bFirst = false;
-                }
-            }
-            if (pInfo->m_pGridCtrl->gridLines() == GVL_BOTH || pInfo->m_pGridCtrl->gridLines() == GVL_VERT)
-            {
-                int Overlap = (iRow == 0)? 0:1;
-                pDC->drawLine(QPoint(rect.right()-Overlap, rect.top()),QPoint(rect.right(), rect.bottom()));
-                if (iCol == 0) {
-                    pDC->drawLine(QPoint(rect.left(), rect.top()-Overlap),QPoint(rect.left(), rect.bottom()));
-                }
-            }
-
         }
     }
     pDC->restore();
-}
-
-void HReportPrint::printFixedRowCells(int nStartColumn, int nStopColumn, int& row, QRect& rect,QPainter *pDC, bool& bFirst,HPrintInfo* pInfo)
-{
-    if(!pDC) return;
-   // print all cells from nStartColumn to nStopColumn on row
-   for (int col =nStartColumn; col < nStopColumn; col++)
-   {
-      rect.setLeft(rect.right() + 1);
-      rect.setRight(rect.left() + pInfo->m_pGridCtrl->columnWidth( col) - 1);
-
-      if( rect.right() > m_nPageWidth)
-         break;
-
-      HGridCellBase* pCell = pInfo->m_pGridCtrl->getCell(row, col);
-      if(pCell)
-          pCell->printCell(pDC, row, col, rect);
-      /*if (pCell)
-      {
-            //Used for merge cells
-            //by Huang Wei
-            int row=m_nCurrPrintRow;
-            if(!pCell->IsMerged())
-            {
-                if(!pCell->IsMergeWithOthers())
-                {
-                    pCell->PrintCell(pDC, row, col, rect);
-                }
-            }
-            else
-            {
-                CRect mergerect=rect;
-                if(GetCellRangeRect(pCell->m_MergeRange,&mergerect))
-                {
-                    //mergerect.DeflateRect(0,0,1,1);
-                    mergerect.OffsetRect(rect.TopLeft()-mergerect.TopLeft());
-                    pCell->PrintCell(pDC, row, col, mergerect);
-                }
-            }
-      }*/
-
-      if (pInfo->m_pGridCtrl->gridLines() == GVL_BOTH || pInfo->m_pGridCtrl->gridLines() == GVL_HORZ)
-      {
-         int Overlap = (col == 0)? 0:1;
-         pDC->drawLine(QPoint(rect.left()-Overlap, rect.bottom()),QPoint(rect.right(), rect.bottom()));
-         if (row == 0)
-         {
-            pDC->drawLine(QPoint(rect.left()-Overlap, rect.top()),QPoint(rect.right(), rect.top()));
-          }
-      }
-
-      if (pInfo->m_pGridCtrl->gridLines() == GVL_BOTH || pInfo->m_pGridCtrl->gridLines() == GVL_VERT)
-      {
-         int Overlap = (row == 0)? 0:1;
-         pDC->drawLine(QPoint(rect.right(), rect.top() - Overlap),QPoint(rect.right(), rect.bottom()));
-         if( bFirst)
-         {
-            pDC->drawLine(QPoint(rect.left()-1, rect.top() - Overlap),QPoint(rect.left()-1, rect.bottom()));
-            bFirst = false;
-          }
-       }
-   }
 }
 
 void HReportPrint::PrintColumnHeadings(QPainter *pDC, HPrintInfo* pInfo)
@@ -407,15 +303,42 @@ void HReportPrint::PrintColumnHeadings(QPainter *pDC, HPrintInfo* pInfo)
         // if printColumn > fixedcolumncount we are on page 2 or more
         // lets printout those fixed cell headings again the 1 or more that would be missed
         // added by M.Fletcher 12/17/00
-        if(m_nPrintColumn>= pInfo->m_pGridCtrl->fixedColumnCount())
+        for (int col = m_nPrintColumn; col < pInfo->m_pGridCtrl->columnCount(); col++)
         {
-           bOriginal=false;
-           // lets print the missing fixed cells on left first out to last fixed column
-           printFixedRowCells(0,pInfo->m_pGridCtrl->fixedColumnCount(), row, rect, pDC, bFirst,pInfo);
-           bFirst=bOriginal;
+           rect.setLeft(rect.right() + 1);
+           rect.setRight(rect.left() + pInfo->m_pGridCtrl->columnWidth( col) - 1);
+
+           if( rect.right() > m_nPageWidth)
+              break;
+
+           HGridCellBase* pCell = pInfo->m_pGridCtrl->getCell(row, col);
+           if(pCell)
+               pCell->printCell(pDC, row, col, rect);
+           /*if (pCell)
+           {
+                 //Used for merge cells
+                 //by Huang Wei
+                 int row=m_nCurrPrintRow;
+                 if(!pCell->IsMerged())
+                 {
+                     if(!pCell->IsMergeWithOthers())
+                     {
+                         pCell->PrintCell(pDC, row, col, rect);
+                     }
+                 }
+                 else
+                 {
+                     CRect mergerect=rect;
+                     if(GetCellRangeRect(pCell->m_MergeRange,&mergerect))
+                     {
+                         //mergerect.DeflateRect(0,0,1,1);
+                         mergerect.OffsetRect(rect.TopLeft()-mergerect.TopLeft());
+                         pCell->PrintCell(pDC, row, col, mergerect);
+                     }
+                 }
+           }*/
         }
-        // now back to normal business print cells in heading after all fixed columns
-        printFixedRowCells(m_nPrintColumn, pInfo->m_pGridCtrl->columnCount(), row, rect, pDC, bFirst,pInfo);
+
     }
     pDC->restore();
 }
@@ -443,6 +366,7 @@ void HReportPrint::printHeader(QPainter *pDC, HPrintInfo *pInfo)
         pDC->drawText( rc, QDT_RIGHT | QDT_SINGLELINE | QDT_NOPREFIX | QDT_VCENTER, strRight);
 
     // draw ruled-line across top
+    pDC->save();
     pDC->setPen(Qt::black);
     pDC->drawLine(QPoint(rc.left(), rc.bottom()),QPoint(rc.right(), rc.bottom()));
 
@@ -467,6 +391,7 @@ void HReportPrint::printFooter(QPainter *pDC, HPrintInfo *pInfo)
     // draw ruled line on bottom
     //先画条线 如果不需要可以删除
     pDC->setPen(Qt::black);
+    //pDC->drawRect(rc);
     pDC->drawLine(QPoint(rc.left(), rc.top()),QPoint(rc.right(), rc.top()));
 
     if( !strLeft.isEmpty() )

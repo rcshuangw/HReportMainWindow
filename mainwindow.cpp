@@ -61,24 +61,6 @@ void HReportMainWindow::setReportManager(HReportManager *mgr)
     m_pReportManager = mgr;
 }
 
-void HReportMainWindow::initReportConnect()
-{
-    //树相关的消息
-    connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
-    connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
-    connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
-    connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
-
-    connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
-
-
-    //打印部分
-    connect(printPreviewAct,SIGNAL(triggered(bool)),this,SLOT(printPreview_clicked()));
-    connect(printOptionAct,SIGNAL(triggered(bool)),this,SLOT(printOption_clicked()));
-    connect(printDialogAct,SIGNAL(triggered(bool)),this,SLOT(printDialog_clicked()));
-}
-
-//
 void HReportMainWindow::initSARibbonBar()
 {
     setRibbonTheme(ribbonTheme());
@@ -195,6 +177,7 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     btnGroup->setFrameShape(QFrame::NoFrame);
     boldAct = new QAction(QIcon(":/icon/icon/Bold.png"),"",this);
     boldAct->setToolTip(QStringLiteral("粗体"));
+    boldAct->setCheckable(true);
     italicAct = new QAction(QIcon(":/icon/icon/Italic.png"),"",this);
     italicAct->setToolTip(QStringLiteral("倾斜"));
     underlineAct = new QAction(QIcon(":/icon/icon/Underline.png"),"",this);
@@ -651,6 +634,23 @@ void HReportMainWindow::createCategoryPrint(SARibbonCategory* page)
     printPreviewAct->setText(QStringLiteral("打印预览"));
     printpannel->addLargeAction(printPreviewAct);
 
+}
+
+void HReportMainWindow::initReportConnect()
+{
+    //树相关的消息
+    connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
+    connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
+    connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
+    connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
+
+    connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
+
+
+    //打印部分
+    connect(printPreviewAct,SIGNAL(triggered(bool)),this,SLOT(printPreview_clicked()));
+    connect(printOptionAct,SIGNAL(triggered(bool)),this,SLOT(printOption_clicked()));
+    connect(printDialogAct,SIGNAL(triggered(bool)),this,SLOT(printDialog_clicked()));
 }
 
 void HReportMainWindow::onMenuButtonPopupCheckableTest(bool b)

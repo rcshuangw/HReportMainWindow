@@ -72,10 +72,11 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
 {
     if(NULL == pItem) return;
     m_pGridCtrlInfo = pItem;//是通过指针赋值还是直接赋值  --huangw
-    m_pGridCtrl->setRowCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxRow);
-    m_pGridCtrl->setColumnCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxCol);
-    m_pGridCtrl->setFixedColumnCount(0);
-    m_pGridCtrl->setFixedRowCount(0);
+
+    m_pGridCtrl->setRowCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxRow + 1);
+    m_pGridCtrl->setColumnCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxCol + 1);
+    m_pGridCtrl->setFixedColumnCount(1);
+    m_pGridCtrl->setFixedRowCount(1);
     int row ,col = 0;
     if(m_bEnableShowHorHeader || m_bEnableShowVerHeader)
     {
