@@ -3,7 +3,7 @@
 
 #include <QObject>
 class HGridCtrlFile;
-//class HReportMainWidget;
+class HFormatSet;
 class HReportManager : public QObject
 {
     Q_OBJECT
@@ -13,6 +13,7 @@ public:
 public:
     HGridCtrlFile* gridCtrlFile() ;
     //HReportMainWidget *reportMainWidget() ;
+    HFormatSet* formatSet();
 public:
     bool loadGridCtrlFile();
     bool saveGridCtrlFile();
@@ -23,6 +24,7 @@ public slots:
 private:
     HGridCtrlFile* m_pGridCtrlFile;
     //HReportMainWidget* m_pReportMainWidget;
+    HFormatSet* m_pFormatSet;
 };
 
 #endif // HGRIDREPORTMGR_H

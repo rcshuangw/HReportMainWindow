@@ -65,10 +65,10 @@ public:
     QString borderBottomLineColor();
 
     //表格
-    void setCellRowHeight(int);
-    int cellRowHeight();
-    void setCellColWidth(int);
-    int cellColWidth();
+    void setCellRowHeight(double);
+    double cellRowHeight();
+    void setCellColumnWidth(double);
+    double cellColumnWidth();
 
     //打印相关
     void enableSheetNoPrefix(bool);
@@ -154,15 +154,15 @@ private:
     bool m_bBorderTop;                   //上边框
     bool m_bBorderRight;                 //右边框
     bool m_bBorderBottom;                //下边框
-    QString m_strDefaultLineColor;       //默认边框颜色
+    QString m_strBorderLineColor;       //默认边框颜色
     QString m_strBorderLeftLineColor;    //左边框颜色
     QString m_strBorderRightLineColor;   //右边框颜色
     QString m_strBorderTopLineColor;     //上边框颜色
     QString m_strBorderBottomLineColor;  //下边框颜色
 
     //表格
-    int m_nCellRowHeight;                //默认表格行高
-    int m_nCellColWidth;                 //默认表格列宽
+    double m_dCellRowHeight;                //默认表格行高
+    double m_dCellColWidth;                 //默认表格列宽
 
     //打印显示
     bool m_bSheetNoPrefix;               //票号前缀
@@ -174,7 +174,7 @@ private:
     QString m_strSheetNoLength;
     QString m_strSheetTempNo;
 
-    quint16 m_strOpTaskWordCount;        //操作任务字符长度
+    quint16 m_nOpTaskWordCount;        //操作任务字符长度
     quint16 m_nOpTermWordCount;          //操作项目字符长度
     quint16 m_nStateChangeWordCount;     //状态转换字符长度
     quint16 m_nSerialNumWordCount;       //流水号字符长度
