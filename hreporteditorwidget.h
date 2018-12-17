@@ -15,6 +15,10 @@ public:
     void newReportWidget();
 
 public:
+    void paste();
+    void cut();
+    void copy();
+public:
     HReportManager* m_pReportManager;
     HGridReportWidget* m_pGridReportWidget;
 };

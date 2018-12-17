@@ -25,5 +25,27 @@ void HReportBrowserWidget::printReportWidget()
 {
     if(!m_pReportManager)
         return;
+    m_pGridReportWidget->print();
+}
+
+void HReportBrowserWidget::printPreviewReportWidget()
+{
+    if(!m_pReportManager)
+        return;
     m_pGridReportWidget->printPreview();
+}
+
+void HReportBrowserWidget::paste()
+{
+
+}
+
+void HReportBrowserWidget::cut()
+{
+
+}
+
+void HReportBrowserWidget::copy()
+{
+
 }

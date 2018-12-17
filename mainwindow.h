@@ -1,9 +1,11 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QMainWindow>
+#include <QAction>
 class SARibbonBar;
 class SARibbonCategory;
 class SARibbonContextCategory;
+class SARibbonComboBox;
 class QTextEdit;
 class HReportManager;
 class HReportMaiWidget;
@@ -66,6 +68,9 @@ public slots:
     void Del(const QString&,const int graphID);
     void ImportFile(const QString&);
 
+    void fontFamilyComboBox_changed(int);
+    void fontSizeComboBox_changed(int);
+    //action
     void paste_clicked();
     void cut_clicked();
     void copy_clicked();
@@ -121,7 +126,9 @@ public slots:
     void information_clicked();
 
 public:
-
+    SARibbonComboBox* fontFamilyComboBox;
+    SARibbonComboBox* fontSizeComboBox;
+    //QAction
     //文件
     QAction* newAct;
     QAction* openAct;

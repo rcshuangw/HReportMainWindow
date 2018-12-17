@@ -98,3 +98,17 @@ void HGridReportWidget::setGridReportType(quint8 uGridReportType)
         setBrowserGridReportAttr();
 }*/
 
+void HReportEditorWidget::paste()
+{
+    m_pGridReportWidget->paste();
+}
+
+void HReportEditorWidget::cut()
+{
+
+}
+
+void HReportEditorWidget::copy()
+{
+
+}

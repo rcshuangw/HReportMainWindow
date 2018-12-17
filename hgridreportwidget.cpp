@@ -299,11 +299,87 @@ void HGridReportWidget::enableSelectRange(bool b)
         }
     }
 }
+void HGridReportWidget::paste()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        HGridCtrl* pGridCtrl = w->gridCtrl();
+        if(pGridCtrl)
+            pGridCtrl->onEditPaste();
+    }
+}
+
+void HGridReportWidget::cut()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        HGridCtrl* pGridCtrl = w->gridCtrl();
+        if(pGridCtrl)
+            pGridCtrl->onEditCut();
+    }
+}
+
+void HGridReportWidget::copy()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        HGridCtrl* pGridCtrl = w->gridCtrl();
+        if(pGridCtrl)
+            pGridCtrl->onEditCopy();
+    }
+}
+
+void HGridReportWidget::bold(bool b)
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        HGridCtrl* pGridCtrl = w->gridCtrl();
+        if(pGridCtrl)
+        {
+            HCellRange cellRange = pGridCtrl->selectedCellRange();
+            for(int row = cellRange.minRow();row < cellRange.maxRow();row++)
+            {
+                for(int col = cellRange.minCol();col < cellRange.maxCol();col++)
+                {
+                    HGridCellBase* pBase = pGridCtrl->getCell(row,col);
+                    QFont font = pBase->font();
+                    font.setBold(b);
+                    pBase->setFont(font);
+                }
+            }
+        }
+    }
+}
+
+void HGridReportWidget::italic()
+{
+
+}
+
+void HGridReportWidget::underline()
+{
+
+}
+
 
 void HGridReportWidget::printPreview()
 {
     HReportPrint print(this);
     print.printPreview();
+}
+
+void HGridReportWidget::print()
+{
+    HReportPrint print(this);
+    print.print();
 }
 
 void HGridReportWidget::gridCell_clicked(HGridCell* pCell)

@@ -19,10 +19,20 @@ public:
     ~HReportMaiWidget();
 
 public:
+    HReportBrowserWidget* reportBrowserWidget() {return m_pReportBrowserWidget;}
+    HReportEditorWidget* reportEditorWidget()   {return m_pReportEditorWidget; }
+public:
     void createReportBrowserWidget();
     void createReportEditorWidget();
+
+public:
+    //操作
+    void paste();
+    void cut();
+    void copy();
     void newReportWidget();
     void printReportWidget();
+    void printPreviewReportWidget();
 
     void updateReportWidget();
 private:

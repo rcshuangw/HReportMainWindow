@@ -35,6 +35,8 @@ public:
     void enableSelectRange(bool);
 
 public:
+
+public:
     HGridCtrl* gridCtrl() {return m_pGridCtrl;}
 
 signals:

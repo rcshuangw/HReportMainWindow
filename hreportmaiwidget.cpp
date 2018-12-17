@@ -71,6 +71,12 @@ void HReportMaiWidget::printReportWidget()
     m_pReportBrowserWidget->printReportWidget();
 }
 
+void HReportMaiWidget::printPreviewReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pReportBrowserWidget->printPreviewReportWidget();
+}
 
 void HReportMaiWidget::updateReportWidget()
 {
@@ -78,4 +84,26 @@ void HReportMaiWidget::updateReportWidget()
         return;
     HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
     if(!pInfo) return;
+}
+
+void HReportMaiWidget::paste()
+{
+    if(!m_pReportManager)
+        return;
+    //如果浏览框也支持粘贴，则此处要判断当前窗口是否为浏览窗口
+    int index = m_pTabWidget->currentIndex();
+    if(0 == index) //浏览框
+        m_pReportBrowserWidget->paste();
+    else if(1 == index) //编辑框
+        m_pReportEditorWidget->paste();
+}
+
+void HReportMaiWidget::cut()
+{
+
+}
+
+void HReportMaiWidget::copy()
+{
+
 }

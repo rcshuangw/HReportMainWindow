@@ -1,7 +1,6 @@
 ﻿#include "mainwindow.h"
 #include <QTextEdit>
 #include <QAbstractButton>
-#include <QAction>
 #include <QMenu>
 #include <QDebug>
 #include <QElapsedTimer>
@@ -11,6 +10,7 @@
 #include <QTreeWidget>
 #include <QStatusBar>
 #include <QPushButton>
+#include <QFontDatabase>
 
 #include "SARibbonBar.h"
 #include "SARibbonCategory.h"
@@ -168,10 +168,19 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     ////////////////////////////////////////////字体设置///////////////////////////////////////////
     //字体格式设置
     SARibbonPannel* fontPannel = page->addPannel(QStringLiteral("字体"));
-    SARibbonComboBox* com = new SARibbonComboBox(this);//设置字体
-    com->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    com->setEditable(true);
-    fontPannel->addWidget(com,0,3);
+    fontFamilyComboBox = new SARibbonComboBox(this);//设置字体
+    fontFamilyComboBox->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Fixed);
+    fontFamilyComboBox->setEditable(true);
+    QFontDatabase fontDB;
+    QStringList fontFamiliesListA = fontDB.families(QFontDatabase::Armenian);
+    QStringList fontFamiliesListC = fontDB.families(QFontDatabase::SimplifiedChinese);
+    //fontFamiliesList<<QStringLiteral("宋体")<<"my test font";//fontDB.families(QFontDatabase::Any);
+    fontFamilyComboBox->addItems(fontFamiliesListA);
+    fontFamilyComboBox->addItems(fontFamiliesListC);
+    fontPannel->addWidget(fontFamilyComboBox,0,3);
+    int index = fontFamilyComboBox->findText(QStringLiteral("宋体"),Qt::MatchCaseSensitive|Qt::MatchFixedString);
+    fontFamilyComboBox->setCurrentIndex(index);
+
 
     SARibbonButtonGroupWidget* btnGroup = new SARibbonButtonGroupWidget(fontPannel);
     btnGroup->setFrameShape(QFrame::NoFrame);
@@ -243,10 +252,16 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     fontPannel->addSeparator();
 
     //字体大小格式
-    com = new SARibbonComboBox(this);
-    com->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    com->setEditable(true);
-    fontPannel->addWidget(com,0,3);
+    fontSizeComboBox = new SARibbonComboBox(this);
+    fontSizeComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    fontSizeComboBox->setEditable(true);
+    QFont sizeFont("Arial",12);
+    fontSizeComboBox->lineEdit()->setFont(sizeFont);
+    fontSizeComboBox->setFont(sizeFont);
+    QStringList fontSizeList;
+    fontSizeList<<"6"<<"8"<<"9"<<"10"<<"11"<<"12"<<"14"<<"16"<<"18"<<"20"<<"22"<<"24"<<"26"<<"28"<<"36"<<"48"<<"72";
+    fontSizeComboBox->addItems(fontSizeList);
+    fontPannel->addWidget(fontSizeComboBox,0,3);
     btnGroup = new SARibbonButtonGroupWidget(fontPannel);
     btnGroup->setFrameShape(QFrame::NoFrame);
     SARibbonMenu* bordermenu = new SARibbonMenu(this);
@@ -302,10 +317,13 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     btnGroup1->setFrameShape(QFrame::NoFrame);
     alignTopAct = new QAction(QIcon(":/icon/icon/AlignTop.png"),"",this);
     alignTopAct->setToolTip(QStringLiteral("顶端对齐"));
+    alignTopAct->setCheckable(true);
     alignMiddleAct = new QAction(QIcon(":/icon/icon/AlignMiddle.png"),"",this);
     alignMiddleAct->setToolTip(QStringLiteral("垂直居中"));
+    alignMiddleAct->setCheckable(true);
     alignBottomAct = new QAction(QIcon(":/icon/icon/AlignBottom.png"),"",this);
     alignBottomAct->setToolTip(QStringLiteral("底端对齐"));
+    alignBottomAct->setCheckable(true);
     btnGroup1->addButton(alignTopAct);
     btnGroup1->addButton(alignMiddleAct);
     btnGroup1->addButton(alignBottomAct);
@@ -314,14 +332,20 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     btnGroup->setFrameShape(QFrame::NoFrame);
     alignLeftAct = new QAction(QIcon(":/icon/icon/AlignLeft.png"),"",this);
     alignLeftAct->setToolTip(QStringLiteral("左对齐"));
+    alignLeftAct->setCheckable(true);
+    alignLeftAct->setChecked(false);
     alignCenterAct = new QAction(QIcon(":/icon/icon/AlignCenter.png"),"",this);
     alignCenterAct->setToolTip(QStringLiteral("居中"));
+    alignCenterAct->setCheckable(true);
+    alignCenterAct->setChecked(false);
     alignRightAct = new QAction(QIcon(":/icon/icon/AlignRight.png"),"",this);
     alignRightAct->setToolTip(QStringLiteral("右对齐"));
+    alignRightAct->setCheckable(true);
+    alignRightAct->setChecked(false);
     btnGroup->addButton(alignLeftAct);
     btnGroup->addButton(alignCenterAct);
     btnGroup->addButton(alignRightAct);
-    aligPannel->addWidget(btnGroup,2,3);
+    aligPannel->addWidget(btnGroup,3,3);
     aligPannel->addSeparator();
 
     //设置自动换行
@@ -646,6 +670,19 @@ void HReportMainWindow::initReportConnect()
 
     connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
 
+    //字体部分
+    connect(fontFamilyComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontFamilyComboBox_changed(int)));
+    connect(fontSizeComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeComboBox_changed(int)));
+    connect(fontSizeIncreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeIncrease_clicked()));
+    connect(fontSizeDecreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeDecrease_clicked()));
+
+    //对齐部分
+    connect(alignTopAct,SIGNAL(triggered(bool)),this,SLOT(alignTop_clicked()));
+    connect(alignBottomAct,SIGNAL(triggered(bool)),this,SLOT(alignBottom_clicked()));
+    connect(alignMiddleAct,SIGNAL(triggered(bool)),this,SLOT(alignMiddle_clicked()));
+    connect(alignLeftAct,SIGNAL(triggered(bool)),this,SLOT(alignLeft_clicked()));
+    connect(alignCenterAct,SIGNAL(triggered(bool)),this,SLOT(alignCenter_clicked()));
+    connect(alignRightAct,SIGNAL(triggered(bool)),this,SLOT(alignRight_clicked()));
 
     //打印部分
     connect(printPreviewAct,SIGNAL(triggered(bool)),this,SLOT(printPreview_clicked()));

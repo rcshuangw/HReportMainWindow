@@ -2,6 +2,7 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
+#include <QPrintDialog>
 #include <QFontMetrics>
 #include "hgridctrl.h"
 #include "QDateTime"
@@ -210,10 +211,6 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 if (m_nCurrPrintRow == 0 || m_nCurrPrintRow == pGridCtrl->fixedRowCount()){
                     pDC->drawLine(QPoint(rect.left()-Overlap, rect.top()),QPoint(rect.right(), rect.top()));
                 }
-                else if(m_nCurrPrintRow == pGridCtrl->fixedRowCount())
-                {
-
-                }
             }
 
             if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_VERT)
@@ -353,11 +350,8 @@ void HReportPrint::printHeader(QPainter *pDC, HPrintInfo *pInfo)
 {
     QString strRight;
     strRight = "my test";
-
     // print parent window title in the centre (Gert Rijs)
     QString strCenter = "hello,world";
-
-
     QRect   rc(pInfo->m_rectDraw);
     //QRect rc(0,0,100,100);
     if( !strCenter.isEmpty() )
@@ -409,6 +403,40 @@ void HReportPrint::printPage(QPainter* p)
     onPrintEnd(p,&m_PrintInfo);
 }
 
+void HReportPrint::print()
+{
+    QPrinter printer;
+    QPrintDialog printDialog(&printer,NULL);
+    if (printDialog.exec() == QDialog::Accepted)
+    {
+        QPainter painter(&printer);
+        //预览打印是支持分页打印的
+        int firstPage = printer.fromPage() - 1;
+        if(firstPage >= m_pGridReportWidget->numSheet())
+            return;
+        if(firstPage == (int)-1)
+            firstPage = 0;
+        int lastPage = printer.toPage() - 1;
+        if(lastPage == -1 || lastPage >= m_pGridReportWidget->numSheet())
+            lastPage = m_pGridReportWidget->numSheet();
+        int numPages = lastPage - firstPage - 1;
+
+        for(int i = 0;i < printer.numCopies();i++)
+        {
+            for(int j= 0;j < numPages;j++) //页数
+            {
+              if(i != 0 || j != 0)
+                  printer.newPage();
+              HGridCtrl* pGridCtrl = ((HGridCtrlWidget*)m_pGridReportWidget->m_tabWidget->widget(j))->gridCtrl();
+              if(!pGridCtrl) continue;
+              m_PrintInfo.m_pGridCtrl = pGridCtrl;
+              m_PrintInfo.m_nCurPage = j;
+              printPage(&painter);
+            }
+        }
+    }
+}
+
 void HReportPrint::printPreview()
 {
     QPrinter printer;
@@ -436,30 +464,6 @@ void HReportPrint::printPreview(QPrinter* p)
 
 void HReportPrint::printPages(QPrinter* p)
 {
-    QPainter painter(p);
-    //预览打印是支持分页打印的
-    int firstPage = p->fromPage() - 1;
-    if(firstPage >= m_pGridReportWidget->numSheet())
-        return;
-    if(firstPage == (int)-1)
-        firstPage = 0;
-    int lastPage = p->toPage() - 1;
-    if(lastPage == -1 || lastPage >= m_pGridReportWidget->numSheet())
-        lastPage = m_pGridReportWidget->numSheet();
-    int numPages = lastPage - firstPage - 1;
 
-    for(int i = 0;i < p->numCopies();i++)
-    {
-        for(int j= 0;j < numPages;j++) //页数
-        {
-          if(i != 0 || j != 0)
-              p->newPage();
-          HGridCtrl* pGridCtrl = ((HGridCtrlWidget*)m_pGridReportWidget->m_tabWidget->widget(j))->gridCtrl();
-          if(!pGridCtrl) continue;
-          m_PrintInfo.m_pGridCtrl = pGridCtrl;
-          m_PrintInfo.m_nCurPage = j;
-          printPage(&painter);
-        }
-    }
 }
 

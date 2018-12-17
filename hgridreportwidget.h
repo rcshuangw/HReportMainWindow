@@ -43,8 +43,18 @@ public:
     void enableShowTab(bool);
     void enableSelectRange(bool);
 
+    //操作
+    void paste();
+    void cut();
+    void copy();
+    void bold(bool);
+    void italic();
+    void underline();
+
+
     //打印
     void printPreview();
+    void print();
 signals:
     void gridcellclickded(HGridCell*);
 

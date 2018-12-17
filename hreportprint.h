@@ -63,8 +63,8 @@ public:
     void printPage(QPainter* p);
 
     void printPreview();//外部调用
+    void print();
 public slots:
-
     void printPreview(QPrinter*); //内部调用 打印预览
     void printPages(QPrinter*); //直接打印
 
