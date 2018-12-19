@@ -238,8 +238,6 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
     pInfo->m_rectDraw.setLeft(0);
     pInfo->m_rectDraw.setRight(m_LogicalPageSize.width() - (0 + m_nRightMargin) * m_CharSize.width());
     pInfo->m_rectDraw.setBottom(m_LogicalPageSize.height());
-    int fx = m_LogicalPageSize.height() + m_nFooterHeight * m_CharSize.height();
-    //pDC->translate(m_nLeftMargin * m_CharSize.width(), 300);
     printFooter(pDC, pInfo);
 
     pDC->restore();
