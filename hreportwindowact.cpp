@@ -7,6 +7,7 @@
 #include "hreportmaiwidget.h"
 #include "hgridcelldef.h"
 #include "SARibbonComboBox.h"
+#include "hformatset.h"
 void HReportMainWindow::new_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
@@ -70,9 +71,12 @@ void HReportMainWindow::formatPainter_clicked()
 
 }
 
-void HReportMainWindow::fontFamilyComboBox_changed(int)
+void HReportMainWindow::fontFamilyComboBox_changed(int index)
 {
-
+    if(-1 == index || !m_pReportManager)
+        return;
+    QString strFamily = fontFamilyComboBox->currentText();
+    m_pReportManager->formatSet()->setFontFamily(strFamily);
 }
 
 void HReportMainWindow::fontSizeComboBox_changed(int)

@@ -3,6 +3,9 @@
 
 #include <QObject>
 //主要是读取和存储设置的相关配置
+//界面发生修改后，如何更改到表格或者选择表格后，状态如何改变到界面上？
+//界面发生修改后，通过设置HFormatSet对象，然后要设置变化的类型，然后发送到HGridCtrlWidget里的函数，然后函数改变到表格里
+//当点击表格后，要把表格状态赋值到HFormatSet对象，然后通过信号一直发送到QMainWindow处，QMainWindow里面要有对应处理函数
 class HFormatSet : public QObject
 {
     Q_OBJECT

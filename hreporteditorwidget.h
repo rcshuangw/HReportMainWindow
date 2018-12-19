@@ -3,7 +3,7 @@
 #include <QTabWidget>
 class HReportManager;
 class HGridReportWidget;
-
+class HFormatSet;
 class HReportEditorWidget : public QWidget
 {
     Q_OBJECT
@@ -18,6 +18,9 @@ public:
     void paste();
     void cut();
     void copy();
+
+public:
+    void setGridCtrlAttr(uint nAttrType,HFormatSet* pFormatSet);
 public:
     HReportManager* m_pReportManager;
     HGridReportWidget* m_pGridReportWidget;

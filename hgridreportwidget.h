@@ -55,6 +55,9 @@ public:
     //打印
     void printPreview();
     void print();
+
+public:
+
 signals:
     void gridcellclickded(HGridCell*);
 
