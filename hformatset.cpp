@@ -1,5 +1,5 @@
 #include "hformatset.h"
-
+#include <QDataStream>
 HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
 {
 
@@ -371,7 +371,7 @@ void HFormatSet::setBorderLineColor(const QString& clr)
 
 QString HFormatSet::borderLineColor()
 {
-    m_strBorderLineColor;
+    return m_strBorderLineColor;
 }
 
 void HFormatSet::setBorderLeftLineColor(const QString& clr)

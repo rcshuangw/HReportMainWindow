@@ -9,13 +9,8 @@ HGridReportWidget::HGridReportWidget(HReportManager* mgr,QWidget *parent)
    :m_pReportManager(mgr),QWidget(parent)
 {
     m_bEnableShowEditBar = false;
-    m_bEnableShowHorHeader = false;
-    m_bEnableShowVerHeader = false;
-    m_bEnableAutoSize = false;
-    m_bEnableEditor = false;
-    m_bEnableShowGridLines = false;
     m_bEnableShowTab = false;
-    m_bEnableSelectRange = false;
+    m_bEnableVirtual = false;
     initGridReportWidget();
 }
 
@@ -63,8 +58,7 @@ void HGridReportWidget::updateGridReportWidget()
         for(int i = 0; i < nAddCount; i++)
         {
             HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
-            //要把表格模板拷贝到每个页面
-            setGridReportType(w);
+            setGridCtrlAttr(w);
             w->initReportWidget();
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             w->setGridCtrlItem(pInfo);
@@ -92,36 +86,27 @@ void HGridReportWidget::clearGridReportWidget()
     }
 }
 
-void HGridReportWidget::setGridReportType(QWidget *w)
+void HGridReportWidget::setGridCtrlAttr(QWidget *w)
 {
     if(!w) return;
     HGridCtrlWidget* pGridCtrlWidget = (HGridCtrlWidget*)w;
     pGridCtrlWidget->enableShowEditBar(m_bEnableShowEditBar);
-    pGridCtrlWidget->enableShowHorizontalHeader(m_bEnableShowHorHeader);
-    pGridCtrlWidget->enableShowVerticalHeader(m_bEnableShowVerHeader);
-    pGridCtrlWidget->enableAutoSize(m_bEnableAutoSize);
-    //pGridCtrlWidget->setFillRange(bool);
-    pGridCtrlWidget->enableEditor(m_bEnableEditor);
-    pGridCtrlWidget->enableShowGridLines(m_bEnableShowGridLines);
     pGridCtrlWidget->enableShowTab(m_bEnableShowTab);
-    pGridCtrlWidget->enableSelectRange(m_bEnableSelectRange);
+    pGridCtrlWidget->setVirtualMode(m_bEnableVirtual);
 }
 
 void HGridReportWidget::setEditorGridReportAttr()
 {
     enableShowEditBar(true);
     enableShowTab(false);
-    enableEditor(true);
-    enableShowHorizontalHeader(true);
-    enableShowVerticalHeader(true);
-    //统一设置属性
+    enableVritual(false);
 }
 
 void HGridReportWidget::setBrowserGridReportAttr()
 {
     enableShowEditBar(false);
     enableShowTab(true);
-    enableEditor(false);
+    enableVritual(true);
 }
 
 bool HGridReportWidget::loadGridCtrlFile(const char* filename)
@@ -197,81 +182,6 @@ void HGridReportWidget::enableShowEditBar(bool b)
     }
 }
 
-void HGridReportWidget::enableShowHorizontalHeader(bool b)//显示水平表格头
-{
-    m_bEnableShowHorHeader = b;
-    int nTabNum = m_tabWidget->count();
-    for(int i = 0; i < nTabNum; i++)
-    {
-        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
-        if(w)
-        {
-            w->enableShowHorizontalHeader(b);
-        }
-    }
-}
-
-void HGridReportWidget::enableShowVerticalHeader(bool b) //显示垂直表格头
-{
-    m_bEnableShowVerHeader = b;
-    int nTabNum = m_tabWidget->count();
-    for(int i = 0; i < nTabNum; i++)
-    {
-        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
-        if(w)
-        {
-            w->enableShowVerticalHeader(b);
-        }
-    }
-}
-
-void HGridReportWidget::enableAutoSize(bool b)
-{
-    m_bEnableAutoSize = b;
-    int nTabNum = m_tabWidget->count();
-    for(int i = 0; i < nTabNum; i++)
-    {
-        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
-        if(w)
-        {
-            w->enableAutoSize(b);
-        }
-    }
-}
-
-void HGridReportWidget::setFillRange(bool b)
-{
-
-}
-
-void HGridReportWidget::enableEditor(bool b)//编辑（复制粘贴拷贝)操作
-{
-    m_bEnableEditor = b;
-    int nTabNum = m_tabWidget->count();
-    for(int i = 0; i < nTabNum; i++)
-    {
-        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
-        if(w)
-        {
-            w->enableEditor(b);
-        }
-    }
-}
-
-void HGridReportWidget::enableShowGridLines(bool b)
-{
-    m_bEnableShowGridLines = b;
-    int nTabNum = m_tabWidget->count();
-    for(int i = 0; i < nTabNum; i++)
-    {
-        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
-        if(w)
-        {
-            w->enableShowGridLines(b);
-        }
-    }
-}
-
 void HGridReportWidget::enableShowTab(bool b)
 {
     m_bEnableShowTab = b;
@@ -286,19 +196,20 @@ void HGridReportWidget::enableShowTab(bool b)
     }
 }
 
-void HGridReportWidget::enableSelectRange(bool b)
+void HGridReportWidget::enableVritual(bool b)
 {
-    m_bEnableSelectRange = b;
+    m_bEnableVirtual = b;
     int nTabNum = m_tabWidget->count();
     for(int i = 0; i < nTabNum; i++)
     {
         HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
         if(w)
         {
-            w->enableSelectRange(b);
+            w->setVirtualMode(b);
         }
     }
 }
+
 void HGridReportWidget::paste()
 {
     int index = m_tabWidget->currentIndex();

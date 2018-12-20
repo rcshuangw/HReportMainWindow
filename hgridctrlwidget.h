@@ -23,17 +23,9 @@ public:
 
 public:
     //设置属性
-    void setGridCtrlWidgetAttr();
+    void setVirtualMode(bool);
     void enableShowEditBar(bool);
-    void enableShowHorizontalHeader(bool);//显示水平表格头
-    void enableShowVerticalHeader(bool); //显示垂直表格头
-    void enableAutoSize(bool);
-    void setFillRange(bool);
-    void enableEditor(bool);//编辑（复制粘贴拷贝)操作
-    void enableShowGridLines(bool);
     void enableShowTab(bool);
-    void enableSelectRange(bool);
-
 public:
 
 public:
@@ -46,13 +38,8 @@ public slots:
 
 private:
     bool m_bEnableShowEditBar;
-    bool m_bEnableShowHorHeader;
-    bool m_bEnableShowVerHeader;
-    bool m_bShowAutoSize;
-    bool m_bEnableEditor;
-    bool m_bEnableShowGridLines;
     bool m_bEnableShowTab;
-    bool m_bEnableSelectRange;
+    bool m_bEnableVirtualMode;
 private:
    HReportManager* m_pReportManager;
    HGridCtrl* m_pGridCtrl;

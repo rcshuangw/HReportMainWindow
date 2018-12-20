@@ -13,18 +13,22 @@ public:
     HGridReportWidget(HReportManager* mgr,QWidget *parent = 0);
     ~HGridReportWidget();
 public:
-    void initGridReportWidget();
-    void updateGridReportWidget();
-    void setGridReportType(QWidget* w);
     void setEditorGridReportAttr();
     void setBrowserGridReportAttr();
-    void clearGridReportWidget();
     bool loadGridCtrlFile(const char* filename);
     bool saveGridCtrlFile(const char* filename);
+
+public:
+    void initGridReportWidget();
+    void updateGridReportWidget();
+    void clearGridReportWidget();
+
+public:
+///////////////////////////////////////////////////////////////////////////////
+///////Tab属性
+/// //////////////////////////////////////////////////////////////////////////
     QString tabName();
     void setTabName(const QString& tableName);
-    //void setShowTable(bool bshow);
-   // bool isShowTable();
     QString sheetName(short nSheet);
     void setSheetName(short nSheet, const QString& lpszNewValue);
     void setNumSheet(long num);
@@ -32,18 +36,17 @@ public:
     void setSheet(long index);
     long sheet();
 
-    //设置属性
+///////////////////////////////////////////////////////////////////////////////
+///////设置属性
+/// //////////////////////////////////////////////////////////////////////////
+    void setGridCtrlAttr(QWidget* w);
     void enableShowEditBar(bool);
-    void enableShowHorizontalHeader(bool);//显示水平表格头
-    void enableShowVerticalHeader(bool); //显示垂直表格头
-    void enableAutoSize(bool);
-    void setFillRange(bool);
-    void enableEditor(bool);//编辑（复制粘贴拷贝)操作
-    void enableShowGridLines(bool);
     void enableShowTab(bool);
-    void enableSelectRange(bool);
+    void enableVritual(bool);
 
-    //操作
+///////////////////////////////////////////////////////////////////////////////
+///////操作
+/// //////////////////////////////////////////////////////////////////////////
     void paste();
     void cut();
     void copy();
@@ -70,12 +73,7 @@ public:
 private:
     long m_nNumSheets;
     bool m_bEnableShowEditBar;
-    bool m_bEnableShowHorHeader;
-    bool m_bEnableShowVerHeader;
-    bool m_bEnableAutoSize;
-    bool m_bEnableEditor;
-    bool m_bEnableShowGridLines;
     bool m_bEnableShowTab;
-    bool m_bEnableSelectRange;
+    bool m_bEnableVirtual;
 };
 #endif // HGRIDREPORTWIDGET_H

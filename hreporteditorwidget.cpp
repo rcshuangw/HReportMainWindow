@@ -9,6 +9,7 @@ HReportEditorWidget::HReportEditorWidget(HReportManager* mgr,QWidget *parent)
     m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
     m_pGridReportWidget->setEditorGridReportAttr();
     layout->addWidget(m_pGridReportWidget);
+    m_pGridReportWidget->hide();
     setLayout(layout);
 }
 
@@ -24,6 +25,7 @@ void HReportEditorWidget::newReportWidget()
     m_pGridReportWidget->clearGridReportWidget();
     m_pGridReportWidget->setNumSheet(1);
     m_pGridReportWidget->updateGridReportWidget();
+    m_pGridReportWidget->show();
 }
 
 /*

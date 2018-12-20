@@ -9,13 +9,8 @@ HGridCtrlWidget::HGridCtrlWidget(HReportManager* mgr,QWidget* parent)
  :m_pReportManager(mgr),QWidget(parent)
 {
     m_bEnableShowEditBar = false;
-    m_bEnableShowHorHeader = false;
-    m_bEnableShowVerHeader = false;
-    //m_bEnableAutoSize = false;
-    m_bEnableEditor = false;
-    m_bEnableShowGridLines = false;
     m_bEnableShowTab = false;
-    m_bEnableSelectRange = false;
+    m_bEnableVirtualMode = false;
     m_pGridCtrl = new HGridCtrl;
 }
 
@@ -78,13 +73,9 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
     m_pGridCtrl->setFixedColumnCount(1);
     m_pGridCtrl->setFixedRowCount(1);
     int row ,col = 0;
-    if(m_bEnableShowHorHeader || m_bEnableShowVerHeader)
+    if(1)
     {
         //设置固定行列
-        if(m_bEnableShowHorHeader)
-            m_pGridCtrl->setFixedColumnCount(1);
-        if(m_bEnableShowVerHeader)
-            m_pGridCtrl->setFixedRowCount(1);
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
             HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
@@ -109,7 +100,7 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
-    else if(!m_bEnableShowHorHeader && !m_bEnableShowVerHeader)
+    //else if(!m_bEnableShowHorHeader && !m_bEnableShowVerHeader)
     {
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
@@ -147,44 +138,14 @@ void HGridCtrlWidget::enableShowEditBar(bool b)
     m_bEnableShowEditBar = b;
 }
 
-void HGridCtrlWidget::enableShowHorizontalHeader(bool b)
-{
-    m_bEnableShowHorHeader = b;
-}
-
-void HGridCtrlWidget::enableShowVerticalHeader(bool b)
-{
-    m_bEnableShowVerHeader = b;
-}
-
-void HGridCtrlWidget::enableAutoSize(bool b)
-{
-    //m_bE
-}
-
-void HGridCtrlWidget::setFillRange(bool b)
-{
-
-}
-
-void HGridCtrlWidget::enableEditor(bool b)
-{
-    m_bEnableEditor = b;
-}
-
-void HGridCtrlWidget::enableShowGridLines(bool b)
-{
-    m_bEnableShowGridLines = b;
-}
-
 void HGridCtrlWidget::enableShowTab(bool b)
 {
     m_bEnableShowTab = b;
 }
 
-void HGridCtrlWidget::enableSelectRange(bool b)
+void HGridCtrlWidget::setVirtualMode(bool b)
 {
-    m_bEnableSelectRange = b;
+    m_pGridCtrl->setVirtualMode(b);
 }
 
 

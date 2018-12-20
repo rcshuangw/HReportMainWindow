@@ -6,6 +6,7 @@ HReportBrowserWidget::HReportBrowserWidget(HReportManager* mgr,QWidget* parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     m_pGridReportWidget = new HGridReportWidget(m_pReportManager,this);
+    m_pGridReportWidget->setBrowserGridReportAttr();
     layout->addWidget(m_pGridReportWidget);
     m_pGridReportWidget->hide();
     setLayout(layout);
