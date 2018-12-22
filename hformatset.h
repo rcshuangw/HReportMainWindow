@@ -157,7 +157,7 @@ private:
     bool m_bBorderTop;                   //上边框
     bool m_bBorderRight;                 //右边框
     bool m_bBorderBottom;                //下边框
-    QString m_strBorderLineColor;       //默认边框颜色
+    QString m_strBorderLineColor;        //默认边框颜色
     QString m_strBorderLeftLineColor;    //左边框颜色
     QString m_strBorderRightLineColor;   //右边框颜色
     QString m_strBorderTopLineColor;     //上边框颜色
@@ -177,7 +177,7 @@ private:
     QString m_strSheetNoLength;
     QString m_strSheetTempNo;
 
-    quint16 m_nOpTaskWordCount;        //操作任务字符长度
+    quint16 m_nOpTaskWordCount;          //操作任务字符长度
     quint16 m_nOpTermWordCount;          //操作项目字符长度
     quint16 m_nStateChangeWordCount;     //状态转换字符长度
     quint16 m_nSerialNumWordCount;       //流水号字符长度
