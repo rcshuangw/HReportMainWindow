@@ -48,7 +48,8 @@ HEADERS  += \
     hreportprint.h \
     hreporteditorwidget.h \
     hgridreportwidget.h \
-    hformatset.h
+    hformatset.h \
+    hformatdef.h
 
 RESOURCES += \
     saribbonresouce.qrc

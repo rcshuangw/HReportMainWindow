@@ -48,6 +48,16 @@ public:
     //边框
     void setBorderPenStyle(quint16);
     quint16 borderPenStyle();
+    void setBorderLeftPenStyle(quint16);
+    quint16 borderLeftPenStyle();
+    void setBorderRightPenStyle(quint16);
+    quint16 borderRightPenStyle();
+    void setBorderTopPenStyle(quint16);
+    quint16 borderTopPenStyle();
+    void setBorderBottomPenStyle(quint16);
+    quint16 borderBottomPenStyle();
+    void enableBorder(bool);
+    bool isBorder();
     void enableBorderLeft(bool);
     bool isBorderLeft();
     void enableBorderRight(bool);

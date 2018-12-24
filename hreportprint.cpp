@@ -18,7 +18,6 @@ HPrintInfo::~HPrintInfo()
 
 }
 
-
 HReportPrint::HReportPrint(HGridReportWidget* widget)
     :m_pGridReportWidget(widget)
 {
