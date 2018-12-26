@@ -6,13 +6,15 @@
 #include <QStandardItem>
 #include <QMouseEvent>
 #include <QColorDialog>
+#include "hgridreportmgr.h"
+#include "hformatset.h"
 typedef struct _tagFontColor
 {
     QString strClrName;
     int     nClrValue;
 }FontColor;
 
-FontColor sysColorList[]=
+FontColor sysColorList1[]=
 {
     //name value
     {QStringLiteral("黑色"),Qt::black},
@@ -34,11 +36,13 @@ FontColor sysColorList[]=
     {QStringLiteral("浅灰色"),(Qt::lightGray)}
 };
 
+QStringList sysColorList= {
+    "#ffffff","#000000","#ff0000","#800000","#00ff00","#008000","#0000ff","#000080","#00ffff","#008080",
+    "#ff00ff","#800080","#ffff00","#808000","#a0a0a4", "#808080", "#c0c0c0" };
 
 
-
-HFontSet::HFontSet(QWidget *parent) :
-    QWidget(parent),
+HFontSet::HFontSet(HReportManager* mgr,QWidget *parent) :
+    m_pReportManager(mgr),QWidget(parent),
     ui(new Ui::HFontSet)
 {
     ui->setupUi(this);
@@ -98,6 +102,66 @@ void HFontSet::initFontFamilies()
     connect(ui->fontColorComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onFontClrCurrentIndexChanged(int)));
     connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_clicked()));
    //如果单元格不为空 则这里调整单元格初始化配置
+
+    if(m_pReportManager && m_pReportManager->formatSet())
+    {
+        HFormatSet* pFormatSet = m_pReportManager->formatSet();
+        QFont font = pFormatSet->formatFont();
+
+        //字体
+        itemList = ui->fontFamilyList->findItems(font.family(),Qt::MatchCaseSensitive|Qt::MatchFixedString);
+        ui->fontFamilyList->setCurrentItem(itemList.at(0));
+
+        //字体大小
+        itemSizeList = ui->fontPointSizeList->findItems(QString("%1").arg(font.pointSize()),Qt::MatchCaseSensitive|Qt::MatchFixedString);
+        ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
+
+        //下划线
+        int index = (int)-1;
+        if(font.underline())
+        {
+            index = ui->fontUnderlineComboBox->findData(QVariant(UnderlineNormal));
+            ui->fontColorComboBox->setCurrentIndex(index);
+        }
+        else
+        {
+            index = ui->fontUnderlineComboBox->findData(QVariant(UnderlineNo));
+            ui->fontColorComboBox->setCurrentIndex(index);
+        }
+
+        //颜色
+        m_strFontColor = pFormatSet->textColor();
+        index = sysColorList.indexOf(m_strFontColor);
+        if(index == (int)-1)
+        {
+            m_recentColorList.append(m_strFontColor);
+            updateColorListSet();
+        }
+        else
+        {
+            ui->fontColorComboBox->setCurrentIndex(index);
+        }
+
+        //加粗
+        int style = StyleNormal;
+        if(font.bold() && font.italic())
+            style = StyleBoldAndItalic;
+        else if(!font.bold() && font.italic())
+            style = StyleItalic;
+        else if(font.bold() && !font.italic())
+            style = StyleBold;
+        for(int i = 0; i < ui->fontStyleList->count();i++)
+        {
+            QListWidgetItem* item = ui->fontStyleList->item(0);
+            if(item && item->data(Qt::UserRole).toInt() == style)
+            {
+                ui->fontStyleList->setCurrentItem(item);
+                break;
+            }
+        }
+
+    }
+
     update();
 }
 
@@ -174,8 +238,7 @@ void HFontSet::onFontClrCurrentIndexChanged(int index)
     QStandardItemModel *model  = (QStandardItemModel *)ui->fontColorComboBox->model();
     if(model)
     {
-        int clrValue = model->item(index,0)->data().toInt();
-        m_strFontColor = QColor(Qt::GlobalColor(clrValue)).name();
+        m_strFontColor = model->item(index,0)->data().toString();
     }
     update();
 }
@@ -209,19 +272,21 @@ void HFontSet::updateColorListSet()
         QPixmap pix( QSize( 100, 20 ) );
         pix.fill( clr);
         QStandardItem *item = new QStandardItem(QIcon( pix ), NULL);
-        item->setData(QVariant(clr.value()));
+        item->setData(QVariant(clr.name()));
         item->setToolTip(clr.name());
         model->appendRow(item);
     }
 
-    for( int i = 0; i < sizeof(sysColorList)/sizeof(FontColor);i++ )
+    for( int i = 0; i < sysColorList.count();i++ )
     {
-        FontColor color = sysColorList[i];
+        QString color = sysColorList[i];
+        QColor clr = QColor( color);
         QPixmap pix( QSize( 100, 20 ) );
-        pix.fill( QColor( Qt::GlobalColor(color.nClrValue) ) );
+        pix.fill(clr);
         QStandardItem *item = new QStandardItem(QIcon( pix ), NULL);
-        item->setData(QVariant(color.nClrValue));
-        item->setToolTip(color.strClrName);
+        int value = clr.value();
+        item->setData(QVariant(clr.name()));
+        item->setToolTip(clr.name());
         model->appendRow(item);
     }
     ui->fontColorComboBox->setModel(model);

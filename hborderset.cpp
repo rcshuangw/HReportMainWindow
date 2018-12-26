@@ -1,5 +1,7 @@
 ﻿#include "hborderset.h"
 #include "ui_hborderset.h"
+#include "hformatset.h"
+#include "hgridreportmgr.h"
 #include <QPainter>
 #include <QStandardItem>
 #include <QMouseEvent>
@@ -10,7 +12,7 @@ typedef struct _tagDefaultColor
     int     nClrValue;
 }DefaultColor;
 
-DefaultColor sysColorList[]=
+DefaultColor sysColorList1[]=
 {
     //name value
     {QStringLiteral("黑色"),Qt::black},
@@ -32,8 +34,13 @@ DefaultColor sysColorList[]=
     {QStringLiteral("浅灰色"),(Qt::lightGray)}
 };
 
-HBorderSet::HBorderSet(QWidget *parent) :
-    QWidget(parent),
+QStringList sysColorList= {
+    "#ffffff","#000000","#ff0000","#800000","#00ff00","#008000","#0000ff","#000080","#00ffff","#008080",
+    "#ff00ff","#800080","#ffff00","#808000","#a0a0a4", "#808080", "#c0c0c0" };
+
+
+HBorderSet::HBorderSet(HReportManager *mgr,QWidget *parent) :
+    m_pReportManager(mgr),QWidget(parent),
     ui(new Ui::HBorderSet)
 {
     ui->setupUi(this);
@@ -71,6 +78,40 @@ void HBorderSet::initBorderSet()
     connect(ui->borderNoBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderNoBtn_clicked()));
     connect(ui->borderAllBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderAllBtn_clicked()));
     connect(ui->borderOutSideBtn,SIGNAL(clicked(bool)),this,SLOT(onBorderOutSideBtn_clicked()));
+
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+
+    //边框
+    m_bBorderLeft = pFormatSet->isBorderLeft();
+    m_strBorderLeftLineColor = pFormatSet->borderLeftLineColor();
+    emit ui->borderLeftBtn->clicked(m_bBorderLeft);
+    m_bBorderRight = pFormatSet->isBorderRight();
+    m_strBorderRightLineColor = pFormatSet->borderRightLineColor();
+    emit ui->borderRightBtn->clicked(m_bBorderRight);
+    m_bBorderTop = pFormatSet->isBorderTop();
+    m_strBorderTopLineColor = pFormatSet->borderTopLineColor();
+    emit ui->borderTopBtn->clicked(m_bBorderTop);
+    m_bBorderBottom = pFormatSet->isBorderBottom();
+    m_strBorderBottomLineColor = pFormatSet->borderBottomLineColor();
+    emit ui->borderBottomBtn->clicked(m_bBorderBottom);
+
+    //颜色
+    m_strLineColor = pFormatSet->textColor();
+    index = sysColorList.indexOf(m_strLineColor);
+    if(index == (int)-1)
+    {
+        m_recentColorList.append(m_strLineColor);
+        updateColorListSet();
+    }
+    else
+    {
+        ui->lineColorComboBox->setCurrentIndex(index);
+    }
+
+    //线形
+
 }
 
 QPixmap HBorderSet::createPenStyleIcon(Qt::PenStyle penStyle)
@@ -161,19 +202,20 @@ void HBorderSet::updateColorListSet()
         QPixmap pix( QSize( 100, 20 ) );
         pix.fill( clr);
         QStandardItem *item = new QStandardItem(QIcon( pix ), NULL);
-        item->setData(QVariant(clr.value()));
+        item->setData(QVariant(clr.name()));
         item->setToolTip(clr.name());
         model->appendRow(item);
     }
 
-    for( int i = 0; i < sizeof(sysColorList)/sizeof(DefaultColor);i++ )
+    for( int i = 0; i < sysColorList.count();i++ )
     {
-        DefaultColor color = sysColorList[i];
+        QString color = sysColorList[i];
+        QColor clr = QColor( color);
         QPixmap pix( QSize( 100, 20 ) );
-        pix.fill( QColor( Qt::GlobalColor(color.nClrValue) ) );
+        pix.fill(clr);
         QStandardItem *item = new QStandardItem(QIcon( pix ), NULL);
-        item->setData(QVariant(color.nClrValue));
-        item->setToolTip(color.strClrName);
+        item->setData(QVariant(clr.name()));
+        item->setToolTip(clr.name());
         model->appendRow(item);
     }
     ui->lineColorComboBox->setModel(model);
@@ -315,8 +357,8 @@ void HBorderSet::currentIndexChanged_clicked(int index)
     QStandardItemModel *model  = (QStandardItemModel *)ui->lineColorComboBox->model();
     if(model)
     {
-        int clrValue = model->item(index,0)->data().toInt();
-        m_strLineColor = QColor(Qt::GlobalColor(clrValue)).name();
+        m_strLineColor = model->item(index,0)->data().toInt();
+        //m_strLineColor = QColor(Qt::GlobalColor(clrValue)).name();
     }
     updateLineStyleSet();
 }

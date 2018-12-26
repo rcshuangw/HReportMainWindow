@@ -2,7 +2,7 @@
 #define HFORMATSETDLG_H
 
 #include <QDialog>
-
+class HReportManager;
 namespace Ui {
 class HFormatSetDlg;
 }
@@ -12,7 +12,7 @@ class HFormatSetDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit HFormatSetDlg(QWidget *parent = 0);
+    explicit HFormatSetDlg(HReportManager* mgr,QWidget *parent = 0);
     ~HFormatSetDlg();
 
 public:
@@ -25,6 +25,7 @@ public slots:
     void onCatagoryListWidget_clicked();
 private:
     Ui::HFormatSetDlg *ui;
+    HReportManager* m_pReportManager;
 };
 
 #endif // HFORMATSETDLG_H

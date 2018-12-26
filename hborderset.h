@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QProxyStyle>
+class HReportManager;
 //颜色列表
 class HNoFocusProxyStyle : public QProxyStyle
 {
@@ -30,7 +31,7 @@ class HBorderSet : public QWidget
     Q_OBJECT
 
 public:
-    explicit HBorderSet(QWidget *parent = 0);
+    explicit HBorderSet(HReportManager *mgr,QWidget *parent = 0);
     ~HBorderSet();
 
 public:
@@ -61,6 +62,7 @@ protected:
 
 private:
     Ui::HBorderSet *ui;
+    HReportManager* m_pReportManager;
     QString m_strLineColor;
     QString m_strBorderLeftLineColor;//边框左线条颜色
     QString m_strBorderRightLineColor;//边框右线条颜色

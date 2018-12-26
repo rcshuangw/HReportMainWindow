@@ -375,7 +375,7 @@ void HReportMainWindow::cellSetFormat_clicked()
 
 void HReportMainWindow::option_clicked()
 {
-    HFormatSetDlg dlg;
+    HFormatSetDlg dlg(m_pReportManager);
     dlg.exec();
 }
 

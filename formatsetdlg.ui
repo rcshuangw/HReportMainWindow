@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -167,7 +167,7 @@
      <property name="title">
       <string>文本控制</string>
      </property>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="autoWrapTextCheckBox">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -180,7 +180,7 @@
        <string>自动换行(&amp;W)</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="mergeCellCheckBox">
       <property name="geometry">
        <rect>
         <x>20</x>

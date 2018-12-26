@@ -5,6 +5,7 @@
 #include <QProxyStyle>
 #include <QFont>
 #include <QListWidgetItem>
+class HReportManager;
 namespace Ui {
 class HFontSet;
 }
@@ -27,7 +28,7 @@ class HFontSet : public QWidget
     };
 
 public:
-    explicit HFontSet(QWidget *parent = 0);
+    explicit HFontSet(HReportManager* mgr,QWidget *parent = 0);
     ~HFontSet();
 public:
     void initFontFamilies();
@@ -42,6 +43,7 @@ public slots:
     void onMoreColorBtn_clicked();
 private:
     Ui::HFontSet *ui;
+    HReportManager* m_pReportManager;
     QFont m_curFont;
     QString m_strFontColor;
     QStringList m_recentColorList;//最近列表

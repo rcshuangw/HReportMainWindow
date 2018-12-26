@@ -2,34 +2,26 @@
 #include "ui_formatsetdlg.h"
 #include "hborderset.h"
 #include "hfontset.h"
+#include "hgridcelldef.h"
+#include "hgridreportmgr.h"
+#include "hformatset.h"
 #include <QDoubleValidator>
 
-#define QDT_TOP                      Qt::AlignTop
-#define QDT_LEFT                     Qt::AlignLeft
-#define QDT_HCENTER                  Qt::AlignHCenter
-#define QDT_CENTER                   QDT_VCENTER|QDT_HCENTER
-#define QDT_RIGHT                    Qt::AlignRight
-#define QDT_VCENTER                  Qt::AlignVCenter
-#define QDT_BOTTOM                   Qt::AlignBottom
-#define QDT_WORDBREAK                Qt::TextWordWrap
-#define QDT_SINGLELINE               Qt::TextSingleLine
-#define QDT_EXPANDTABS               Qt::TextExpandTabs
-#define QDT_NOPREFIX                 Qt::TextHideMnemonic
 
 #define QCATAGORY_NORMAL   0
 #define QCATAGORY_DATE     1
 #define QCATAGORY_TIME     2
 
 //注意具体配置需要从xml里面读取
-HFormatSetDlg::HFormatSetDlg(QWidget *parent) :
-    QDialog(parent),
+HFormatSetDlg::HFormatSetDlg(HReportManager *mgr,QWidget *parent) :
+    m_pReportManager(mgr),QDialog(parent),
     ui(new Ui::HFormatSetDlg)
 {
     ui->setupUi(this);
     initDigitalSet();
     initBaseSet();
-    HFontSet* font = new HFontSet(this);
-    HBorderSet* border = new HBorderSet(this);
+    HFontSet* font = new HFontSet(m_pReportManager,this);
+    HBorderSet* border = new HBorderSet(m_pReportManager,this);
     ui->tabWidget->insertTab(2,font,QStringLiteral("字体"));
     ui->tabWidget->insertTab(3,border,QStringLiteral("边框"));
     initPrintSheetSet();
@@ -63,6 +55,47 @@ void HFormatSetDlg::initBaseSet()
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignLeft.png"),QStringLiteral("左对齐"),QVariant(QDT_LEFT));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignCenter.png"),QStringLiteral("水平居中"),QVariant(QDT_HCENTER));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignRight.png"),QStringLiteral("右对齐"),QVariant(QDT_RIGHT));
+
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    quint32 nFormat = pFormatSet->format();
+    int index = (int)-1;
+    if(QDT_LEFT == (nFormat & QDT_LEFT))
+    {
+        index = ui->veritcalComboBox->findData(QDT_TOP);
+
+    }
+    else if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+    {
+        index = ui->veritcalComboBox->findData(QDT_HCENTER);
+    }
+    else if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+    {
+        index = ui->veritcalComboBox->findData(QDT_RIGHT);
+    }
+    ui->veritcalComboBox->setCurrentIndex(index);
+
+    if(QDT_TOP == (nFormat & QDT_TOP))
+    {
+        index = ui->horizontalComboBox->findData(QDT_TOP);
+    }
+    else if(QDT_VCENTER == (nFormat & QDT_VCENTER))
+    {
+        index = ui->horizontalComboBox->findData(QDT_VCENTER);
+    }
+    else if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+    {
+        index = ui->horizontalComboBox->findData(QDT_BOTTOM);
+    }
+    ui->horizontalComboBox->setCurrentIndex(index);
+
+    if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
+    {
+        ui->autoWrapTextCheckBox->setChecked(true);
+    }
+
+    //缺少一个合并单元格
 }
 
 void HFormatSetDlg::initPrintSheetSet()
