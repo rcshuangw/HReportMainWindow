@@ -41,9 +41,12 @@ public:
     QPixmap createPenStyleIcon(Qt::PenStyle capStyle);
     void updateLineStyleSet();
     void updateColorListSet();
+    void instanceBorderSet();
 
 public slots:
     void currentIndexChanged_clicked(int index);
+
+    void lineColorTableWidget_itemChanged();
     void onBorderLeftBtn_clicked();
     void onBorderVerBtn_clicked();
     void onBorderRightBtn_clicked();
@@ -63,6 +66,12 @@ protected:
 private:
     Ui::HBorderSet *ui;
     HReportManager* m_pReportManager;
+    quint16 m_nBorderPenStyle;           //边框线形
+    quint16 m_nBorderLeftPenStyle;       //边框线形
+    quint16 m_nBorderRightPenStyle;      //边框线形
+    quint16 m_nBorderTopPenStyle;        //边框线形
+    quint16 m_nBorderBottomPenStyle;     //边框线形
+
     QString m_strLineColor;
     QString m_strBorderLeftLineColor;//边框左线条颜色
     QString m_strBorderRightLineColor;//边框右线条颜色

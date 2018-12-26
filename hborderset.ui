@@ -258,7 +258,7 @@
    <property name="title">
     <string>直线</string>
    </property>
-   <widget class="QTableWidget" name="lineSytleWidget">
+   <widget class="QTableWidget" name="lineStyleWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
