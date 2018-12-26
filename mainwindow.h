@@ -125,6 +125,9 @@ public slots:
     void hideRibbon_clicked();
     void information_clicked();
 
+    //表格选择
+    void gridCell_clicked();
+
 public:
     SARibbonComboBox* fontFamilyComboBox;
     SARibbonComboBox* fontSizeComboBox;

@@ -32,7 +32,7 @@ public:
 
 
 signals:
-    void gridcellclickded(HGridCell*);
+    void gridcellclicked(HGridCell*);
 public slots:
     void gridCell_clicked(HGridCell*);*/
 

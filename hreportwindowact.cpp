@@ -412,3 +412,65 @@ void HReportMainWindow::information_clicked()
 {
 
 }
+
+void HReportMainWindow::gridCell_clicked()
+{
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    //刷新界面
+    //设置字体
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    QFont font = pFormatSet->formatFont();
+    boldAct->setChecked(font.bold());
+    italicAct->setChecked(font.italic());
+    underlineAct->setChecked(font.underline());
+
+    int index = fontFamilyComboBox->findText(font.family());
+    if(index != (int)-1)
+        fontFamilyComboBox->setCurrentIndex(index);
+    QString strPointSize = QString("%1").arg(font.pointSize());
+    index = fontSizeComboBox->findText(strPointSize);
+    if(index == (int)-1)
+        fontSizeComboBox->lineEdit()->setText(strPointSize);
+    else
+        fontSizeComboBox->setCurrentIndex(index);
+
+    //对齐
+    quint32 nFormat = pFormatSet->format();
+    if(QDT_LEFT == (nFormat & QDT_LEFT))
+    {
+        alignLeftAct->setChecked(true);
+        alignTop_clicked();
+    }
+    else if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+    {
+        alignCenterAct->setChecked(true);
+        alignCenter_clicked();
+    }
+    else if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+    {
+        alignRightAct->setChecked(true);
+        alignRight_clicked();
+    }
+
+    if(QDT_TOP == (nFormat & QDT_TOP))
+    {
+        alignTopAct->setChecked(true);
+        alignTop_clicked();
+    }
+    else if(QDT_VCENTER == (nFormat & QDT_VCENTER))
+    {
+        alignMiddleAct->setChecked(true);
+        alignMiddle_clicked();
+    }
+    else if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+    {
+        alignBottomAct->setChecked(true);
+        alignBottom_clicked();
+    }
+
+    if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
+    {
+        autoWrapTextAct->setChecked(true);
+    }
+}

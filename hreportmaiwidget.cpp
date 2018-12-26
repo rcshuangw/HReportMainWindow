@@ -52,6 +52,7 @@ void HReportMaiWidget::createReportEditorWidget()
 {
     //QHBoxLayout *layout = new QHBoxLayout(m_pTabWidget);
     m_pReportEditorWidget = new HReportEditorWidget(m_pReportManager,m_pTabWidget);
+    connect(m_pReportEditorWidget,SIGNAL(gridcellclicked()),this,SIGNAL(gridcellclicked()));
     //layout->addWidget(m_pReportEditorWidget);
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }

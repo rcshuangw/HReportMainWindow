@@ -2,6 +2,7 @@
 #define HFORMATSET_H
 
 #include <QObject>
+#include <QFont>
 //主要是读取和存储设置的相关配置
 //界面发生修改后，如何更改到表格或者选择表格后，状态如何改变到界面上？
 //界面发生修改后，通过设置HFormatSet对象，然后要设置变化的类型，然后发送到HGridCtrlWidget里的函数，然后函数改变到表格里
@@ -18,6 +19,8 @@ public:
 
 public:
     //基本
+    void setFormat(quint32 f) { m_nFormatAlign = f;    }
+    quint32 format()          { return m_nFormatAlign; }
     void setHorizontalAlign(quint32 hAlign);
     quint32 horizontalAlign();
     void setVerticalAlign(quint32 vAlign);
@@ -28,6 +31,8 @@ public:
     bool isMergeCell();
 
     //字体
+    void setFormatFont(const QFont& font) { m_formatFont = font; }
+    QFont formatFont()                    { return m_formatFont; }
     void setFontFamily(const QString& fontFamily);
     QString fontFamily();
     void setFontStyle(quint8);
@@ -146,12 +151,14 @@ public slots:
 private:
 
     //基本
+    quint32   m_nFormatAlign;
     quint32   m_nHorizontalAlign;       //水平对齐
     quint32   m_nVerticalAlign;         //垂直对齐
     bool    m_bAutoWrapText;            //自动换行
     bool    m_bMergeCell;               //合并单元格
 
     //字体
+    QFont   m_formatFont;               //字体
     QString m_strFontFamily;            //字体
     quint8  m_nFontStyle;               //字体风格
     quint8  m_nFontSize;                //字体大小
@@ -162,7 +169,12 @@ private:
     QString m_strTextBkColor;           //字体背景颜色
 
     //边框
-    quint16 m_nBorderPenStyle;                 //边框线形
+    quint16 m_nBorderPenStyle;           //边框线形
+    quint16 m_nBorderLeftPenStyle;       //边框线形
+    quint16 m_nBorderRightPenStyle;      //边框线形
+    quint16 m_nBorderTopPenStyle;        //边框线形
+    quint16 m_nBorderBottomPenStyle;     //边框线形
+    bool m_bBorder;
     bool m_bBorderLeft;                  //左边框
     bool m_bBorderTop;                   //上边框
     bool m_bBorderRight;                 //右边框

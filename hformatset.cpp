@@ -324,9 +324,59 @@ quint16 HFormatSet::borderPenStyle()
     return m_nBorderPenStyle;
 }
 
+void HFormatSet::setBorderLeftPenStyle(quint16 v)
+{
+    m_nBorderLeftPenStyle = v;
+}
+
+quint16 HFormatSet::borderLeftPenStyle()
+{
+    return m_nBorderLeftPenStyle;
+}
+
+void HFormatSet::setBorderRightPenStyle(quint16 v)
+{
+    m_nBorderRightPenStyle = v;
+}
+
+quint16 HFormatSet::borderRightPenStyle()
+{
+    return m_nBorderRightPenStyle;
+}
+
+void HFormatSet::setBorderTopPenStyle(quint16 v)
+{
+    m_nBorderTopPenStyle = v;
+}
+
+quint16 HFormatSet::borderTopPenStyle()
+{
+    return m_nBorderTopPenStyle;
+}
+
+void HFormatSet::setBorderBottomPenStyle(quint16 v)
+{
+    m_nBorderBottomPenStyle = v;
+}
+
+quint16 HFormatSet::borderBottomPenStyle()
+{
+    return m_nBorderBottomPenStyle;
+}
+
 void HFormatSet::enableBorderLeft(bool b)
 {
     m_bBorderLeft = b;
+}
+
+bool HFormatSet::isBorder()
+{
+    return m_bBorder;
+}
+
+void HFormatSet::enableBorder(bool b)
+{
+    m_bBorder = b;
 }
 
 bool HFormatSet::isBorderLeft()

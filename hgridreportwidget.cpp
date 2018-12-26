@@ -58,6 +58,7 @@ void HGridReportWidget::updateGridReportWidget()
         for(int i = 0; i < nAddCount; i++)
         {
             HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
+            connect(w,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             w->setGridCtrlItem(pInfo);
             setGridCtrlAttr(w);
@@ -293,7 +294,16 @@ void HGridReportWidget::print()
     print.print();
 }
 
-void HGridReportWidget::gridCell_clicked(HGridCell* pCell)
+void HGridReportWidget::gridCell_clicked()
 {
-    emit gridcellclickded(pCell);
+    //获取格式信息
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        w->cellFormat(m_pReportManager->formatSet());
+    }
+    emit gridcellclicked();
 }

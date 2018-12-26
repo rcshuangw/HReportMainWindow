@@ -662,6 +662,8 @@ void HReportMainWindow::createCategoryPrint(SARibbonCategory* page)
 
 void HReportMainWindow::initReportConnect()
 {
+    //
+    connect(m_pReportMainWidget,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
     //树相关的消息
     connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
     connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开

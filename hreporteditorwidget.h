@@ -21,6 +21,9 @@ public:
 
 public:
     void setGridCtrlAttr(uint nAttrType,HFormatSet* pFormatSet);
+
+signals:
+    void gridcellclicked();
 public:
     HReportManager* m_pReportManager;
     HGridReportWidget* m_pGridReportWidget;

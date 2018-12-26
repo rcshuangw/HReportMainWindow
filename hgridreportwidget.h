@@ -59,13 +59,11 @@ public:
     void printPreview();
     void print();
 
-public:
-
 signals:
-    void gridcellclickded(HGridCell*);
+    void gridcellclicked();
 
 public slots:
-    void gridCell_clicked(HGridCell*);
+    void gridCell_clicked();
 
 public:
     HReportManager* m_pReportManager;

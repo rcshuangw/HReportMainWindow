@@ -1,6 +1,7 @@
 #ifndef HFORMATDEF_H
 #define HFORMATDEF_H
 //定义表格的相关属性
+#define GRID_TYPE_ALL             0x00
 #define CELL_TYPE_HORIZONTAL      0x01
 #define CELL_TYPE_VERTICAL        0x02
 #define CELL_TYPE_AUTOWRAPTEXT    0x03

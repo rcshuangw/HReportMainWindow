@@ -35,6 +35,8 @@ public:
     void printPreviewReportWidget();
 
     void updateReportWidget();
+signals:
+     void gridcellclicked();
 private:
     Ui::HReportMaiWidget *ui;
     QTabWidget* m_pTabWidget;

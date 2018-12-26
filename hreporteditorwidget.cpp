@@ -11,6 +11,7 @@ HReportEditorWidget::HReportEditorWidget(HReportManager* mgr,QWidget *parent)
     layout->addWidget(m_pGridReportWidget);
     m_pGridReportWidget->hide();
     setLayout(layout);
+    connect(m_pGridReportWidget,SIGNAL(gridcellclicked()),this,SIGNAL(gridcellclicked()));
 }
 
 HReportEditorWidget::~HReportEditorWidget()

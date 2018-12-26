@@ -8,7 +8,7 @@ class HGridCtrl;
 class QLabel;
 class QLineEdit;
 class HGridCtrlInfo;
-class HGridCell;
+class HCellID;
 class HReportManager;
 class HFormatSet;
 //tab页的具体内容
@@ -49,6 +49,7 @@ public:
     void enableFontUnderline(GV_ITEM* item,bool);
     void enableFontBold(GV_ITEM* item,bool);
     void enableFontItalic(GV_ITEM* item,bool);
+    //字体颜色
     void setTextColor(GV_ITEM* item,const QString&);
     void setTextBkColor(GV_ITEM* item,const QString&);
 
@@ -65,9 +66,9 @@ public:
     HGridCtrl* gridCtrl() {return m_pGridCtrl;}
 
 signals:
-    void gridcellclickded(HGridCell*);
+    void gridcellclicked();
 public slots:
-    void gridCell_clicked(HGridCell*);
+    //void gridCell_clicked(HCellID);
 
 private:
     bool m_bEnableShowEditBar;

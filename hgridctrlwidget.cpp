@@ -61,6 +61,7 @@ void HGridCtrlWidget::initReportWidget()
         vBoxLayout->addWidget(m_pGridCtrl);
     }
     setLayout(vBoxLayout);
+    connect(m_pGridCtrl,SIGNAL(clicked(HCellID)),this,SIGNAL(gridcellclicked()));
 
 }
 
@@ -129,10 +130,11 @@ void HGridCtrlWidget::getGridCtrlItem(HGridCtrlInfo* pItem)
     }
 }
 
-void HGridCtrlWidget::gridCell_clicked(HGridCell* pCell)
+/*
+void HGridCtrlWidget::gridCell_clicked(HCellID cellID)
 {
-    emit gridcellclickded(pCell);
-}
+    emit gridcellclicked(cellID);
+}*/
 
 void HGridCtrlWidget::enableShowEditBar(bool b)
 {
@@ -149,6 +151,7 @@ void HGridCtrlWidget::setVirtualMode(bool b)
     m_pGridCtrl->setVirtualMode(b);
 }
 
+//设置单项
 void HGridCtrlWidget::setCellFormat(uint formatType,HFormatSet* pFormatSet)
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
@@ -161,39 +164,77 @@ void HGridCtrlWidget::setCellFormat(uint formatType,HFormatSet* pFormatSet)
             GV_ITEM pItem;
             pItem.row = rangeRow;
             pItem.col = rangeCol;
+            pItem.mask = 0;
             bool bok = m_pGridCtrl->item(&pItem);
-            HGridCellBase* pCell = m_pGridCtrl->getCell(rangeRow,rangeCol);
             if(bok)
             {
-                if(formatType == CELL_TYPE_HORIZONTAL)
+                /*if((formatType == CELL_TYPE_HORIZONTAL) | formatType == GRID_TYPE_ALL)
                 {
                     int horizontalAlign = pFormatSet->horizontalAlign();
                     setHorizontalAlign(&pItem,horizontalAlign);
                 }
-                else if(formatType == CELL_TYPE_VERTICAL)
+                if(formatType == CELL_TYPE_VERTICAL  | formatType == GRID_TYPE_ALL)
                 {
                     int verticalAlign = pFormatSet->verticalAlign();
                     setVerticalAlign(&pItem,verticalAlign);
                 }
-                else if(formatType == CELL_TYPE_BORDER_All)
+
+                if(formatType == CELL_TYPE_BORDER_All  | formatType == GRID_TYPE_ALL)
                 {
                     setCellBorderFormat(rangeRow,rangeCol,pFormatSet);
                 }
-                else if(formatType == CELL_TYPE_ROW_HEIGHT)
+
+                if(formatType == GRID_TYPE_ROW_HEIGHT  | formatType == GRID_TYPE_ALL)
                 {
                     m_pGridCtrl->setRowHeight(rangeRow,pFormatSet->cellRowHeight());
                 }
-                else if(formatType == CELL_TYPE_COL_WIDTH)
+
+                if(formatType == GRID_TYPE_COL_WIDTH  | formatType == GRID_TYPE_ALL)
                 {
                     m_pGridCtrl->setColumnWidth(rangeCol,pFormatSet->cellColumnWidth());
-                }
+                }*/
             }
         }
     }
+    //如果类型时GRID_TYPE_ALL 则打印相关的设置都要增加
 }
 
+//获取cell表格的属性
 void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
 {
+    if(!pFormatSet)
+        return;
+    HCellID cellID = m_pGridCtrl->focusCell();
+    if(!cellID.isValid()) return;
+    HGridCellBase* pCell = m_pGridCtrl->getCell(cellID);
+    if(!pCell) return;
+    //字体 + 字体颜色
+    pFormatSet->setFormatFont(pCell->font());
+    pFormatSet->setTextColor(pCell->textClr().name());
+    pFormatSet->setTextBkColor(pCell->backClr().name());
+
+    //边框
+    pFormatSet->setBorderPenStyle(pCell->borderStyle());
+    pFormatSet->setBorderLeftPenStyle(pCell->borderLeftStyle());
+    pFormatSet->setBorderRightPenStyle(pCell->borderRightStyle());
+    pFormatSet->setBorderTopPenStyle(pCell->borderTopStyle());
+    pFormatSet->setBorderBottomPenStyle(pCell->borderBottomStyle());
+
+    pFormatSet->enableBorder(pCell->isDrawBorder());
+    pFormatSet->enableBorderLeft(pCell->isDrawBorderLeft());
+    pFormatSet->enableBorderRight(pCell->isDrawBorderRight());
+    pFormatSet->enableBorderTop(pCell->isDrawBorderTop());
+    pFormatSet->enableBorderBottom(pCell->isDrawBorderBottom());
+    pFormatSet->setBorderLineColor(pCell->borderColor().name());
+    pFormatSet->setBorderLeftLineColor(pCell->borderLeftColor().name());
+    pFormatSet->setBorderRightLineColor(pCell->borderRightColor().name());
+    pFormatSet->setBorderTopLineColor(pCell->borderTopColor().name());
+    pFormatSet->setBorderBottomLineColor(pCell->borderBottomColor().name());
+
+    //对齐
+    pFormatSet->setFormat(pCell->format());
+
+    //打印相关设置
 
 }
 
@@ -260,7 +301,7 @@ void HGridCtrlWidget::setVerticalAlign(GV_ITEM* pItem,quint32 vAlign)
     m_pGridCtrl->setItem(pItem);
 }
 
-void HGridCtrlWidget::enableAutoWrapText(GV_ITEM* item,bool bAutoWrapText)
+void HGridCtrlWidget::enableAutoWrapText(GV_ITEM* pItem,bool bAutoWrapText)
 {
     bool bok = m_pGridCtrl->item(pItem);
     quint32 nFormat = pItem->nFormat;
@@ -280,17 +321,29 @@ void HGridCtrlWidget::enableAutoWrapText(GV_ITEM* item,bool bAutoWrapText)
     m_pGridCtrl->setItem(pItem);
 }
 
-void HGridCtrlWidget::enableMergeCell(bool bMergCell)
+void HGridCtrlWidget::enableMergeCell(GV_ITEM* item,bool bMergCell)
 {
 
 }
 
 
 //字体
+void HGridCtrlWidget::setFont(GV_ITEM* pItem,const QFont& font)
+{
+    if(!pItem) return;
+    pItem->mask = pItem->mask | GVIF_FONT;
+    bool bok = m_pGridCtrl->item(pItem);
+    if(bok)
+    {
+        pItem->lfFont = font;
+    }
+    m_pGridCtrl->setItem(pItem);
+}
+
 void HGridCtrlWidget::setFontFamily(GV_ITEM* pItem,const QString& fontFamily)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
+    pItem->mask = pItem->mask |GVIF_FONT;
     bool bok = m_pGridCtrl->item(pItem);
     QFont font = pItem->lfFont;
     if(bok)
@@ -300,22 +353,10 @@ void HGridCtrlWidget::setFontFamily(GV_ITEM* pItem,const QString& fontFamily)
     m_pGridCtrl->setItem(pItem);
 }
 
-void HGridCtrlWidget::setFont(GV_ITEM* pItem,const QFont& font)
-{
-    if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
-    bool bok = m_pGridCtrl->item(pItem);
-    if(bok)
-    {
-        pItem->lfFont = font;
-    }
-    m_pGridCtrl->setItem(pItem);
-}
-
 void HGridCtrlWidget::setFontSize(GV_ITEM* pItem,quint8 size)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
+    pItem->mask = pItem->mask | GVIF_FONT;
     bool bok = m_pGridCtrl->item(pItem);
     QFont font = pItem->lfFont;
     if(bok)
@@ -328,7 +369,7 @@ void HGridCtrlWidget::setFontSize(GV_ITEM* pItem,quint8 size)
 void HGridCtrlWidget::enableFontUnderline(GV_ITEM* pItem,bool b)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
+    pItem->mask = pItem->mask | GVIF_FONT;
     bool bok = m_pGridCtrl->item(pItem);
     QFont font = pItem->lfFont;
     if(bok)
@@ -341,7 +382,7 @@ void HGridCtrlWidget::enableFontUnderline(GV_ITEM* pItem,bool b)
 void HGridCtrlWidget::enableFontBold(GV_ITEM* pItem,bool b)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
+    pItem->mask = pItem->mask | GVIF_FONT;
     bool bok = m_pGridCtrl->item(pItem);
     QFont font = pItem->lfFont;
     if(bok)
@@ -354,7 +395,7 @@ void HGridCtrlWidget::enableFontBold(GV_ITEM* pItem,bool b)
 void HGridCtrlWidget::enableFontItalic(GV_ITEM* pItem,bool b)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FONT;
+    pItem->mask = pItem->mask | GVIF_FONT;
     bool bok = m_pGridCtrl->item(pItem);
     QFont font = pItem->lfFont;
     if(bok)
@@ -367,7 +408,7 @@ void HGridCtrlWidget::enableFontItalic(GV_ITEM* pItem,bool b)
 void HGridCtrlWidget::setTextColor(GV_ITEM* pItem,const QString& strTextClr)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_FGCLR;
+    pItem->mask = pItem->mask | GVIF_FGCLR;
     bool bok = m_pGridCtrl->item(pItem);
     if(bok)
     {
@@ -381,7 +422,7 @@ void HGridCtrlWidget::setTextColor(GV_ITEM* pItem,const QString& strTextClr)
 void HGridCtrlWidget::setTextBkColor(GV_ITEM* pItem,const QString& strTextBkClr)
 {
     if(!pItem) return;
-    pItem->mask = pItem->mask & GVIF_BKCLR;
+    pItem->mask = pItem->mask | GVIF_BKCLR;
     bool bok = m_pGridCtrl->item(pItem);
     if(bok)
     {
@@ -396,7 +437,7 @@ void HGridCtrlWidget::setCellBorderFormat(int row,int col,HFormatSet* pFormatSet
 {
     if(row < 0 || col < 0) return;
     if(!pFormatSet) return;
-    HGridCell *pCell = m_pGridCtrl->getCell(row,col);
+    HGridCellBase *pCell = m_pGridCtrl->getCell(row,col);
     if(NULL == pCell) return;
     if(!pFormatSet->isBorder())//无边框
     {
