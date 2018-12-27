@@ -196,10 +196,61 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     btnGroup->addButton(underlineAct);
 
     //字体背景颜色
+    QPixmap pix(QSize(40,40));
+    pix.fill(QColor(Qt::black));
+    QAction* blackAct = new QAction(QIcon(pix),QStringLiteral("黑色"));
+    blackAct->setData(QVariant("#000000"));
+    pix.fill(QColor(Qt::white));
+    QAction* whiteAct = new QAction(QIcon(pix),QStringLiteral("白色"));
+    whiteAct->setData(QVariant("#ffffff"));
+    pix.fill(QColor(Qt::red));
+    QAction* redAct = new QAction(QIcon(pix),QStringLiteral("红色"));
+    redAct->setData(QVariant("#ff0000"));
+    pix.fill(QColor(Qt::green));
+    QAction* greenAct = new QAction(QIcon(pix),QStringLiteral("绿色"));
+    greenAct->setData(QVariant("#00ff00"));
+    pix.fill(QColor(Qt::blue));
+    QAction* blueAct = new QAction(QIcon(pix),QStringLiteral("蓝色"));
+    blueAct->setData(QVariant("#0000ff"));
+    pix.fill(QColor(Qt::yellow));
+    QAction* yellowAct = new QAction(QIcon(pix),QStringLiteral("黄色"));
+    yellowAct->setData(QVariant("#ffff00"));
+    pix.fill(QColor(Qt::darkRed));
+    QAction* darkRedAct = new QAction(QIcon(pix),QStringLiteral("深红色"));
+    darkRedAct->setData(QVariant("#800000"));
+    pix.fill(QColor(Qt::darkGreen));
+    QAction* darkGreenAct = new QAction(QIcon(pix),QStringLiteral("深绿色"));
+    darkGreenAct->setData(QVariant("#008000"));
+    pix.fill(QColor(Qt::darkBlue));
+    QAction* darkBlue = new QAction(QIcon(pix),QStringLiteral("深绿色"));
+    darkBlue->setData(QVariant("#000080"));
+    pix.fill(QColor(Qt::cyan));
+    QAction* cyanAct = new QAction(QIcon(pix),QStringLiteral("蓝绿色"));
+    cyanAct->setData(QVariant("#00ffff"));
+
     SARibbonMenu* clrmenu = new SARibbonMenu(this);
-    fontBkColorAct = clrmenu->addAction(QIcon(":/icon/icon/fontbkcolor.png"),QStringLiteral("color"));
-    clrmenu->addAction(QIcon(":/icon/icon/folder.png"),QStringLiteral("1"));
-    clrmenu->addAction(QIcon(":/icon/icon/folder.png"),QStringLiteral("11"));
+    fontBkColorActGroup = new QActionGroup(this);
+    clrmenu->addAction(blackAct);
+    fontBkColorActGroup->addAction(blackAct);
+    clrmenu->addAction(whiteAct);
+    fontBkColorActGroup->addAction(whiteAct);
+    clrmenu->addAction(redAct);
+    fontBkColorActGroup->addAction(redAct);
+    clrmenu->addAction(greenAct);
+    fontBkColorActGroup->addAction(greenAct);
+    clrmenu->addAction(blueAct);
+    fontBkColorActGroup->addAction(blueAct);
+    clrmenu->addAction(yellowAct);
+    fontBkColorActGroup->addAction(yellowAct);
+    clrmenu->addAction(darkRedAct);
+    fontBkColorActGroup->addAction(darkRedAct);
+    clrmenu->addAction(darkGreenAct);
+    fontBkColorActGroup->addAction(darkGreenAct);
+    clrmenu->addAction(darkBlue);
+    fontBkColorActGroup->addAction(darkBlue);
+    clrmenu->addAction(cyanAct);
+    fontBkColorActGroup->addAction(cyanAct);
+    fontBkColorAct = clrmenu->addAction(QIcon(":/icon/icon/fontbkcolor.png"),QStringLiteral("字体背景颜色"));
     btn = btnGroup->addButton(fontBkColorAct);
     btn->setPopupMode(QToolButton::InstantPopup);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -209,39 +260,28 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
 
     //字体颜色
     SARibbonMenu* clrmenu2 = new SARibbonMenu(this);
-    QPixmap pix(QSize(40,40));
-    pix.fill(QColor(Qt::black));
-    QAction* clrAct = new QAction(QIcon(pix),QStringLiteral("黑色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::white));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("白色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::red));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("红色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::green));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("绿色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::blue));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("蓝色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::yellow));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("黄色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::darkRed));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("深红色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::darkGreen));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("深绿色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::darkBlue));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("深绿色"));
-    clrmenu2->addAction(clrAct);
-    pix.fill(QColor(Qt::cyan));
-    clrAct = new QAction(QIcon(pix),QStringLiteral("深蓝色"));
-    clrmenu2->addAction(clrAct);
+    fontColorActGroup = new QActionGroup(this);
+    clrmenu2->addAction(blackAct);
+    fontColorActGroup->addAction(blackAct);
+    clrmenu2->addAction(whiteAct);
+    fontColorActGroup->addAction(whiteAct);
+    clrmenu2->addAction(redAct);
+    fontColorActGroup->addAction(redAct);
+    clrmenu2->addAction(greenAct);
+    fontColorActGroup->addAction(greenAct);
+    clrmenu2->addAction(blueAct);
+    fontColorActGroup->addAction(blueAct);
+    clrmenu2->addAction(yellowAct);
+    fontColorActGroup->addAction(yellowAct);
+    clrmenu2->addAction(darkRedAct);
+    fontColorActGroup->addAction(darkRedAct);
+    clrmenu2->addAction(darkGreenAct);
+    fontColorActGroup->addAction(darkGreenAct);
+    clrmenu2->addAction(darkBlue);
+    fontColorActGroup->addAction(darkBlue);
+    clrmenu2->addAction(cyanAct);
+    fontColorActGroup->addAction(cyanAct);
     fontColorAct = clrmenu2->addAction(QIcon(":/icon/icon/fontcolor.png"),QStringLiteral("字体颜色"));
-
     btn = btnGroup->addButton(fontColorAct);
     btn->setPopupMode(QToolButton::InstantPopup);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -272,7 +312,7 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     bordermenu->addSeparator();
 
     borderNoneAct = bordermenu->addAction(QIcon(":/icon/icon/BorderNone.png"),QStringLiteral("无框线"));
-    borderAllAct = bordermenu->addAction(QIcon(":/icon/icon/BorderAll.png"),QStringLiteral("所有框线"));
+    borderAllAct = bordermenu->addAction(QIcon(":/icon/icon/BordersAll.png"),QStringLiteral("所有框线"));
     borderOutSideAct = bordermenu->addAction(QIcon(":/icon/icon/BorderOutside.png"),QStringLiteral("外侧框线"));
     borderInsideAct = bordermenu->addAction(QIcon(":/icon/icon/BorderInside.png"),QStringLiteral("内部框线"));
     bordermenu->addSeparator();
@@ -354,6 +394,7 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     autoWrapTextAct->setText(QStringLiteral("自动换行"));
     btn = aligPannel->addSmallAction(autoWrapTextAct);
     aligPannel->addWidget(btn,0,3);
+
     //合并单元格
     SARibbonMenu* mergemenu = new SARibbonMenu(this);
     mergeCenterAct = mergemenu->addAction(QIcon(":/icon/icon/MergeCenter.png"),QStringLiteral("合并后居中"));
@@ -677,6 +718,12 @@ void HReportMainWindow::initReportConnect()
     connect(fontSizeComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeComboBox_changed(int)));
     connect(fontSizeIncreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeIncrease_clicked()));
     connect(fontSizeDecreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeDecrease_clicked()));
+
+    connect(fontColorAct,SIGNAL(triggered(bool)),this,SLOT(fontColor_clicked()));
+    connect(fontColorActGroup,SIGNAL(triggered(QAction*)),this,SLOT(fontColorActGroup_clicked(QAction*)));
+    connect(fontBkColorAct,SIGNAL(triggered(bool)),this,SLOT(fontBkColor_clicked()));
+    connect(fontBkColorActGroup,SIGNAL(triggered(QAction*)),this,SLOT(fontBkColorActGroup_clicked(QAction*)));
+
 
     //对齐部分
     connect(alignTopAct,SIGNAL(triggered(bool)),this,SLOT(alignTop_clicked()));

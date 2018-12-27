@@ -1,26 +1,23 @@
 #ifndef HFORMATDEF_H
 #define HFORMATDEF_H
-//定义表格的相关属性
-#define GRID_TYPE_ALL             0x00
-#define CELL_TYPE_HORIZONTAL      0x01
-#define CELL_TYPE_VERTICAL        0x02
-#define CELL_TYPE_AUTOWRAPTEXT    0x03
-#define CELL_TYPE_MERGECELL       0x04
+//定义单元格的相关属性
+#define CELL_TYPE_ALIGNMENT       0x01
+#define CELL_TYPE_FONT            0x02
+#define CELL_TYPE_BORDER          0x03
+#define CELL_TYPE_COLOR           0x04
+#define CELL_TYPE_AUTOWRAPTEXT    0x05
+#define CELL_TYPE_RESET           0x06
 
-#define CELL_TYPE_FONT_FAMILY     0x05
-#define CELL_TYPE_FONT_STYLE      0x06
-#define CELL_TYPE_FONT_SIZE       0x07
-#define CELL_TYPE_FONT_UNDERLINE  0x08
-#define CELL_TYPE_FONT_BOLD       0x09
-#define CELL_TYPE_FONT_ITALIC     0x0A
-#define CELL_TYPE_TEXT_COLOR      0x0B
-#define CELL_TYPE_TEXTBK_COLOE    0x0C
+//定义表格
+#define GRID_TYPE_MERGECELL       0x60
+#define GRID_TYPE_SPLITCELL       0x61
+#define GRID_TYPE_ROW_HEIGHT      0x62
+#define GRID_TYPE_COL_WIDTH       0x63
 
-//边框只要1个就行了
-#define CELL_TYPE_BORDER_All            0x0D
 
-#define GRID_TYPE_ROW_HEIGHT            0x14
-#define GRID_TYPE_COL_WIDTH             0x15
+//合并单元格 拆分单元格 插入行 插入列 插入行列
+
+
 
 
   /*  //打印相关

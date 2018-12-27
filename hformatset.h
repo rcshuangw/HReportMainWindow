@@ -18,33 +18,30 @@ public:
     void saveDefaultFormatSet(int v,QDataStream* ds);
 
 public:
-    //基本
+    //对齐 格式
     void setFormat(quint32 f) { m_nFormatAlign = f;    }
     quint32 format()          { return m_nFormatAlign; }
-    void setHorizontalAlign(quint32 hAlign);
-    quint32 horizontalAlign();
-    void setVerticalAlign(quint32 vAlign);
-    quint32 verticalAlign();
+
+    //自动换行
     void enableAutoWrapText(bool bAutoWrapText);
     bool isAutoWrapText();
+
+    //清除
+    void enableResetFormat(bool);
+    bool isResetFormat();
+    void enableResetText(bool);
+    bool isResetText();
+    void enableResetAll(bool);
+    bool isResetAll();
+    //合并
     void enableMergeCell(bool bMergCell);
     bool isMergeCell();
 
     //字体
     void setFormatFont(const QFont& font) { m_formatFont = font; }
     QFont formatFont()                    { return m_formatFont; }
-    void setFontFamily(const QString& fontFamily);
-    QString fontFamily();
-    void setFontStyle(quint8);
-    quint8 fontStyle();
-    void setFontSize(quint8);
-    quint8 fontSize();
-    void enableFontUnderline(bool);
-    bool isFontUnderline();
-    void enableFontBold(bool);
-    bool isFontBold();
-    void enableFontItalic(bool);
-    bool isFontItalic();
+
+    //颜色
     void setTextColor(const QString&);
     QString textColor();
     void setTextBkColor(const QString&);

@@ -152,7 +152,7 @@ void HGridCtrlWidget::setVirtualMode(bool b)
 }
 
 //设置单项
-void HGridCtrlWidget::setCellFormat(uint formatType,HFormatSet* pFormatSet)
+void HGridCtrlWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
@@ -161,38 +161,91 @@ void HGridCtrlWidget::setCellFormat(uint formatType,HFormatSet* pFormatSet)
     {
         for(int rangeCol = range.minCol();rangeCol <= range.maxCol();rangeCol++)
         {
-            GV_ITEM pItem;
-            pItem.row = rangeRow;
-            pItem.col = rangeCol;
-            pItem.mask = 0;
-            bool bok = m_pGridCtrl->item(&pItem);
-            if(bok)
+            HGridCellBase* pCell = m_pGridCtrl->getCell(rangeRow,rangeCol);
+            if(NULL == pCell) return;
+            if(CELL_TYPE_ALIGNMENT == formatType | bAll)
             {
-                /*if((formatType == CELL_TYPE_HORIZONTAL) | formatType == GRID_TYPE_ALL)
-                {
-                    int horizontalAlign = pFormatSet->horizontalAlign();
-                    setHorizontalAlign(&pItem,horizontalAlign);
-                }
-                if(formatType == CELL_TYPE_VERTICAL  | formatType == GRID_TYPE_ALL)
-                {
-                    int verticalAlign = pFormatSet->verticalAlign();
-                    setVerticalAlign(&pItem,verticalAlign);
-                }
+                pCell->setFormat(pFormatSet->format());
+            }
 
-                if(formatType == CELL_TYPE_BORDER_All  | formatType == GRID_TYPE_ALL)
-                {
-                    setCellBorderFormat(rangeRow,rangeCol,pFormatSet);
-                }
+            if(CELL_TYPE_FONT == formatType | bAll)
+            {
+                pCell->setFont(pFormatSet->formatFont());
+            }
 
-                if(formatType == GRID_TYPE_ROW_HEIGHT  | formatType == GRID_TYPE_ALL)
-                {
-                    m_pGridCtrl->setRowHeight(rangeRow,pFormatSet->cellRowHeight());
-                }
+            if(CELL_TYPE_BORDER == formatType | bAll)
+            {
+                pCell->setBorderColor(pFormatSet->borderLineColor());
+                pCell->setBorderStyle(pFormatSet->borderPenStyle());
+                pCell->setDrawBorder(pFormatSet->isBorder());
+                pCell->setBorderLeftColor(pFormatSet->borderLeftLineColor());
+                pCell->setBorderLeftStyle(pFormatSet->borderLeftPenStyle());
+                pCell->setDrawBorderLeft(pFormatSet->isBorderLeft());
+                pCell->setBorderRightColor(pFormatSet->borderRightLineColor());
+                pCell->setBorderRightStyle(pFormatSet->borderRightPenStyle());
+                pCell->setDrawBorderRight(pFormatSet->isBorderRight());
+                pCell->setBorderTopColor(pFormatSet->borderTopLineColor());
+                pCell->setBorderTopStyle(pFormatSet->borderTopPenStyle());
+                pCell->setDrawBorderTop(pFormatSet->isBorderTop());
+                pCell->setBorderBottomColor(pFormatSet->borderBottomLineColor());
+                pCell->setBorderBottomStyle(pFormatSet->borderBottomPenStyle());
+                pCell->setDrawBorderBottom(pFormatSet->isBorderBottom());
+            }
 
-                if(formatType == GRID_TYPE_COL_WIDTH  | formatType == GRID_TYPE_ALL)
+            if(CELL_TYPE_COLOR == formatType | bAll)
+            {
+                pCell->setTextClr(pFormatSet->textColor());
+                pCell->setBackClr(pFormatSet->textBkColor());
+            }
+
+            if(formatType == GRID_TYPE_ROW_HEIGHT | bAll)
+            {
+                m_pGridCtrl->setRowHeight(rangeRow,pFormatSet->cellRowHeight());
+            }
+
+            if(formatType == GRID_TYPE_COL_WIDTH  | bAll)
+            {
+                m_pGridCtrl->setColumnWidth(rangeCol,pFormatSet->cellColumnWidth());
+            }
+
+            if(CELL_TYPE_AUTOWRAPTEXT == formatType)
+            {
+                quint32 nFormat = pCell->format();
+                if(pFormatSet->isAutoWrapText())
                 {
-                    m_pGridCtrl->setColumnWidth(rangeCol,pFormatSet->cellColumnWidth());
-                }*/
+                    if(QDT_SINGLELINE == (nFormat & QDT_SINGLELINE))
+                    {
+                        nFormat = nFormat & ~QDT_SINGLELINE;
+                    }
+                    nFormat |= QDT_WORDBREAK;
+                }
+                else
+                {
+                    if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
+                    {
+                        nFormat = nFormat & ~QDT_WORDBREAK;
+                    }
+                    nFormat |= QDT_SINGLELINE;
+                }
+                pCell->setFormat(nFormat);
+            }
+
+            if(CELL_TYPE_RESET == formatType)
+            {
+                if(pFormatSet->isResetFormat())
+                {
+                    QString strText = pCell->text();
+                    pCell->reset();
+                    pCell->setText(strText);
+                }
+                else if(pFormatSet->isResetText())
+                {
+                    pCell->setText("");
+                }
+                else if(pFormatSet->isResetAll())
+                {
+                    pCell->reset();
+                }
             }
         }
     }

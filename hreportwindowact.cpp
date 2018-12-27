@@ -8,6 +8,7 @@
 #include "hgridcelldef.h"
 #include "SARibbonComboBox.h"
 #include "hformatset.h"
+#include <QColorDialog>
 void HReportMainWindow::new_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
@@ -75,58 +76,149 @@ void HReportMainWindow::fontFamilyComboBox_changed(int index)
 {
     if(-1 == index || !m_pReportManager)
         return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
     QString strFamily = fontFamilyComboBox->currentText();
-    m_pReportManager->formatSet()->setFontFamily(strFamily);
+    font.setFamily(strFamily);
+    m_pReportManager->formatSet()->setFormatFont(font);
 }
 
 void HReportMainWindow::fontSizeComboBox_changed(int)
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    QString strSize = fontSizeComboBox->currentText();
+    font.setPointSize(strSize.toUInt());
+    m_pReportManager->formatSet()->setFormatFont(font);
 }
 
 void HReportMainWindow::bold_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    bool bBold = boldAct->isChecked();
+    font.setBold(bBold);
+    m_pReportManager->formatSet()->setFormatFont(font);
 }
 
 void HReportMainWindow::italic_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    bool italic = italicAct->isChecked();
+    font.setBold(italic);
+    m_pReportManager->formatSet()->setFormatFont(font);
 }
 
 void HReportMainWindow::underline_clicked()
 {
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    bool underline = underlineAct->isChecked();
+    font.setBold(underline);
+    m_pReportManager->formatSet()->setFormatFont(font);
+}
 
+void HReportMainWindow::fontSizeIncrease_clicked()
+{
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    QString strFontSize = fontSizeComboBox->currentText();
+    if(strFontSize.toInt() >= 255)
+        return;
+    int nFontSize = strFontSize.toInt();
+    nFontSize++;
+    strFontSize = QString("%1").arg(nFontSize);
+    fontSizeComboBox->setCurrentText(strFontSize);
+    font.setPointSize(nFontSize);
+    m_pReportManager->formatSet()->setFormatFont(font);
+}
+
+void HReportMainWindow::fontSizeDecrease_clicked()
+{
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QFont font = m_pReportManager->formatSet()->formatFont();
+    QString strFontSize = fontSizeComboBox->currentText();
+    if(strFontSize.toInt() <= 1)
+        return;
+    int nFontSize = strFontSize.toInt();
+    nFontSize--;
+    strFontSize = QString("%1").arg(nFontSize);
+    fontSizeComboBox->setCurrentText(strFontSize);
+    font.setPointSize(nFontSize);
+    m_pReportManager->formatSet()->setFormatFont(font);
 }
 
 void HReportMainWindow::fontColor_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QString strTextClr = m_pReportManager->formatSet()->textColor();
+    QColor clr = QColorDialog::getColor(QColor(strTextClr),this,QStringLiteral("选择颜色"));
+    strTextClr = clr.name();
+    m_pReportManager->formatSet()->setTextColor(strTextClr);
 }
 
-void HReportMainWindow::fontbkColor_clicked()
+void HReportMainWindow::fontColorActGroup_clicked(QAction *action)
 {
+    if(!action) return;
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QString strTextClr = action->data().toString();
+    m_pReportManager->formatSet()->setTextColor(strTextClr);
+}
 
+
+void HReportMainWindow::fontBkColor_clicked()
+{
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QString strTextBkClr = m_pReportManager->formatSet()->textBkColor();
+    QColor clr = QColorDialog::getColor(QColor(strTextBkClr),this,QStringLiteral("选择颜色"));
+    strTextBkClr = clr.name();
+    m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
+}
+
+void HReportMainWindow::fontBkColorActGroup_clicked(QAction *action)
+{
+    if(!action) return;
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    QString strTextBkClr = action->data().toString();
+    m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
 }
 
 void HReportMainWindow::borderBottom_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorderBottom(true);
 }
 
 void HReportMainWindow::borderTop_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorderTop(true);
 }
 
 void HReportMainWindow::borderLeft_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorderLeft(true);
 }
 
 void HReportMainWindow::borderRight_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorderRight(true);
 }
 
 void HReportMainWindow::borderNone_clicked()
@@ -157,28 +249,6 @@ void HReportMainWindow::borderInsideHor_clicked()
 void HReportMainWindow::borderInsideVer_clicked()
 {
 
-}
-
-void HReportMainWindow::fontSizeIncrease_clicked()
-{
-    QString strFontSize = fontSizeComboBox->currentText();
-    if(strFontSize.toInt() >= 255)
-        return;
-    int nFontSize = strFontSize.toInt();
-    nFontSize++;
-    strFontSize = QString("%1").arg(nFontSize);
-    fontSizeComboBox->setCurrentText(strFontSize);
-}
-
-void HReportMainWindow::fontSizeDecrease_clicked()
-{
-    QString strFontSize = fontSizeComboBox->currentText();
-    if(strFontSize.toInt() <= 1)
-        return;
-    int nFontSize = strFontSize.toInt();
-    nFontSize--;
-    strFontSize = QString("%1").arg(nFontSize);
-    fontSizeComboBox->setCurrentText(strFontSize);
 }
 
 void HReportMainWindow::clearAllFormat_clicked()
@@ -295,11 +365,16 @@ void HReportMainWindow::alignRight_clicked()
 
 void HReportMainWindow::autoWrapText_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool b = autoWrapTextAct->isChecked();
+    m_pReportManager->formatSet()->enableAutoWrapText(b);
 }
 
 void HReportMainWindow::mergeCenter_clicked()
 {
+    //要获取是否合并，然后合并单元格，如果成功则改状态，如果失败就不改
+    //如果只有一个单元格，合并失败
 
 }
 

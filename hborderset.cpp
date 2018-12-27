@@ -38,7 +38,7 @@ DefaultColor sysColorList2[]=
 };
 
 QStringList sysColorList1= {
-    "#ffffff","#000000","#ff0000","#800000","#00ff00","#008000","#0000ff","#000080","#00ffff","#008080",
+    "#000000","#ffffff","#ff0000","#800000","#00ff00","#008000","#0000ff","#000080","#00ffff","#008080",
     "#ff00ff","#800080","#ffff00","#808000","#a0a0a4", "#808080", "#c0c0c0" };
 
 
@@ -113,51 +113,6 @@ void HBorderSet::initLineStyleSet()
 
 }
 
-void HBorderSet::updateLineStyleSet()
-{
-    ui->lineStyleWidget->clear();
-
-    ui->lineStyleWidget->setIconSize(QSize(134,16));
-    QTableWidgetItem *item = new QTableWidgetItem;
-    item->setText(QStringLiteral("无"));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_NOPEN));
-    ui->lineStyleWidget->setItem(0,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(QIcon(createPenStyleIcon(Qt::SolidLine)));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_SOLIDLINE));
-    ui->lineStyleWidget->setItem(1,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::DashLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHLINE));
-    ui->lineStyleWidget->setItem(2,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::DotLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_DOTLINE));
-    ui->lineStyleWidget->setItem(3,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::DashDotLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHDOTLINE));
-    ui->lineStyleWidget->setItem(4,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::DashDotLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_NOPEN));
-    ui->lineStyleWidget->setItem(5,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::DashDotDotLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHDOTDOTLINE));
-    ui->lineStyleWidget->setItem(6,0,item);
-
-    item = new QTableWidgetItem;
-    item->setIcon(createPenStyleIcon(Qt::CustomDashLine));
-    item->setData(Qt::UserRole,QVariant((quint8)QPS_CUSTOMDASHLINE));
-    ui->lineStyleWidget->setItem(7,0,item);
-}
 
 void HBorderSet::initColorSet()
 {   
@@ -269,14 +224,14 @@ void HBorderSet::mouseReleaseEvent(QMouseEvent *event)
         if(m_strLineColor != m_strBorderLeftLineColor && m_bBorderLeft)
         {
             m_strBorderLeftLineColor = m_strLineColor;
-            m_nBorderLeftPenStyle = m_nBorderPenStyle;
+
         }
         else
         {
             m_bBorderLeft = !m_bBorderLeft;
             m_strBorderLeftLineColor = m_strLineColor;
-            m_nBorderLeftPenStyle = m_nBorderPenStyle;
         }
+        m_nBorderLeftPenStyle = m_nBorderPenStyle;
         ui->borderLeftBtn->setChecked(m_bBorderLeft);
     }
     else if(borderTopRect.contains(pt))
@@ -284,14 +239,14 @@ void HBorderSet::mouseReleaseEvent(QMouseEvent *event)
         if(m_strLineColor != m_strBorderTopLineColor && m_bBorderTop)
         {
             m_strBorderTopLineColor = m_strLineColor;
-            m_nBorderTopPenStyle = m_nBorderPenStyle;
+
         }
         else
         {
             m_bBorderTop = !m_bBorderTop;
             m_strBorderTopLineColor = m_strLineColor;
-            m_nBorderTopPenStyle = m_nBorderPenStyle;
         }
+        m_nBorderTopPenStyle = m_nBorderPenStyle;
         ui->borderTopBtn->setChecked(m_bBorderTop);
     }
     else if(borderRightRect.contains(pt))
@@ -299,14 +254,13 @@ void HBorderSet::mouseReleaseEvent(QMouseEvent *event)
         if(m_strLineColor != m_strBorderRightLineColor && m_bBorderRight)
         {
             m_strBorderRightLineColor = m_strLineColor;
-            m_nBorderRightPenStyle = m_nBorderPenStyle;
         }
         else
         {
             m_bBorderRight = !m_bBorderRight;
-            m_strBorderRightLineColor = m_strLineColor;
-            m_nBorderRightPenStyle = m_nBorderPenStyle;
+            m_strBorderRightLineColor = m_strLineColor;        
         }
+        m_nBorderRightPenStyle = m_nBorderPenStyle;
         ui->borderRightBtn->setChecked(m_bBorderRight);
     }
     else if(borderBottomRect.contains(pt))
@@ -314,14 +268,13 @@ void HBorderSet::mouseReleaseEvent(QMouseEvent *event)
         if(m_strLineColor != m_strBorderBottomLineColor && m_bBorderBottom)
         {
             m_strBorderBottomLineColor = m_strLineColor;
-            m_nBorderBottomPenStyle = m_nBorderPenStyle;
         }
         else
         {
             m_bBorderBottom = !m_bBorderBottom;
-            m_strBorderBottomLineColor = m_strLineColor;
-            m_nBorderBottomPenStyle = m_nBorderPenStyle;
+            m_strBorderBottomLineColor = m_strLineColor;  
         }
+        m_nBorderBottomPenStyle = m_nBorderPenStyle;
         ui->borderBottomBtn->setChecked(m_bBorderBottom);
     }
     update();
@@ -418,6 +371,7 @@ void HBorderSet::onBorderLeftBtn_clicked()
         m_bBorderLeft = !m_bBorderLeft;
         m_strBorderLeftLineColor = m_strLineColor;
     }
+    m_nBorderLeftPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
     update();
 }
@@ -439,6 +393,7 @@ void HBorderSet::onBorderRightBtn_clicked()
         m_bBorderRight = !m_bBorderRight;
         m_strBorderRightLineColor = m_strLineColor;
     }
+    m_nBorderRightPenStyle = m_nBorderPenStyle;
     ui->borderRightBtn->setChecked(m_bBorderRight);
     update();
 }
@@ -454,6 +409,7 @@ void HBorderSet::onBorderTopBtn_clicked()
         m_bBorderTop = !m_bBorderTop;
         m_strBorderTopLineColor = m_strLineColor;
     }
+    m_nBorderTopPenStyle = m_nBorderPenStyle;
     ui->borderTopBtn->setChecked(m_bBorderTop);
     update();
 
@@ -475,6 +431,7 @@ void HBorderSet::onBorderBottomBtn_clicked()
         m_bBorderBottom = !m_bBorderBottom;
         m_strBorderBottomLineColor = m_strLineColor;
     }
+    m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderBottomBtn->setChecked(m_bBorderBottom);
     update();
 
@@ -483,6 +440,8 @@ void HBorderSet::onBorderBottomBtn_clicked()
 void HBorderSet::onBorderNoBtn_clicked()
 {
     m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = false;
+    m_nBorderLeftPenStyle = m_nBorderRightPenStyle = m_nBorderPenStyle;
+    m_nBorderTopPenStyle = m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
     ui->borderBottomBtn->setChecked(m_bBorderBottom);
     ui->borderTopBtn->setChecked(m_bBorderTop);
@@ -498,6 +457,8 @@ void HBorderSet::onBorderAllBtn_clicked()
 void HBorderSet::onBorderOutSideBtn_clicked()
 {
     m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = true;
+    m_nBorderLeftPenStyle = m_nBorderRightPenStyle = m_nBorderPenStyle;
+    m_nBorderTopPenStyle = m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
     ui->borderBottomBtn->setChecked(m_bBorderBottom);
     ui->borderTopBtn->setChecked(m_bBorderTop);
@@ -527,5 +488,51 @@ void HBorderSet::lineColorTableWidget_itemChanged()
     QTableWidgetItem* item = ui->lineStyleWidget->currentItem();
     if(NULL == item) return;
     m_nBorderPenStyle = item->data(Qt::UserRole).toUInt();
+}
+
+void HBorderSet::updateLineStyleSet()
+{
+    ui->lineStyleWidget->clear();
+
+    ui->lineStyleWidget->setIconSize(QSize(134,16));
+    QTableWidgetItem *item = new QTableWidgetItem;
+    item->setText(QStringLiteral("无"));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_NOPEN));
+    ui->lineStyleWidget->setItem(0,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(QIcon(createPenStyleIcon(Qt::SolidLine)));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_SOLIDLINE));
+    ui->lineStyleWidget->setItem(1,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::DashLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHLINE));
+    ui->lineStyleWidget->setItem(2,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::DotLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_DOTLINE));
+    ui->lineStyleWidget->setItem(3,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::DashDotLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHDOTLINE));
+    ui->lineStyleWidget->setItem(4,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::DashDotLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_NOPEN));
+    ui->lineStyleWidget->setItem(5,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::DashDotDotLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_DASHDOTDOTLINE));
+    ui->lineStyleWidget->setItem(6,0,item);
+
+    item = new QTableWidgetItem;
+    item->setIcon(createPenStyleIcon(Qt::CustomDashLine));
+    item->setData(Qt::UserRole,QVariant((quint8)QPS_CUSTOMDASHLINE));
+    ui->lineStyleWidget->setItem(7,0,item);
 }
 

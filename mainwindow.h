@@ -78,8 +78,13 @@ public slots:
     void bold_clicked();
     void italic_clicked();
     void underline_clicked();
+
+    //
     void fontColor_clicked();
-    void fontbkColor_clicked();
+    void fontBkColor_clicked();
+    void fontColorActGroup_clicked(QAction*);
+    void fontBkColorActGroup_clicked(QAction*);
+    //
     void borderBottom_clicked();
     void borderTop_clicked();
     void borderLeft_clicked();
@@ -153,6 +158,8 @@ public:
     //字体颜色
     QAction* fontColorAct;
     QAction* fontBkColorAct;
+    QActionGroup* fontColorActGroup;
+    QActionGroup* fontBkColorActGroup;
 
     //边框设置
     QAction* borderBottomAct;

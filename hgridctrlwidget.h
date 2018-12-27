@@ -29,36 +29,8 @@ public:
     void enableShowEditBar(bool);
     void enableShowTab(bool);
 
-    void setCellFormat(uint formatType,HFormatSet* pFormatSet);
+    void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
     void cellFormat(HFormatSet* pFormatSet);
-
-    //基本
-    void setHorizontalAlign(GV_ITEM* item,quint32 hAlign);
-    //quint32 horizontalAlign();
-    void setVerticalAlign(GV_ITEM* item,quint32 vAlign);
-    //quint32 verticalAlign();
-    void enableAutoWrapText(GV_ITEM* item,bool bAutoWrapText);
-    //bool isAutoWrapText();
-    void enableMergeCell(GV_ITEM* item,bool bMergCell);
-    //bool isMergeCell();
-
-    //字体
-    void setFontFamily(GV_ITEM* item,const QString& fontFamily);
-    void setFont(GV_ITEM* item,const QFont& font);
-    void setFontSize(GV_ITEM* item,quint8);
-    void enableFontUnderline(GV_ITEM* item,bool);
-    void enableFontBold(GV_ITEM* item,bool);
-    void enableFontItalic(GV_ITEM* item,bool);
-    //字体颜色
-    void setTextColor(GV_ITEM* item,const QString&);
-    void setTextBkColor(GV_ITEM* item,const QString&);
-
-    //设置边框
-    void setCellBorderFormat(int row,int col,HFormatSet* pset);
-
-    //设置打印边界
-    void setPrintMarginInfo(HFormatSet* pSet);
-
 
 public:
 
