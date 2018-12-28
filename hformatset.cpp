@@ -8,7 +8,7 @@ HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
 void HFormatSet::loadDefaultFormatSet(int v,QDataStream* ds)
 {
     if(!ds) return;
-    quint32 n32;
+   /* quint32 n32;
     *ds>>n32;
     m_nHorizontalAlign = n32;
     *ds>>n32;
@@ -122,13 +122,13 @@ void HFormatSet::loadDefaultFormatSet(int v,QDataStream* ds)
     *ds>>b;
     m_bPageShowRow = b;
     *ds>>b;
-    m_bPagePrintColour = b;
+    m_bPagePrintColour = b;*/
 }
 
 void HFormatSet::saveDefaultFormatSet(int v,QDataStream* ds)
 {
     if(!ds) return;
-    *ds<<(quint32)m_nHorizontalAlign;
+    /**ds<<(quint32)m_nHorizontalAlign;
     *ds<<(quint32)m_nVerticalAlign;
     *ds<<(bool)m_bAutoWrapText;
     *ds<<(bool)m_bMergeCell;
@@ -188,28 +188,7 @@ void HFormatSet::saveDefaultFormatSet(int v,QDataStream* ds)
     *ds<<(bool)m_bPageShowGrid;
     *ds<<(bool)m_bPageShowCol;
     *ds<<(bool)m_bPageShowRow;
-    *ds<<(bool)m_bPagePrintColour;
-}
-
-//基本
-void HFormatSet::setHorizontalAlign(quint32 hAlign)
-{
-    m_nHorizontalAlign = hAlign;
-}
-
-quint32 HFormatSet::horizontalAlign()
-{
-    return m_nHorizontalAlign;
-}
-
-void HFormatSet::setVerticalAlign(quint32 vAlign)
-{
-    m_nVerticalAlign = vAlign;
-}
-
-quint32 HFormatSet::verticalAlign()
-{
-    return m_nVerticalAlign;
+    *ds<<(bool)m_bPagePrintColour;*/
 }
 
 void HFormatSet::enableAutoWrapText(bool bAutoWrapText)
@@ -230,67 +209,6 @@ void HFormatSet::enableMergeCell(bool bMergCell)
 bool HFormatSet::isMergeCell()
 {
     return m_bMergeCell;
-}
-
-//字体
-void HFormatSet::setFontFamily(const QString& fontFamily)
-{
-    m_strFontFamily = fontFamily;
-}
-
-QString HFormatSet::fontFamily()
-{
-    return m_strFontFamily;
-}
-
-void HFormatSet::setFontStyle(quint8 fontStyle)
-{
-    m_nFontStyle = fontStyle;
-}
-
-quint8 HFormatSet::fontStyle()
-{
-    return m_nFontStyle;
-}
-
-void HFormatSet::setFontSize(quint8 fontSize)
-{
-    m_nFontSize = fontSize;
-}
-
-quint8 HFormatSet::fontSize()
-{
-    return m_nFontSize;
-}
-
-void HFormatSet::enableFontUnderline(bool b)
-{
-    m_bFontUnderline = b;
-}
-
-bool HFormatSet::isFontUnderline()
-{
-    return m_bFontUnderline;
-}
-
-void HFormatSet::enableFontBold(bool b)
-{
-    m_bFontBold = b;
-}
-
-bool HFormatSet::isFontBold()
-{
-    return m_bFontBold;
-}
-
-void HFormatSet::enableFontItalic(bool b)
-{
-    m_bFontItalic = b;
-}
-
-bool HFormatSet::isFontItalic()
-{
-    return m_bFontItalic;
 }
 
 void HFormatSet::setTextColor(const QString& clr)
@@ -462,6 +380,37 @@ void HFormatSet::setBorderBottomLineColor(const QString& clr)
 QString HFormatSet::borderBottomLineColor()
 {
     return m_strBorderBottomLineColor;
+}
+
+//清除
+void HFormatSet::enableResetFormat(bool b)
+{
+    m_bResetCellFormat = b;
+}
+
+bool HFormatSet::isResetFormat()
+{
+    return m_bResetCellFormat;
+}
+
+void HFormatSet::enableResetText(bool b)
+{
+    m_bResetText = b;
+}
+
+bool HFormatSet::isResetText()
+{
+    return m_bResetText;
+}
+
+void HFormatSet::enableResetAllFormat(bool b)
+{
+    m_bResetAllFormat = b;
+}
+
+bool HFormatSet::isResetAllFormat()
+{
+    return m_bResetAllFormat;
 }
 
 //表格

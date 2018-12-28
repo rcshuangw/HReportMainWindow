@@ -31,8 +31,9 @@ public:
     bool isResetFormat();
     void enableResetText(bool);
     bool isResetText();
-    void enableResetAll(bool);
-    bool isResetAll();
+    void enableResetAllFormat(bool);
+    bool isResetAllFormat();
+
     //合并
     void enableMergeCell(bool bMergCell);
     bool isMergeCell();
@@ -147,21 +148,22 @@ public slots:
 
 private:
 
-    //基本
+    //对齐(格式)
     quint32   m_nFormatAlign;
-    quint32   m_nHorizontalAlign;       //水平对齐
-    quint32   m_nVerticalAlign;         //垂直对齐
+
+    //(格式)
     bool    m_bAutoWrapText;            //自动换行
     bool    m_bMergeCell;               //合并单元格
 
+    //清除
+    bool    m_bResetAllFormat;
+    bool    m_bResetCellFormat;
+    bool    m_bResetText;
+
     //字体
     QFont   m_formatFont;               //字体
-    QString m_strFontFamily;            //字体
-    quint8  m_nFontStyle;               //字体风格
-    quint8  m_nFontSize;                //字体大小
-    bool    m_bFontUnderline;           //字体下划线
-    bool    m_bFontBold;                //字体加粗
-    bool    m_bFontItalic;              //字体倾斜
+
+    //颜色
     QString m_strTextColor;             //字体颜色
     QString m_strTextBkColor;           //字体背景颜色
 
@@ -185,6 +187,14 @@ private:
     //表格
     double m_dCellRowHeight;                //默认表格行高
     double m_dCellColWidth;                 //默认表格列宽
+
+    //插入删除操作
+    bool  m_bInsertRow;
+    bool  m_bInsertCol;
+    bool  m_bInsertCell;
+    bool  m_bRemoveRow;
+    bool  m_bRemoveCol;
+    bool  m_bRemoveCell;
 
     //打印显示
     bool m_bSheetNoPrefix;               //票号前缀

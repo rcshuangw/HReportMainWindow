@@ -711,19 +711,37 @@ void HReportMainWindow::initReportConnect()
     connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
     connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
 
+    //编辑
     connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
+    connect(cutAct,SIGNAL(triggered(bool)),this,SLOT(cut_clicked()));
+    connect(copyAct,SIGNAL(triggered(bool)),this,SLOT(copy_clicked()));
+    connect(pasteAct,SIGNAL(triggered(bool)),this,SLOT(paste_clicked()));
 
     //字体部分
     connect(fontFamilyComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontFamilyComboBox_changed(int)));
     connect(fontSizeComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(fontSizeComboBox_changed(int)));
     connect(fontSizeIncreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeIncrease_clicked()));
     connect(fontSizeDecreaseAct,SIGNAL(triggered(bool)),this,SLOT(fontSizeDecrease_clicked()));
-
+    connect(boldAct,SIGNAL(triggered(bool)),this,SLOT(bold_clicked()));
+    connect(italicAct,SIGNAL(triggered(bool)),this,SLOT(italic_clicked()));
+    connect(underlineAct,SIGNAL(triggered(bool)),this,SLOT(underline_clicked()));
     connect(fontColorAct,SIGNAL(triggered(bool)),this,SLOT(fontColor_clicked()));
     connect(fontColorActGroup,SIGNAL(triggered(QAction*)),this,SLOT(fontColorActGroup_clicked(QAction*)));
     connect(fontBkColorAct,SIGNAL(triggered(bool)),this,SLOT(fontBkColor_clicked()));
     connect(fontBkColorActGroup,SIGNAL(triggered(QAction*)),this,SLOT(fontBkColorActGroup_clicked(QAction*)));
 
+    //边框部分
+    connect(borderTopAct,SIGNAL(triggered(bool)),this,SLOT(borderTop_clicked()));
+    connect(borderBottomAct,SIGNAL(triggered(bool)),this,SLOT(borderBottom_clicked()));
+    connect(borderLeftAct,SIGNAL(triggered(bool)),this,SLOT(borderLeft_clicked()));
+    connect(borderRightAct,SIGNAL(triggered(bool)),this,SLOT(borderRight_clicked()));
+    connect(borderNoneAct,SIGNAL(triggered(bool)),this,SLOT(borderNone_clicked()));
+    connect(borderAllAct,SIGNAL(triggered(bool)),this,SLOT(borderAll_clicked()));
+
+    //清除部分
+    connect(clearAllFormatsAct,SIGNAL(triggered(bool)),this,SLOT(clearAllFormat_clicked()));
+    connect(clearFormatsAct,SIGNAL(triggered(bool)),this,SLOT(clearFormats_clicked()));
+    connect(clearFormatingAct,SIGNAL(triggered(bool)),this,SLOT(clearFommating_clicked()));
 
     //对齐部分
     connect(alignTopAct,SIGNAL(triggered(bool)),this,SLOT(alignTop_clicked()));
@@ -732,6 +750,30 @@ void HReportMainWindow::initReportConnect()
     connect(alignLeftAct,SIGNAL(triggered(bool)),this,SLOT(alignLeft_clicked()));
     connect(alignCenterAct,SIGNAL(triggered(bool)),this,SLOT(alignCenter_clicked()));
     connect(alignRightAct,SIGNAL(triggered(bool)),this,SLOT(alignRight_clicked()));
+
+    //自动换行
+    connect(autoWrapTextAct,SIGNAL(triggered(bool)),this,SLOT(autoWrapText_clicked()));
+
+    //合并单元格
+    connect(mergeCenterAct,SIGNAL(triggered(bool)),this,SLOT(mergeCenter_clicked()));
+    connect(mergeCellsAct,SIGNAL(triggered(bool)),this,SLOT(mergeCells_clicked()));
+    connect(mergeSplitAct,SIGNAL(triggered(bool)),this,SLOT(mergeSplit_clicked()));
+
+    //单元格插入和删除
+    connect(cellInsertAct,SIGNAL(triggered(bool)),this,SLOT(cellInsert_clicked()));
+    connect(cellDeleteAct,SIGNAL(triggered(bool)),this,SLOT(mergeSplit_clicked()));
+    connect(cellInsertRowAct,SIGNAL(triggered(bool)),this,SLOT(cellInsertRow_clicked()));
+    connect(cellRemoveRowAct,SIGNAL(triggered(bool)),this,SLOT(cellRemoveRow_clicked()));
+    connect(cellInsertColAct,SIGNAL(triggered(bool)),this,SLOT(cellInsertCol_clicked()));
+    connect(cellRemoveColAct,SIGNAL(triggered(bool)),this,SLOT(cellRemoveCol_clicked()));
+
+    //单元格格式
+    connect(cellRowHeightAct,SIGNAL(triggered(bool)),this,SLOT(cellRowHeight_clicked()));
+    connect(cellAutoRowHeightAct,SIGNAL(triggered(bool)),this,SLOT(cellAutoRowHeight_clicked()));
+    connect(cellColWidthAct,SIGNAL(triggered(bool)),this,SLOT(cellColWidth_clicked()));
+    connect(cellAutoColWidthAct,SIGNAL(triggered(bool)),this,SLOT(cellAutoColWidth_clicked()));
+    connect(cellDefaultColWidthAct,SIGNAL(triggered(bool)),this,SLOT(cellDefaultColWidth_clicked()));
+    connect(cellSetFormatAct,SIGNAL(triggered(bool)),this,SLOT(cellSetFormat_clicked()));
 
     //打印部分
     connect(printPreviewAct,SIGNAL(triggered(bool)),this,SLOT(printPreview_clicked()));

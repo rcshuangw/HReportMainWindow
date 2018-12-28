@@ -253,113 +253,178 @@ void HReportMainWindow::borderInsideVer_clicked()
 
 void HReportMainWindow::clearAllFormat_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableResetAllFormat(true);
 }
 
 void HReportMainWindow::clearFormats_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableResetFormat(true);
 }
 
 void HReportMainWindow::clearFommating_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableResetText(true);
 }
 
 void HReportMainWindow::alignTop_clicked()
 {
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
+    //方法有点low
     bool b = alignTopAct->isChecked();
     if(!b)
     {
         alignTopAct->setChecked(false);
+        alignMiddleAct->setChecked(true);
+        alignBottomAct->setChecked(false);
+        nFormat|= QDT_VCENTER;
+        if(QDT_TOP == (nFormat & QDT_TOP))
+            nFormat |= ~QDT_TOP;
+        if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+            nFormat |= ~QDT_BOTTOM;
     }
     else
     {
         alignTopAct->setChecked(true);
         alignMiddleAct->setChecked(false);
         alignBottomAct->setChecked(false);
+        nFormat|= QDT_TOP;
+        if(QDT_VCENTER == (nFormat & QDT_VCENTER))
+            nFormat |= ~QDT_VCENTER;
+        if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+            nFormat |= ~QDT_BOTTOM;
     }
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::alignMiddle_clicked()
 {
-    bool b = alignMiddleAct->isChecked();
-    if(!b)
-    {
-        alignMiddleAct->setChecked(false);
-    }
-    else
-    {
-        alignTopAct->setChecked(false);
-        alignMiddleAct->setChecked(true);
-        alignBottomAct->setChecked(false);
-    }
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
+    alignTopAct->setChecked(false);
+    alignMiddleAct->setChecked(true);
+    alignBottomAct->setChecked(false);
+    nFormat|= QDT_VCENTER;
+    if(QDT_TOP == (nFormat & QDT_TOP))
+        nFormat |= ~QDT_TOP;
+    if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+        nFormat |= ~QDT_BOTTOM;
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::alignBottom_clicked()
 {
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
     bool b = alignBottomAct->isChecked();
     if(!b)
     {
+        alignTopAct->setChecked(false);
+        alignMiddleAct->setChecked(true);
         alignBottomAct->setChecked(false);
+        nFormat |= QDT_VCENTER;
+        if(QDT_TOP == (nFormat & QDT_TOP))
+            nFormat |= ~QDT_TOP;
+        if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+            nFormat |= ~QDT_BOTTOM;
     }
     else
     {
         alignTopAct->setChecked(false);
         alignMiddleAct->setChecked(false);
         alignBottomAct->setChecked(true);
+        nFormat|= QDT_BOTTOM;
+        if(QDT_TOP == (nFormat & QDT_TOP))
+            nFormat |= ~QDT_TOP;
+        if(QDT_VCENTER == (nFormat & QDT_VCENTER))
+            nFormat |= ~QDT_VCENTER;
     }
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::alignLeft_clicked()
 {
-    //方法有点low
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
     bool b = alignLeftAct->isChecked();
     if(!b)
     {
         alignLeftAct->setChecked(false);
-        alignCenterAct->setChecked(true);
-        alignRightAct->setChecked(false);
+        if(QDT_LEFT == (nFormat & QDT_LEFT))
+            nFormat |= ~QDT_LEFT;
     }
     else
     {
         alignLeftAct->setChecked(true);
         alignCenterAct->setChecked(false);
         alignRightAct->setChecked(false);
+        nFormat|= QDT_LEFT;
+        if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+            nFormat |= ~QDT_HCENTER;
+        if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+            nFormat |= ~QDT_RIGHT;
     }
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::alignCenter_clicked()
 {
-    //bool b = alignCenterAct->isChecked();
-    //if(!b)
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
+    bool b = alignCenterAct->isChecked();
+    if(!b)
+    {
+        alignCenterAct->setChecked(false);
+        if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+            nFormat |= ~QDT_HCENTER;
+    }
+    else
     {
         alignLeftAct->setChecked(false);
         alignCenterAct->setChecked(true);
         alignRightAct->setChecked(false);
+        nFormat|= QDT_HCENTER;
+        if(QDT_TOP == (nFormat & QDT_TOP))
+            nFormat |= ~QDT_TOP;
+        if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+            nFormat |= ~QDT_BOTTOM;
     }
-    //else
-    //{
-        //alignLeftAct->setChecked(true);
-      //  alignCenterAct->setChecked(true);
-        //alignRightAct->setChecked(false);
-    //}
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::alignRight_clicked()
 {
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    int nFormat = m_pReportManager->formatSet()->format();
     bool b = alignRightAct->isChecked();
     if(!b)
     {
-        alignLeftAct->setChecked(false);
-        alignCenterAct->setChecked(true);
         alignRightAct->setChecked(false);
+        if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+            nFormat |= ~QDT_RIGHT;
     }
     else
     {
         alignLeftAct->setChecked(false);
         alignCenterAct->setChecked(false);
         alignRightAct->setChecked(true);
+        nFormat |= QDT_RIGHT;
+        if(QDT_LEFT == (nFormat & QDT_LEFT))
+            nFormat |= ~QDT_LEFT;
+        if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+            nFormat |= ~QDT_HCENTER;
     }
 }
 
@@ -367,8 +432,26 @@ void HReportMainWindow::autoWrapText_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
-    bool b = autoWrapTextAct->isChecked();
+    bool b = autoWrapTextAct->isChecked(); 
+    quint32 nFormat = m_pReportManager->formatSet()->format();
+    if(b)
+    {
+        if(QDT_SINGLELINE == (nFormat & QDT_SINGLELINE))
+        {
+            nFormat = nFormat & ~QDT_SINGLELINE;
+        }
+        nFormat |= QDT_WORDBREAK;
+    }
+    else
+    {
+        if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
+        {
+            nFormat = nFormat & ~QDT_WORDBREAK;
+        }
+        nFormat |= QDT_SINGLELINE;
+    }
     m_pReportManager->formatSet()->enableAutoWrapText(b);
+    m_pReportManager->formatSet()->setFormat(nFormat);
 }
 
 void HReportMainWindow::mergeCenter_clicked()

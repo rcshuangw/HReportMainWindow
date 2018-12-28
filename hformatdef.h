@@ -15,7 +15,9 @@
 #define GRID_TYPE_COL_WIDTH       0x63
 
 
-//合并单元格 拆分单元格 插入行 插入列 插入行列
+//插入 删除操作，插入和删除都有行，列，单元格三种
+#define GRID_TYPE_INSERT          0x64
+#define GRID_TYPE_REMOVE          0x65
 
 
 
