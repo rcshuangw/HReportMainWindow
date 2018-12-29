@@ -9,6 +9,7 @@
 #include "SARibbonComboBox.h"
 #include "hformatset.h"
 #include <QColorDialog>
+#include <QInputDialog>
 void HReportMainWindow::new_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
@@ -503,7 +504,13 @@ void HReportMainWindow::cellRemoveCol_clicked()
 
 void HReportMainWindow::cellRowHeight_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool ok;
+    double d = m_pReportManager->formatSet()->cellRowHeight();
+    d = QInputDialog::getDouble(this, tr("行高"),tr("行高:"), d, -999, 999, 2, &ok);
+    if (ok)
+        m_pReportManager->formatSet()->setCellRowHeight(d);
 }
 
 void HReportMainWindow::cellAutoRowHeight_clicked()
@@ -513,7 +520,13 @@ void HReportMainWindow::cellAutoRowHeight_clicked()
 
 void HReportMainWindow::cellColWidth_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool ok;
+    double d = m_pReportManager->formatSet()->cellColumnWidth();
+    d = QInputDialog::getDouble(this, tr("列宽"),tr("列宽:"), d, -999, 999, 2, &ok);
+    if (ok)
+        m_pReportManager->formatSet()->setCellColumnWidth(d);
 }
 
 void HReportMainWindow::cellAutoColWidth_clicked()
@@ -523,7 +536,13 @@ void HReportMainWindow::cellAutoColWidth_clicked()
 
 void HReportMainWindow::cellDefaultColWidth_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool ok;
+    double d = m_pReportManager->formatSet()->cellColumnWidth();
+    d = QInputDialog::getDouble(this, tr("标准列宽"),tr("标准列宽:"), d, -999, 999, 2, &ok);
+    if (ok)
+        m_pReportManager->formatSet()->setDefaultColumnWidth(d);
 }
 
 void HReportMainWindow::cellSetFormat_clicked()

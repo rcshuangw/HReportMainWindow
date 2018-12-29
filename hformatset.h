@@ -85,6 +85,8 @@ public:
     double cellRowHeight();
     void setCellColumnWidth(double);
     double cellColumnWidth();
+    void setDefaultColumnWidth(double);
+    double defaultColumnWidth();
 
     //打印相关
     void enableSheetNoPrefix(bool);
@@ -185,8 +187,9 @@ private:
     QString m_strBorderBottomLineColor;  //下边框颜色
 
     //表格
-    double m_dCellRowHeight;                //默认表格行高
-    double m_dCellColWidth;                 //默认表格列宽
+    double m_fCellRowHeight;             //表格行高
+    double m_fCellColWidth;              //表格列宽
+    double m_fDefaultColWidth;           //默认表格列宽
 
     //插入删除操作
     bool  m_bInsertRow;

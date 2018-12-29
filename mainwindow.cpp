@@ -11,7 +11,6 @@
 #include <QStatusBar>
 #include <QPushButton>
 #include <QFontDatabase>
-
 #include "SARibbonBar.h"
 #include "SARibbonCategory.h"
 #include "SARibbonPannel.h"

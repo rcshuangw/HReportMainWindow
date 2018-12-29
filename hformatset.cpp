@@ -416,22 +416,32 @@ bool HFormatSet::isResetAllFormat()
 //表格
 void HFormatSet::setCellRowHeight(double d)
 {
-    m_dCellRowHeight = d;
+    m_fCellRowHeight = d;
 }
 
 double HFormatSet::cellRowHeight()
 {
-    return m_dCellRowHeight;
+    return m_fCellRowHeight;
 }
 
 void HFormatSet::setCellColumnWidth(double d)
 {
-    m_dCellColWidth = d;
+    m_fCellColWidth = d;
 }
 
 double HFormatSet::cellColumnWidth()
 {
-    return m_dCellColWidth;
+    return m_fCellColWidth;
+}
+
+void HFormatSet::setDefaultColumnWidth(double d)
+{
+    m_fDefaultColWidth = d;
+}
+
+double HFormatSet::defaultColumnWidth()
+{
+    return m_fDefaultColWidth;
 }
 
 //打印相关

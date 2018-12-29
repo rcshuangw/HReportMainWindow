@@ -50,9 +50,16 @@ public:
     void paste();
     void cut();
     void copy();
-    void bold(bool);
-    void italic();
-    void underline();
+    void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
+    void cellFormat(HFormatSet* pFormatSet);
+
+    //操作
+    bool mergeCell();
+    bool splitCell();
+    bool insertGridRow();
+    bool insertGridColumn();
+    bool removeGridRow();
+    bool removeGridColumn();
 
 
     //打印

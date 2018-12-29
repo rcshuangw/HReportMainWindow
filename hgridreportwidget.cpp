@@ -247,41 +247,95 @@ void HGridReportWidget::copy()
     }
 }
 
-void HGridReportWidget::bold(bool b)
+void HGridReportWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     int index = m_tabWidget->currentIndex();
     HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
     if(w)
     {
-        HGridCtrl* pGridCtrl = w->gridCtrl();
-        if(pGridCtrl)
-        {
-            HCellRange cellRange = pGridCtrl->selectedCellRange();
-            for(int row = cellRange.minRow();row < cellRange.maxRow();row++)
-            {
-                for(int col = cellRange.minCol();col < cellRange.maxCol();col++)
-                {
-                    HGridCellBase* pBase = pGridCtrl->getCell(row,col);
-                    QFont font = pBase->font();
-                    font.setBold(b);
-                    pBase->setFont(font);
-                }
-            }
-        }
+        w->setCellFormat(pFormatSet,formatType,bAll);
     }
 }
 
-void HGridReportWidget::italic()
+void HGridReportWidget::cellFormat(HFormatSet* pFormatSet)
 {
-
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        w->cellFormat(pFormatSet);
+    }
 }
 
-void HGridReportWidget::underline()
+//操作
+bool HGridReportWidget::mergeCell()
 {
-
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->mergeCell();
+    }
+    return false;
 }
 
+bool HGridReportWidget::splitCell()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->splitCell();
+    }
+    return false;
+}
 
+//操作:插入删除行列部分
+bool HGridReportWidget::insertGridRow()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->insertGridRow();
+    }
+    return false;
+}
+
+bool HGridReportWidget::insertGridColumn()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->insertGridColumn();
+    }
+    return false;
+}
+
+bool HGridReportWidget::removeGridRow()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->removeGridRow();
+    }
+    return false;
+}
+
+bool HGridReportWidget::removeGridColumn()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        return w->removeGridColumn();
+    }
+    return false;
+}
+
+//打印部分
 void HGridReportWidget::printPreview()
 {
     HReportPrint print(this);

@@ -115,6 +115,8 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
+    m_pGridCtrl->autoColumnHeader();
+    m_pGridCtrl->autoRowHeader();
 }
 
 void HGridCtrlWidget::getGridCtrlItem(HGridCtrlInfo* pItem)
@@ -268,5 +270,84 @@ void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
     //打印相关设置
 
 }
+bool HGridCtrlWidget::mergeCell()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid() || range.count() <=1)
+        return false;
+    m_pGridCtrl->setMergeSelectedCells();
+    return true;
+}
+
+bool HGridCtrlWidget::splitCell()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid() || range.count() <=1 )
+        return false;
+    m_pGridCtrl->setSplitSelectedCells();
+}
+
+//行列插入最后位置
+bool HGridCtrlWidget::insertGridRow()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid())
+        return;
+    int nStartRow = range.minRow();
+    int nRowNum = range.maxRow() - range.minRow() - 1;
+    if(m_pGridCtrl->rowCount() + nRowNum > ROWMAX_COUNT)
+        return false;
+
+    for(int i = 0; i < nRowNum; i++)
+    {
+       if((int)-1 == m_pGridCtrl->insertRow("",nStartRow))//strHeader是插入之后会自动刷新
+           return false;
+    }
+    return true;
+}
 
 
+bool HGridCtrlWidget::insertGridColumn()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid())
+        return;
+    int nStartCol = range.minCol();
+    int nColNum = range.maxCol() - range.minCol() - 1;
+    if(m_pGridCtrl->columnCount() + nColNum > COLMAX_COUNT)
+        return false;
+
+    for(int i = 0; i < nColNum; i++)
+    {
+       if((int)-1 == m_pGridCtrl->insertRow("",nStartCol))//strHeader是插入之后会自动刷新
+           return false;
+    }
+    return true;
+}
+
+//删除行列
+bool HGridCtrlWidget::removeGridRow()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid())
+        return;
+    for(int row = range.minRow(); row < range.maxRow(); row++)
+    {
+       if(!m_pGridCtrl->deleteRow(row))//strHeader是插入之后会自动刷新
+           return false;
+    }
+    return true;
+}
+
+bool HGridCtrlWidget::removeGridColumn()
+{
+    HCellRange range = m_pGridCtrl->selectedCellRange();
+    if(!range.isValid())
+        return;
+    for(int col = range.minCol(); col < range.maxCol(); col++)
+    {
+       if(!m_pGridCtrl->deleteColumn(col))//strHeader是插入之后会自动刷新
+           return false;
+    }
+    return true;
+}
