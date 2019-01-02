@@ -19,6 +19,16 @@ public:
     void cut();
     void copy();
 
+    void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
+    void cellFormat(HFormatSet* pFormatSet);
+
+    //操作
+    bool mergeCell();
+    bool splitCell();
+    bool insertGridRow();
+    bool insertGridColumn();
+    bool removeGridRow();
+    bool removeGridColumn();
 public:
     void setGridCtrlAttr(uint nAttrType,HFormatSet* pFormatSet);
 

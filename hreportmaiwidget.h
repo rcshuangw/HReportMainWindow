@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QTabWidget>
+#include "hformatdef.h"
+#include "hformatset.h"
 namespace Ui {
 class HReportMaiWidget;
 }
@@ -30,6 +32,18 @@ public:
     void paste();
     void cut();
     void copy();
+
+    void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
+    void cellFormat(HFormatSet* pFormatSet);
+
+    bool mergeCell();
+    bool splitCell();
+    bool insertGridRow();
+    bool insertGridColumn();
+    bool removeGridRow();
+    bool removeGridColumn();
+
+
     void newReportWidget();
     void printReportWidget();
     void printPreviewReportWidget();

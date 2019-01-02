@@ -6,6 +6,7 @@
 #include "hreporttreewidget.h"
 #include "hreportmaiwidget.h"
 #include "hgridcelldef.h"
+#include "hformatdef.h"
 #include "SARibbonComboBox.h"
 #include "hformatset.h"
 #include <QColorDialog>
@@ -75,57 +76,62 @@ void HReportMainWindow::formatPainter_clicked()
 
 void HReportMainWindow::fontFamilyComboBox_changed(int index)
 {
-    if(-1 == index || !m_pReportManager)
+    if(-1 == index || !m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     QString strFamily = fontFamilyComboBox->currentText();
     font.setFamily(strFamily);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::fontSizeComboBox_changed(int)
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     QString strSize = fontSizeComboBox->currentText();
     font.setPointSize(strSize.toUInt());
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::bold_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     bool bBold = boldAct->isChecked();
     font.setBold(bBold);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::italic_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     bool italic = italicAct->isChecked();
-    font.setBold(italic);
+    font.setItalic(italic);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::underline_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     bool underline = underlineAct->isChecked();
-    font.setBold(underline);
+    font.setUnderline(underline);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::fontSizeIncrease_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     QString strFontSize = fontSizeComboBox->currentText();
@@ -137,11 +143,12 @@ void HReportMainWindow::fontSizeIncrease_clicked()
     fontSizeComboBox->setCurrentText(strFontSize);
     font.setPointSize(nFontSize);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::fontSizeDecrease_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QFont font = m_pReportManager->formatSet()->formatFont();
     QString strFontSize = fontSizeComboBox->currentText();
@@ -153,25 +160,28 @@ void HReportMainWindow::fontSizeDecrease_clicked()
     fontSizeComboBox->setCurrentText(strFontSize);
     font.setPointSize(nFontSize);
     m_pReportManager->formatSet()->setFormatFont(font);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_FONT);
 }
 
 void HReportMainWindow::fontColor_clicked()
 {
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QString strTextClr = m_pReportManager->formatSet()->textColor();
     QColor clr = QColorDialog::getColor(QColor(strTextClr),this,QStringLiteral("选择颜色"));
     strTextClr = clr.name();
     m_pReportManager->formatSet()->setTextColor(strTextClr);
+    //m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_COLOR);
 }
 
 void HReportMainWindow::fontColorActGroup_clicked(QAction *action)
 {
     if(!action) return;
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QString strTextClr = action->data().toString();
     m_pReportManager->formatSet()->setTextColor(strTextClr);
+     m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_COLOR);
 }
 
 
@@ -182,16 +192,17 @@ void HReportMainWindow::fontBkColor_clicked()
     QString strTextBkClr = m_pReportManager->formatSet()->textBkColor();
     QColor clr = QColorDialog::getColor(QColor(strTextBkClr),this,QStringLiteral("选择颜色"));
     strTextBkClr = clr.name();
-    m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
+   //m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
 }
 
 void HReportMainWindow::fontBkColorActGroup_clicked(QAction *action)
 {
     if(!action) return;
-    if(!m_pReportManager || !m_pReportManager->formatSet())
+    if(!m_pReportManager || !m_pReportManager->formatSet() || !m_pReportMainWidget)
         return;
     QString strTextBkClr = action->data().toString();
     m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_COLOR);
 }
 
 void HReportMainWindow::borderBottom_clicked()
@@ -287,9 +298,9 @@ void HReportMainWindow::alignTop_clicked()
         alignBottomAct->setChecked(false);
         nFormat|= QDT_VCENTER;
         if(QDT_TOP == (nFormat & QDT_TOP))
-            nFormat |= ~QDT_TOP;
+            nFormat &= ~QDT_TOP;
         if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-            nFormat |= ~QDT_BOTTOM;
+            nFormat &= ~QDT_BOTTOM;
     }
     else
     {
@@ -298,11 +309,12 @@ void HReportMainWindow::alignTop_clicked()
         alignBottomAct->setChecked(false);
         nFormat|= QDT_TOP;
         if(QDT_VCENTER == (nFormat & QDT_VCENTER))
-            nFormat |= ~QDT_VCENTER;
+            nFormat &= ~QDT_VCENTER;
         if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-            nFormat |= ~QDT_BOTTOM;
+            nFormat &= ~QDT_BOTTOM;
     }
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::alignMiddle_clicked()
@@ -315,10 +327,11 @@ void HReportMainWindow::alignMiddle_clicked()
     alignBottomAct->setChecked(false);
     nFormat|= QDT_VCENTER;
     if(QDT_TOP == (nFormat & QDT_TOP))
-        nFormat |= ~QDT_TOP;
+        nFormat &= ~QDT_TOP;
     if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-        nFormat |= ~QDT_BOTTOM;
+        nFormat &= ~QDT_BOTTOM;
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::alignBottom_clicked()
@@ -334,9 +347,9 @@ void HReportMainWindow::alignBottom_clicked()
         alignBottomAct->setChecked(false);
         nFormat |= QDT_VCENTER;
         if(QDT_TOP == (nFormat & QDT_TOP))
-            nFormat |= ~QDT_TOP;
+            nFormat &= ~QDT_TOP;
         if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-            nFormat |= ~QDT_BOTTOM;
+            nFormat &= ~QDT_BOTTOM;
     }
     else
     {
@@ -345,11 +358,12 @@ void HReportMainWindow::alignBottom_clicked()
         alignBottomAct->setChecked(true);
         nFormat|= QDT_BOTTOM;
         if(QDT_TOP == (nFormat & QDT_TOP))
-            nFormat |= ~QDT_TOP;
+            nFormat &= ~QDT_TOP;
         if(QDT_VCENTER == (nFormat & QDT_VCENTER))
-            nFormat |= ~QDT_VCENTER;
+            nFormat &= ~QDT_VCENTER;
     }
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::alignLeft_clicked()
@@ -362,7 +376,7 @@ void HReportMainWindow::alignLeft_clicked()
     {
         alignLeftAct->setChecked(false);
         if(QDT_LEFT == (nFormat & QDT_LEFT))
-            nFormat |= ~QDT_LEFT;
+            nFormat &= ~QDT_LEFT;
     }
     else
     {
@@ -371,11 +385,12 @@ void HReportMainWindow::alignLeft_clicked()
         alignRightAct->setChecked(false);
         nFormat|= QDT_LEFT;
         if(QDT_HCENTER == (nFormat & QDT_HCENTER))
-            nFormat |= ~QDT_HCENTER;
+            nFormat &= ~QDT_HCENTER;
         if(QDT_RIGHT == (nFormat & QDT_RIGHT))
-            nFormat |= ~QDT_RIGHT;
+            nFormat &= ~QDT_RIGHT;
     }
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::alignCenter_clicked()
@@ -388,7 +403,7 @@ void HReportMainWindow::alignCenter_clicked()
     {
         alignCenterAct->setChecked(false);
         if(QDT_HCENTER == (nFormat & QDT_HCENTER))
-            nFormat |= ~QDT_HCENTER;
+            nFormat &= ~QDT_HCENTER;
     }
     else
     {
@@ -397,11 +412,12 @@ void HReportMainWindow::alignCenter_clicked()
         alignRightAct->setChecked(false);
         nFormat|= QDT_HCENTER;
         if(QDT_TOP == (nFormat & QDT_TOP))
-            nFormat |= ~QDT_TOP;
+            nFormat &= ~QDT_TOP;
         if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-            nFormat |= ~QDT_BOTTOM;
+            nFormat &= ~QDT_BOTTOM;
     }
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::alignRight_clicked()
@@ -414,7 +430,7 @@ void HReportMainWindow::alignRight_clicked()
     {
         alignRightAct->setChecked(false);
         if(QDT_RIGHT == (nFormat & QDT_RIGHT))
-            nFormat |= ~QDT_RIGHT;
+            nFormat &= ~QDT_RIGHT;
     }
     else
     {
@@ -423,10 +439,12 @@ void HReportMainWindow::alignRight_clicked()
         alignRightAct->setChecked(true);
         nFormat |= QDT_RIGHT;
         if(QDT_LEFT == (nFormat & QDT_LEFT))
-            nFormat |= ~QDT_LEFT;
+            nFormat &= ~QDT_LEFT;
         if(QDT_HCENTER == (nFormat & QDT_HCENTER))
-            nFormat |= ~QDT_HCENTER;
+            nFormat &= ~QDT_HCENTER;
     }
+    m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
 }
 
 void HReportMainWindow::autoWrapText_clicked()
@@ -439,7 +457,7 @@ void HReportMainWindow::autoWrapText_clicked()
     {
         if(QDT_SINGLELINE == (nFormat & QDT_SINGLELINE))
         {
-            nFormat = nFormat & ~QDT_SINGLELINE;
+            nFormat&=~QDT_SINGLELINE;
         }
         nFormat |= QDT_WORDBREAK;
     }
@@ -447,19 +465,22 @@ void HReportMainWindow::autoWrapText_clicked()
     {
         if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
         {
-            nFormat = nFormat & ~QDT_WORDBREAK;
+            nFormat&= ~QDT_WORDBREAK;
         }
         nFormat |= QDT_SINGLELINE;
     }
     m_pReportManager->formatSet()->enableAutoWrapText(b);
     m_pReportManager->formatSet()->setFormat(nFormat);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_AUTOWRAPTEXT);
 }
 
 void HReportMainWindow::mergeCenter_clicked()
 {
     //要获取是否合并，然后合并单元格，如果成功则改状态，如果失败就不改
     //如果只有一个单元格，合并失败
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->mergeCell();
 }
 
 void HReportMainWindow::mergeCells_clicked()
@@ -614,36 +635,36 @@ void HReportMainWindow::gridCell_clicked()
 
     //对齐
     quint32 nFormat = pFormatSet->format();
+    alignLeftAct->setChecked(false);
+    alignCenterAct->setChecked(false);
+    alignRightAct->setChecked(false);
     if(QDT_LEFT == (nFormat & QDT_LEFT))
     {
         alignLeftAct->setChecked(true);
-        alignTop_clicked();
     }
     else if(QDT_HCENTER == (nFormat & QDT_HCENTER))
     {
         alignCenterAct->setChecked(true);
-        alignCenter_clicked();
     }
     else if(QDT_RIGHT == (nFormat & QDT_RIGHT))
     {
         alignRightAct->setChecked(true);
-        alignRight_clicked();
     }
 
+    alignTopAct->setChecked(false);
+    alignMiddleAct->setChecked(false);
+    alignBottomAct->setChecked(false);
     if(QDT_TOP == (nFormat & QDT_TOP))
     {
         alignTopAct->setChecked(true);
-        alignTop_clicked();
     }
     else if(QDT_VCENTER == (nFormat & QDT_VCENTER))
     {
         alignMiddleAct->setChecked(true);
-        alignMiddle_clicked();
     }
     else if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
     {
         alignBottomAct->setChecked(true);
-        alignBottom_clicked();
     }
 
     if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))

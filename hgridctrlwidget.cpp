@@ -292,7 +292,7 @@ bool HGridCtrlWidget::insertGridRow()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
-        return;
+        return false;
     int nStartRow = range.minRow();
     int nRowNum = range.maxRow() - range.minRow() - 1;
     if(m_pGridCtrl->rowCount() + nRowNum > ROWMAX_COUNT)
@@ -311,7 +311,7 @@ bool HGridCtrlWidget::insertGridColumn()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
-        return;
+        return false;
     int nStartCol = range.minCol();
     int nColNum = range.maxCol() - range.minCol() - 1;
     if(m_pGridCtrl->columnCount() + nColNum > COLMAX_COUNT)
@@ -330,7 +330,7 @@ bool HGridCtrlWidget::removeGridRow()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
-        return;
+        return false;
     for(int row = range.minRow(); row < range.maxRow(); row++)
     {
        if(!m_pGridCtrl->deleteRow(row))//strHeader是插入之后会自动刷新
@@ -343,7 +343,7 @@ bool HGridCtrlWidget::removeGridColumn()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
-        return;
+        return false;
     for(int col = range.minCol(); col < range.maxCol(); col++)
     {
        if(!m_pGridCtrl->deleteColumn(col))//strHeader是插入之后会自动刷新

@@ -108,3 +108,44 @@ void HReportMaiWidget::copy()
 {
 
 }
+
+void HReportMaiWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
+{
+    m_pReportEditorWidget->setCellFormat(pFormatSet,formatType,bAll);
+}
+
+void HReportMaiWidget::cellFormat(HFormatSet* pFormatSet)
+{
+    m_pReportEditorWidget->cellFormat(pFormatSet);
+}
+
+//操作
+bool HReportMaiWidget::mergeCell()
+{
+    return m_pReportEditorWidget->mergeCell();
+}
+
+bool HReportMaiWidget::splitCell()
+{
+    return m_pReportEditorWidget->splitCell();
+}
+
+bool HReportMaiWidget::insertGridRow()
+{
+    return m_pReportEditorWidget->insertGridRow();
+}
+
+bool HReportMaiWidget::insertGridColumn()
+{
+    return m_pReportEditorWidget->insertGridColumn();
+}
+
+bool HReportMaiWidget::removeGridRow()
+{
+    return m_pReportEditorWidget->removeGridRow();
+}
+
+bool HReportMaiWidget::removeGridColumn()
+{
+    return m_pReportEditorWidget->removeGridColumn();
+}

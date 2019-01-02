@@ -188,8 +188,10 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     boldAct->setCheckable(true);
     italicAct = new QAction(QIcon(":/icon/icon/Italic.png"),"",this);
     italicAct->setToolTip(QStringLiteral("倾斜"));
+    italicAct->setCheckable(true);
     underlineAct = new QAction(QIcon(":/icon/icon/Underline.png"),"",this);
     underlineAct->setToolTip(QStringLiteral("下划线"));
+    underlineAct->setCheckable(true);
     btnGroup->addButton(boldAct);
     btnGroup->addButton(italicAct);
     btnGroup->addButton(underlineAct);
@@ -294,7 +296,7 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     fontSizeComboBox = new SARibbonComboBox(this);
     fontSizeComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     fontSizeComboBox->setEditable(true);
-    QFont sizeFont("Arial",12);
+    QFont sizeFont("Arial",10);
     fontSizeComboBox->lineEdit()->setFont(sizeFont);
     fontSizeComboBox->setFont(sizeFont);
     QStringList fontSizeList;
@@ -397,7 +399,9 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     //合并单元格
     SARibbonMenu* mergemenu = new SARibbonMenu(this);
     mergeCenterAct = mergemenu->addAction(QIcon(":/icon/icon/MergeCenter.png"),QStringLiteral("合并后居中"));
+   // mergeCenterAct->setCheckable(true);
     mergeCellsAct = mergemenu->addAction(QIcon(":/icon/icon/MergeCells.png"),QStringLiteral("合并单元格"));
+    //mergeCellsAct->setCheckable(true);
     mergeSplitAct = mergemenu->addAction(QIcon(":/icon/icon/MergeOrSplitCells.png"),QStringLiteral("取消合并单元格"));
     btn = aligPannel->addSmallAction(mergeCenterAct);
     btn->setIcon(QIcon(":/icon/icon/MergeCenter.png"));

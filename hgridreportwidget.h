@@ -4,7 +4,8 @@
 #include <QWidget>
 //管理多个HGridCtrlWidget具体tab页面的
 #include <QTabWidget>
-#include <hgridctrl.h>
+#include "hgridctrl.h"
+#include "hformatset.h"
 class HReportManager;
 class HGridReportWidget : public QWidget
 {
