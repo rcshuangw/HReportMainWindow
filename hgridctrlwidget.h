@@ -48,6 +48,7 @@ signals:
     void gridcellclicked();
 public slots:
     //void gridCell_clicked(HCellID);
+    void lineedit_textEdited(const QString &text);
 
 private:
     bool m_bEnableShowEditBar;

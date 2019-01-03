@@ -393,6 +393,7 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     autoWrapTextAct = new QAction(this);
     autoWrapTextAct->setIcon(QIcon(":/icon/icon/WrapText.png"));
     autoWrapTextAct->setText(QStringLiteral("自动换行"));
+    autoWrapTextAct->setCheckable(true);
     btn = aligPannel->addSmallAction(autoWrapTextAct);
     aligPannel->addWidget(btn,0,3);
 
@@ -740,6 +741,7 @@ void HReportMainWindow::initReportConnect()
     connect(borderRightAct,SIGNAL(triggered(bool)),this,SLOT(borderRight_clicked()));
     connect(borderNoneAct,SIGNAL(triggered(bool)),this,SLOT(borderNone_clicked()));
     connect(borderAllAct,SIGNAL(triggered(bool)),this,SLOT(borderAll_clicked()));
+    connect(borderOutSideAct,SIGNAL(triggered(bool)),this,SLOT(borderOutSide_clicked()));
 
     //清除部分
     connect(clearAllFormatsAct,SIGNAL(triggered(bool)),this,SLOT(clearAllFormat_clicked()));
@@ -765,10 +767,10 @@ void HReportMainWindow::initReportConnect()
     //单元格插入和删除
     connect(cellInsertAct,SIGNAL(triggered(bool)),this,SLOT(cellInsert_clicked()));
     connect(cellDeleteAct,SIGNAL(triggered(bool)),this,SLOT(mergeSplit_clicked()));
-    connect(cellInsertRowAct,SIGNAL(triggered(bool)),this,SLOT(cellInsertRow_clicked()));
-    connect(cellRemoveRowAct,SIGNAL(triggered(bool)),this,SLOT(cellRemoveRow_clicked()));
-    connect(cellInsertColAct,SIGNAL(triggered(bool)),this,SLOT(cellInsertCol_clicked()));
-    connect(cellRemoveColAct,SIGNAL(triggered(bool)),this,SLOT(cellRemoveCol_clicked()));
+    connect(cellInsertRowAct,SIGNAL(triggered(bool)),this,SLOT(gridInsertRow_clicked()));
+    connect(cellRemoveRowAct,SIGNAL(triggered(bool)),this,SLOT(gridRemoveRow_clicked()));
+    connect(cellInsertColAct,SIGNAL(triggered(bool)),this,SLOT(gridInsertCol_clicked()));
+    connect(cellRemoveColAct,SIGNAL(triggered(bool)),this,SLOT(gridRemoveCol_clicked()));
 
     //单元格格式
     connect(cellRowHeightAct,SIGNAL(triggered(bool)),this,SLOT(cellRowHeight_clicked()));

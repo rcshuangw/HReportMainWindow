@@ -282,6 +282,11 @@ quint16 HFormatSet::borderBottomPenStyle()
     return m_nBorderBottomPenStyle;
 }
 
+void HFormatSet::resetEnableBorder()
+{
+    m_bBorderLeft = m_bBorderRight = m_bBorderTop = m_bBorderBottom = false;
+}
+
 void HFormatSet::enableBorderLeft(bool b)
 {
     m_bBorderLeft = b;
@@ -383,6 +388,13 @@ QString HFormatSet::borderBottomLineColor()
 }
 
 //清除
+void HFormatSet::resetAllFormat()
+{
+    m_bResetAllFormat = false;
+    m_bResetCellFormat = false;
+    m_bResetText = false;
+}
+
 void HFormatSet::enableResetFormat(bool b)
 {
     m_bResetCellFormat = b;

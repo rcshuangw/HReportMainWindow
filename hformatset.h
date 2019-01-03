@@ -18,6 +18,9 @@ public:
     void saveDefaultFormatSet(int v,QDataStream* ds);
 
 public:
+    void setText(const QString& str) {m_strText = str;}
+    QString text()  {return m_strText;}
+
     //对齐 格式
     void setFormat(quint32 f) { m_nFormatAlign = f;    }
     quint32 format()          { return m_nFormatAlign; }
@@ -27,6 +30,7 @@ public:
     bool isAutoWrapText();
 
     //清除
+    void resetAllFormat();
     void enableResetFormat(bool);
     bool isResetFormat();
     void enableResetText(bool);
@@ -49,6 +53,7 @@ public:
     QString textBkColor();
 
     //边框
+    void resetEnableBorder();
     void setBorderPenStyle(quint16);
     quint16 borderPenStyle();
     void setBorderLeftPenStyle(quint16);
@@ -149,6 +154,8 @@ signals:
 public slots:
 
 private:
+
+    QString m_strText;
 
     //对齐(格式)
     quint32   m_nFormatAlign;

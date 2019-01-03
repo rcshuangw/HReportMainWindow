@@ -209,14 +209,18 @@ void HReportMainWindow::borderBottom_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    //m_pReportManager->formatSet()->resetEnableBorder();
     m_pReportManager->formatSet()->enableBorderBottom(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderTop_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    //m_pReportManager->formatSet()->resetEnableBorder();
     m_pReportManager->formatSet()->enableBorderTop(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderLeft_clicked()
@@ -224,6 +228,7 @@ void HReportMainWindow::borderLeft_clicked()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     m_pReportManager->formatSet()->enableBorderLeft(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderRight_clicked()
@@ -231,21 +236,38 @@ void HReportMainWindow::borderRight_clicked()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     m_pReportManager->formatSet()->enableBorderRight(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderNone_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorder(false);
+    m_pReportManager->formatSet()->enableBorderTop(false);
+    m_pReportManager->formatSet()->enableBorderBottom(false);
+    m_pReportManager->formatSet()->enableBorderLeft(false);
+    m_pReportManager->formatSet()->enableBorderRight(false);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderAll_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorderTop(true);
+    m_pReportManager->formatSet()->enableBorderBottom(true);
+    m_pReportManager->formatSet()->enableBorderLeft(true);
+    m_pReportManager->formatSet()->enableBorderRight(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderOutSide_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportManager->formatSet()->enableBorder(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
 void HReportMainWindow::borderInside_clicked()
@@ -267,21 +289,27 @@ void HReportMainWindow::clearAllFormat_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    m_pReportManager->formatSet()->resetAllFormat();
     m_pReportManager->formatSet()->enableResetAllFormat(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_RESET);
 }
 
 void HReportMainWindow::clearFormats_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    m_pReportManager->formatSet()->resetAllFormat();
     m_pReportManager->formatSet()->enableResetFormat(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_RESET);
 }
 
 void HReportMainWindow::clearFommating_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    m_pReportManager->formatSet()->resetAllFormat();
     m_pReportManager->formatSet()->enableResetText(true);
+    m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_RESET);
 }
 
 void HReportMainWindow::alignTop_clicked()
@@ -490,7 +518,9 @@ void HReportMainWindow::mergeCells_clicked()
 
 void HReportMainWindow::mergeSplit_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->splitCell();
 }
 
 void HReportMainWindow::cellInsert_clicked()
@@ -498,14 +528,18 @@ void HReportMainWindow::cellInsert_clicked()
 
 }
 
-void HReportMainWindow::cellInsertRow_clicked()
+void HReportMainWindow::gridInsertRow_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->insertGridRow();
 }
 
-void HReportMainWindow::cellInsertCol_clicked()
+void HReportMainWindow::gridInsertCol_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->insertGridColumn();
 }
 
 void HReportMainWindow::cellDelete_clicked()
@@ -513,14 +547,18 @@ void HReportMainWindow::cellDelete_clicked()
 
 }
 
-void HReportMainWindow::cellRemoveRow_clicked()
+void HReportMainWindow::gridRemoveRow_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->removeGridRow();
 }
 
-void HReportMainWindow::cellRemoveCol_clicked()
+void HReportMainWindow::gridRemoveCol_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    bool bok = m_pReportMainWidget->removeGridColumn();
 }
 
 void HReportMainWindow::cellRowHeight_clicked()
@@ -529,9 +567,12 @@ void HReportMainWindow::cellRowHeight_clicked()
         return;
     bool ok;
     double d = m_pReportManager->formatSet()->cellRowHeight();
-    d = QInputDialog::getDouble(this, tr("行高"),tr("行高:"), d, -999, 999, 2, &ok);
+    d = QInputDialog::getDouble(this, QStringLiteral("行高"),QStringLiteral("行高:"), d, -999, 999, 2, &ok);
     if (ok)
+    {
         m_pReportManager->formatSet()->setCellRowHeight(d);
+        m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),GRID_TYPE_ROW_HEIGHT);
+    }
 }
 
 void HReportMainWindow::cellAutoRowHeight_clicked()
@@ -545,9 +586,12 @@ void HReportMainWindow::cellColWidth_clicked()
         return;
     bool ok;
     double d = m_pReportManager->formatSet()->cellColumnWidth();
-    d = QInputDialog::getDouble(this, tr("列宽"),tr("列宽:"), d, -999, 999, 2, &ok);
+    d = QInputDialog::getDouble(this, QStringLiteral("列宽"),QStringLiteral("列宽:"), d, -999, 999, 2, &ok);
     if (ok)
+    {
         m_pReportManager->formatSet()->setCellColumnWidth(d);
+        m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),GRID_TYPE_COL_WIDTH);
+    }
 }
 
 void HReportMainWindow::cellAutoColWidth_clicked()

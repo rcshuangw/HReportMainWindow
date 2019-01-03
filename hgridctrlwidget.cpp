@@ -55,6 +55,7 @@ void HGridCtrlWidget::initReportWidget()
         vBoxLayout->addWidget(m_pGridCtrl);
         vBoxLayout->setStretch(0,1);
         vBoxLayout->setStretch(1,9);
+        connect(m_inputLineEdit,SIGNAL(textEdited(QString)),this,SLOT(lineedit_textEdited(QString)));
     }
     else
     {
@@ -156,9 +157,45 @@ void HGridCtrlWidget::setVirtualMode(bool b)
 //设置单项
 void HGridCtrlWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
+    if(!pFormatSet)
+        return;
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
         return;
+
+    //以下部分必须是单独设置
+    if(CELL_TYPE_RESET == formatType)
+    {
+        if(pFormatSet->isResetFormat())
+        {
+            m_pGridCtrl->clearFormats(range);
+        }
+        else if(pFormatSet->isResetText())
+        {
+            m_pGridCtrl->clearFormatting(range);
+        }
+        else if(pFormatSet->isResetAllFormat())
+        {
+            m_pGridCtrl->clearCells(range);
+        }
+        return;
+    }
+    else if((formatType == GRID_TYPE_ROW_HEIGHT))
+    {
+        for(int rangeRow = range.minRow(); rangeRow <= range.maxRow();rangeRow++)
+            m_pGridCtrl->setRowHeight(rangeRow,pFormatSet->cellRowHeight());
+        return;
+    }
+
+    else if(formatType == GRID_TYPE_COL_WIDTH)
+    {
+        for(int rangeCol = range.minCol();rangeCol <= range.maxCol();rangeCol++)
+            m_pGridCtrl->setColumnWidth(rangeCol,pFormatSet->cellColumnWidth());
+
+        return;
+    }
+
+    //以下部分可以单独设置也可以通过单元格属性框确认后设置
     for(int rangeRow = range.minRow(); rangeRow <= range.maxRow();rangeRow++)
     {
         for(int rangeCol = range.minCol();rangeCol <= range.maxCol();rangeCol++)
@@ -177,55 +214,106 @@ void HGridCtrlWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool 
 
             if((CELL_TYPE_BORDER == formatType) | bAll)
             {
-                pCell->setBorderColor(pFormatSet->borderLineColor());
-                pCell->setBorderStyle(pFormatSet->borderPenStyle());
-                pCell->setDrawBorder(pFormatSet->isBorder());
-                pCell->setBorderLeftColor(pFormatSet->borderLeftLineColor());
-                pCell->setBorderLeftStyle(pFormatSet->borderLeftPenStyle());
-                pCell->setDrawBorderLeft(pFormatSet->isBorderLeft());
-                pCell->setBorderRightColor(pFormatSet->borderRightLineColor());
-                pCell->setBorderRightStyle(pFormatSet->borderRightPenStyle());
-                pCell->setDrawBorderRight(pFormatSet->isBorderRight());
-                pCell->setBorderTopColor(pFormatSet->borderTopLineColor());
-                pCell->setBorderTopStyle(pFormatSet->borderTopPenStyle());
-                pCell->setDrawBorderTop(pFormatSet->isBorderTop());
-                pCell->setBorderBottomColor(pFormatSet->borderBottomLineColor());
-                pCell->setBorderBottomStyle(pFormatSet->borderBottomPenStyle());
-                pCell->setDrawBorderBottom(pFormatSet->isBorderBottom());
+                //外边框
+                if(pFormatSet->isBorder())
+                {
+                    if(rangeRow == range.minRow())
+                    {
+                        pCell->setBorderTopColor(pFormatSet->borderTopLineColor());
+                        pCell->setBorderTopStyle(pFormatSet->borderTopPenStyle());
+                        pCell->setDrawBorderTop(pFormatSet->isBorder());
+                    }
+
+                    if(rangeRow == range.maxRow())//最大行的下一个单元格
+                    {
+                        pCell->setBorderBottomColor(pFormatSet->borderBottomLineColor());
+                        pCell->setBorderBottomStyle(pFormatSet->borderBottomPenStyle());
+                        pCell->setDrawBorderBottom(pFormatSet->isBorder());
+                    }
+
+                    if(rangeCol == range.minCol())
+                    {
+                        pCell->setBorderLeftColor(pFormatSet->borderLeftLineColor());
+                        pCell->setBorderLeftStyle(pFormatSet->borderLeftPenStyle());
+                        pCell->setDrawBorderLeft(pFormatSet->isBorder());
+                    }
+
+                    if(rangeCol == range.maxCol())
+                    {
+                        pCell->setBorderRightColor(pFormatSet->borderRightLineColor());
+                        pCell->setBorderRightStyle(pFormatSet->borderRightPenStyle());
+                        pCell->setDrawBorderRight(pFormatSet->isBorder());
+                    }
+                }
+                else
+                {
+                    //pCell->setBorderColor(pFormatSet->borderLineColor());
+                    //pCell->setBorderStyle(pFormatSet->borderPenStyle());
+                    //pCell->setDrawBorder(pFormatSet->isBorder());
+                    pCell->setBorderLeftColor(pFormatSet->borderLeftLineColor());
+                    pCell->setBorderLeftStyle(pFormatSet->borderLeftPenStyle());
+                    pCell->setDrawBorderLeft(pFormatSet->isBorderLeft());
+                    pCell->setBorderRightColor(pFormatSet->borderRightLineColor());
+                    pCell->setBorderRightStyle(pFormatSet->borderRightPenStyle());
+                    pCell->setDrawBorderRight(pFormatSet->isBorderRight());
+                    pCell->setBorderTopColor(pFormatSet->borderTopLineColor());
+                    pCell->setBorderTopStyle(pFormatSet->borderTopPenStyle());
+                    pCell->setDrawBorderTop(pFormatSet->isBorderTop());
+                    pCell->setBorderBottomColor(pFormatSet->borderBottomLineColor());
+                    pCell->setBorderBottomStyle(pFormatSet->borderBottomPenStyle());
+                    pCell->setDrawBorderBottom(pFormatSet->isBorderBottom());
+                }
+
+                //最小行的上一个单元格
+                if(rangeRow == range.minRow())
+                {
+                    HGridCellBase* pRowOutCell = m_pGridCtrl->getCell(rangeRow-1,rangeCol);
+                    if(pRowOutCell)
+                    {
+                        pRowOutCell->setDrawBorderBottom(pCell->isDrawBorderTop());
+                        pRowOutCell->setBorderBottomColor(pCell->borderTopColor());
+                        pRowOutCell->setBorderBottomStyle(pCell->borderTopStyle());
+                    }
+                }
+
+                if(rangeRow == range.maxRow())//最大行的下一个单元格
+                {
+                    HGridCellBase* pRowOutCell = m_pGridCtrl->getCell(rangeRow+1,rangeCol);
+                    if(pRowOutCell)
+                    {
+                        pRowOutCell->setDrawBorderTop(pCell->isDrawBorderBottom());
+                        pRowOutCell->setBorderTopColor(pCell->borderBottomColor());
+                        pRowOutCell->setBorderTopStyle(pCell->borderBottomStyle());
+                    }
+                }
+
+                if(rangeCol == range.minCol())
+                {
+                    HGridCellBase* pRowOutCell = m_pGridCtrl->getCell(rangeRow,rangeCol-1);
+                    if(pRowOutCell)
+                    {
+                        pRowOutCell->setDrawBorderRight(pCell->isDrawBorderLeft());
+                        pRowOutCell->setBorderRightColor(pCell->borderLeftColor());
+                        pRowOutCell->setBorderRightStyle(pCell->borderLeftStyle());
+                    }
+                }
+
+                if(rangeCol == range.maxCol())
+                {
+                    HGridCellBase* pRowOutCell = m_pGridCtrl->getCell(rangeRow,rangeCol+1);
+                    if(pRowOutCell)
+                    {
+                        pRowOutCell->setDrawBorderLeft(pCell->isDrawBorderRight());
+                        pRowOutCell->setBorderLeftColor(pCell->borderRightColor());
+                        pRowOutCell->setBorderLeftStyle(pCell->borderRightStyle());
+                    }
+                }
             }
 
             if((CELL_TYPE_COLOR == formatType) | bAll)
             {
                 pCell->setTextClr(pFormatSet->textColor());
                 pCell->setBackClr(pFormatSet->textBkColor());
-            }
-
-            if((formatType == GRID_TYPE_ROW_HEIGHT) | bAll)
-            {
-                m_pGridCtrl->setRowHeight(rangeRow,pFormatSet->cellRowHeight());
-            }
-
-            if((formatType == GRID_TYPE_COL_WIDTH)  | bAll)
-            {
-                m_pGridCtrl->setColumnWidth(rangeCol,pFormatSet->cellColumnWidth());
-            }
-
-            if(CELL_TYPE_RESET == formatType)
-            {
-                if(pFormatSet->isResetFormat())
-                {
-                    QString strText = pCell->text();
-                    pCell->reset();
-                    pCell->setText(strText);
-                }
-                else if(pFormatSet->isResetText())
-                {
-                    pCell->setText("");
-                }
-                else if(pFormatSet->isResetAllFormat())
-                {
-                    pCell->reset();
-                }
             }
         }
     }
@@ -241,6 +329,8 @@ void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
     if(!cellID.isValid()) return;
     HGridCellBase* pCell = m_pGridCtrl->getCell(cellID);
     if(!pCell) return;
+
+    pFormatSet->setText(pCell->text());
     //字体 + 字体颜色
     pFormatSet->setFormatFont(pCell->font());
     pFormatSet->setTextColor(pCell->textClr().name());
@@ -267,9 +357,27 @@ void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
     //对齐
     pFormatSet->setFormat(pCell->format());
 
+    //行高列宽
+    pFormatSet->setCellRowHeight(m_pGridCtrl->rowHeight(cellID.row));
+    pFormatSet->setCellColumnWidth(m_pGridCtrl->columnWidth(cellID.col));
     //打印相关设置
 
+
+
+    //lineedit和行列标签的变化
+    if(m_bEnableShowEditBar)
+    {
+        m_inputLineEdit->setText(pFormatSet->text());
+        pCell = m_pGridCtrl->getCell(0,cellID.col);
+        if(!pCell) return;
+        QString strRow = pCell->text();
+        pCell = m_pGridCtrl->getCell(cellID.row,0);
+        if(!pCell) return;
+        QString strCol = pCell->text();
+        m_rowColLabel->setText(strRow+strCol);
+    }
 }
+
 bool HGridCtrlWidget::mergeCell()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
@@ -282,7 +390,7 @@ bool HGridCtrlWidget::mergeCell()
 bool HGridCtrlWidget::splitCell()
 {
     HCellRange range = m_pGridCtrl->selectedCellRange();
-    if(!range.isValid() || range.count() <=1 )
+    if(!range.isValid())
         return false;
     m_pGridCtrl->setSplitSelectedCells();
 }
@@ -294,7 +402,7 @@ bool HGridCtrlWidget::insertGridRow()
     if(!range.isValid())
         return false;
     int nStartRow = range.minRow();
-    int nRowNum = range.maxRow() - range.minRow() - 1;
+    int nRowNum = range.maxRow() - range.minRow() + 1;
     if(m_pGridCtrl->rowCount() + nRowNum > ROWMAX_COUNT)
         return false;
 
@@ -313,13 +421,13 @@ bool HGridCtrlWidget::insertGridColumn()
     if(!range.isValid())
         return false;
     int nStartCol = range.minCol();
-    int nColNum = range.maxCol() - range.minCol() - 1;
+    int nColNum = range.maxCol() - range.minCol() + 1;
     if(m_pGridCtrl->columnCount() + nColNum > COLMAX_COUNT)
         return false;
 
     for(int i = 0; i < nColNum; i++)
     {
-       if((int)-1 == m_pGridCtrl->insertRow("",nStartCol))//strHeader是插入之后会自动刷新
+       if((int)-1 == m_pGridCtrl->insertColumn("",nStartCol))//strHeader是插入之后会自动刷新
            return false;
     }
     return true;
@@ -350,4 +458,13 @@ bool HGridCtrlWidget::removeGridColumn()
            return false;
     }
     return true;
+}
+
+void HGridCtrlWidget::lineedit_textEdited(const QString &text)
+{
+    HCellID cellID = m_pGridCtrl->focusCell();
+    if(!cellID.isValid()) return;
+    HGridCellBase* pCell = m_pGridCtrl->getCell(cellID);
+    if(!pCell) return;
+    pCell->setText(text);
 }

@@ -111,11 +111,11 @@ public slots:
     void mergeCells_clicked();
     void mergeSplit_clicked();
     void cellInsert_clicked();
-    void cellInsertRow_clicked();
-    void cellInsertCol_clicked();
+    void gridInsertRow_clicked();
+    void gridInsertCol_clicked();
     void cellDelete_clicked();
-    void cellRemoveRow_clicked();
-    void cellRemoveCol_clicked();
+    void gridRemoveRow_clicked();
+    void gridRemoveCol_clicked();
     void cellRowHeight_clicked();
     void cellAutoRowHeight_clicked();
     void cellColWidth_clicked();
