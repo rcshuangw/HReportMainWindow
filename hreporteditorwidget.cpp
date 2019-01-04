@@ -156,3 +156,13 @@ bool HReportEditorWidget::removeGridColumn()
 {
     return m_pGridReportWidget->removeGridColumn();
 }
+
+void HReportEditorWidget::autoSizeRows()
+{
+    m_pGridReportWidget->autoSizeRows();
+}
+
+void HReportEditorWidget::autoSizeColumns()
+{
+    m_pGridReportWidget->autoSizeColumns();
+}

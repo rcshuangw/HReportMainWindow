@@ -335,6 +335,26 @@ bool HGridReportWidget::removeGridColumn()
     return false;
 }
 
+void HGridReportWidget::autoSizeRows()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        w->autoSizeRows();
+    }
+}
+
+void HGridReportWidget::autoSizeColumns()
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        w->autoSizeColumns();
+    }
+}
+
 //打印部分
 void HGridReportWidget::printPreview()
 {

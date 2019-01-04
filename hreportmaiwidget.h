@@ -42,6 +42,8 @@ public:
     bool insertGridColumn();
     bool removeGridRow();
     bool removeGridColumn();
+    void autoSizeRows();
+    void autoSizeColumns();
 
 
     void newReportWidget();

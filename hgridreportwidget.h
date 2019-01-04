@@ -61,7 +61,8 @@ public:
     bool insertGridColumn();
     bool removeGridRow();
     bool removeGridColumn();
-
+    void autoSizeRows();
+    void autoSizeColumns();
 
     //打印
     void printPreview();

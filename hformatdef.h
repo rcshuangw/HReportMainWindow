@@ -14,10 +14,9 @@
 #define GRID_TYPE_ROW_HEIGHT      0x62
 #define GRID_TYPE_COL_WIDTH       0x63
 
-
 //插入 删除操作，插入和删除都有行，列，单元格三种
-#define GRID_TYPE_INSERT          0x64
-#define GRID_TYPE_REMOVE          0x65
+#define GRID_TYPE_INSERT          0x90
+#define GRID_TYPE_REMOVE          0x91
 
 
 

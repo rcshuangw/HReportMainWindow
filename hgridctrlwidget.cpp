@@ -411,6 +411,7 @@ bool HGridCtrlWidget::insertGridRow()
        if((int)-1 == m_pGridCtrl->insertRow("",nStartRow))//strHeader是插入之后会自动刷新
            return false;
     }
+    m_pGridCtrl->setSelectedRange(range);
     return true;
 }
 
@@ -425,11 +426,13 @@ bool HGridCtrlWidget::insertGridColumn()
     if(m_pGridCtrl->columnCount() + nColNum > COLMAX_COUNT)
         return false;
 
+    quint32 nFormat = m_pGridCtrl->defaultCell(false,false)->format();
     for(int i = 0; i < nColNum; i++)
     {
-       if((int)-1 == m_pGridCtrl->insertColumn("",nStartCol))//strHeader是插入之后会自动刷新
+       if((int)-1 == m_pGridCtrl->insertColumn("",nFormat,nStartCol))//strHeader是插入之后会自动刷新
            return false;
     }
+    m_pGridCtrl->setSelectedRange(range);
     return true;
 }
 
@@ -439,7 +442,7 @@ bool HGridCtrlWidget::removeGridRow()
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
         return false;
-    for(int row = range.minRow(); row < range.maxRow(); row++)
+    for(int row = range.minRow(); row <= range.maxRow(); row++)
     {
        if(!m_pGridCtrl->deleteRow(row))//strHeader是插入之后会自动刷新
            return false;
@@ -452,12 +455,26 @@ bool HGridCtrlWidget::removeGridColumn()
     HCellRange range = m_pGridCtrl->selectedCellRange();
     if(!range.isValid())
         return false;
-    for(int col = range.minCol(); col < range.maxCol(); col++)
+    for(int col = range.minCol(); col <= range.maxCol(); col++)
     {
        if(!m_pGridCtrl->deleteColumn(col))//strHeader是插入之后会自动刷新
            return false;
     }
     return true;
+}
+
+void HGridCtrlWidget::autoSizeRows()
+{
+    if(!m_pGridCtrl)
+        return;
+    m_pGridCtrl->autoSizeRows();
+}
+
+void HGridCtrlWidget::autoSizeColumns()
+{
+    if(!m_pGridCtrl)
+        return;
+    m_pGridCtrl->autoSizeColumns();
 }
 
 void HGridCtrlWidget::lineedit_textEdited(const QString &text)

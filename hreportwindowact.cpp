@@ -577,7 +577,9 @@ void HReportMainWindow::cellRowHeight_clicked()
 
 void HReportMainWindow::cellAutoRowHeight_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportMainWidget->autoSizeRows();
 }
 
 void HReportMainWindow::cellColWidth_clicked()
@@ -596,7 +598,9 @@ void HReportMainWindow::cellColWidth_clicked()
 
 void HReportMainWindow::cellAutoColWidth_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportMainWidget->autoSizeColumns();
 }
 
 void HReportMainWindow::cellDefaultColWidth_clicked()
@@ -612,11 +616,15 @@ void HReportMainWindow::cellDefaultColWidth_clicked()
 
 void HReportMainWindow::cellSetFormat_clicked()
 {
-
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    m_pReportMainWidget->autoSizeColumns();
 }
 
 void HReportMainWindow::option_clicked()
 {
+    if(!m_pReportMainWidget || !m_pReportManager)
+        return;
     HFormatSetDlg dlg(m_pReportManager);
     dlg.exec();
 }

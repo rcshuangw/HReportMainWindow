@@ -113,6 +113,7 @@ void HFontSet::initFontFamilies()
         ui->fontFamilyList->setCurrentItem(itemList.at(0));
 
         //字体大小
+        int nSize = font.pointSize();
         itemSizeList = ui->fontPointSizeList->findItems(QString("%1").arg(font.pointSize()),Qt::MatchCaseSensitive|Qt::MatchFixedString);
         ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
 

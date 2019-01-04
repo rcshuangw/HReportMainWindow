@@ -29,6 +29,8 @@ public:
     bool insertGridColumn();
     bool removeGridRow();
     bool removeGridColumn();
+    void autoSizeRows();
+    void autoSizeColumns();
 public:
     void setGridCtrlAttr(uint nAttrType,HFormatSet* pFormatSet);
 
