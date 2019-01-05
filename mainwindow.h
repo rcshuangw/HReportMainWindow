@@ -51,6 +51,9 @@ protected:
     void loadTheme(const QString &themeFile);
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *obj, QEvent *e);
+    void setAttrPage(quint8);
+
+
 private:
     SARibbonContextCategory* m_contextCategory;
     SARibbonBar* m_ribbonMenuBar;
@@ -123,11 +126,13 @@ public slots:
     void cellDefaultColWidth_clicked();
     void cellSetFormat_clicked();
     void option_clicked();
+    void baseOption_clicked();
+    void fontOption_clicked();
     void printDialog_clicked();
     void printOption_clicked();
     void printPreview_clicked();
     void opSheet_clicked();
-    void hideRibbon_clicked();
+    void hideRibbon_clicked(bool);
     void information_clicked();
 
     //表格选择
@@ -218,15 +223,18 @@ public:
     QAction* cellSetFormatAct;
 
     //格式
-    QAction* optAct;
+    QAction* baseOptAct;
+    QAction* fontOptAct;
+
+    //显示格式
+    QAction* opSheetAct;
 
     //打印
     QAction* printDialogAct;
     QAction* printOptionAct;
     QAction* printPreviewAct;
 
-    //显示设置
-    QAction* opSheetAct;
+
 
     //隐藏工具栏
     QAction* hideRibbonAct;

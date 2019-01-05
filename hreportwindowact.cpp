@@ -7,6 +7,7 @@
 #include "hreportmaiwidget.h"
 #include "hgridcelldef.h"
 #include "hformatdef.h"
+#include "SARibbonBar.h"
 #include "SARibbonComboBox.h"
 #include "hformatset.h"
 #include <QColorDialog>
@@ -509,6 +510,7 @@ void HReportMainWindow::mergeCenter_clicked()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     bool bok = m_pReportMainWidget->mergeCell();
+    m_pReportManager->formatSet()->enableMergeCell(bok);
 }
 
 void HReportMainWindow::mergeCells_clicked()
@@ -521,6 +523,7 @@ void HReportMainWindow::mergeSplit_clicked()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     bool bok = m_pReportMainWidget->splitCell();
+    m_pReportManager->formatSet()->enableMergeCell(!bok);
 }
 
 void HReportMainWindow::cellInsert_clicked()
@@ -626,6 +629,25 @@ void HReportMainWindow::option_clicked()
     if(!m_pReportMainWidget || !m_pReportManager)
         return;
     HFormatSetDlg dlg(m_pReportManager);
+    dlg.setTabIndex(TAB_ATTR_PRINTSHEET);
+    dlg.exec();
+}
+
+void HReportMainWindow::baseOption_clicked()
+{
+    if(!m_pReportMainWidget || !m_pReportManager)
+        return;
+    HFormatSetDlg dlg(m_pReportManager);
+    dlg.setTabIndex(TAB_ATTR_BASE);
+    dlg.exec();
+}
+
+void HReportMainWindow::fontOption_clicked()
+{
+    if(!m_pReportMainWidget || !m_pReportManager)
+        return;
+    HFormatSetDlg dlg(m_pReportManager);
+    dlg.setTabIndex(TAB_ATTR_FONT);
     dlg.exec();
 }
 
@@ -653,9 +675,9 @@ void HReportMainWindow::opSheet_clicked()
 
 }
 
-void HReportMainWindow::hideRibbon_clicked()
+void HReportMainWindow::hideRibbon_clicked(bool b)
 {
-
+    this->m_ribbonMenuBar->setHideMode(b);
 }
 
 void HReportMainWindow::information_clicked()

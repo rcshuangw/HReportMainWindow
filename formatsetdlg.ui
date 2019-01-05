@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>528</width>
-    <height>460</height>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>表格设置</string>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -463,12 +463,90 @@
        <x>10</x>
        <y>200</y>
        <width>491</width>
-       <height>80</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="title">
       <string>自定义显示</string>
      </property>
+     <widget class="QCheckBox" name="firstOpTaskCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>第一页显示操作任务</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>20</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>其他页：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="opTaskOtherLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>19</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>接上页</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>45</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>其他页：</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="firststChangeCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>45</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>第一页显示状态转换</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="stChangeOtherLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>44</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>接上页</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
@@ -603,7 +681,7 @@
        <string>右：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="tailMargin">
+     <widget class="QLineEdit" name="footMargin">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -723,7 +801,7 @@
        <string>页尾：</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="tailText">
+     <widget class="QTextEdit" name="footText">
       <property name="geometry">
        <rect>
         <x>12</x>
@@ -800,6 +878,32 @@
      </widget>
     </widget>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="okBtn">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>460</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>确定</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancleBtn">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>460</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>取消</string>
+   </property>
   </widget>
  </widget>
  <resources/>

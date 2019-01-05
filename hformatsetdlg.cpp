@@ -20,17 +20,26 @@ HFormatSetDlg::HFormatSetDlg(HReportManager *mgr,QWidget *parent) :
     ui->setupUi(this);
     initDigitalSet();
     initBaseSet();
-    HFontSet* font = new HFontSet(m_pReportManager,this);
-    HBorderSet* border = new HBorderSet(m_pReportManager,this);
-    ui->tabWidget->insertTab(2,font,QStringLiteral("字体"));
-    ui->tabWidget->insertTab(3,border,QStringLiteral("边框"));
-    initPrintSheetSet();
-    initPrintSet();
+    HFontSet* font = new HFontSet(m_pReportManager,this);//0
+    HBorderSet* border = new HBorderSet(m_pReportManager,this);//1
+    ui->tabWidget->insertTab(TAB_ATTR_FONT,font,QStringLiteral("字体"));//2
+    ui->tabWidget->insertTab(TAB_ATTR_BORDER,border,QStringLiteral("边框"));//3
+    initPrintSheetSet();//4
+    initPrintSet();//5
+
+    connect(ui->okBtn,SIGNAL(clicked(bool)),this,SLOT(okBtn_clicked()));
+    connect(ui->cancleBtn,SIGNAL(clicked(bool)),this,SLOT(cancleBtn_clicked()));
 }
 
 HFormatSetDlg::~HFormatSetDlg()
 {
     delete ui;
+}
+
+void HFormatSetDlg::setTabIndex(quint8 index)
+{
+    m_nTabIndex = index;
+    ui->tabWidget->setCurrentIndex(m_nTabIndex);
 }
 
 void HFormatSetDlg::initDigitalSet()
@@ -63,32 +72,32 @@ void HFormatSetDlg::initBaseSet()
     int index = (int)-1;
     if(QDT_LEFT == (nFormat & QDT_LEFT))
     {
-        index = ui->veritcalComboBox->findData(QDT_TOP);
+        index = ui->horizontalComboBox->findData(QDT_LEFT);
 
     }
     else if(QDT_HCENTER == (nFormat & QDT_HCENTER))
     {
-        index = ui->veritcalComboBox->findData(QDT_HCENTER);
+        index = ui->horizontalComboBox->findData(QDT_HCENTER);
     }
     else if(QDT_RIGHT == (nFormat & QDT_RIGHT))
     {
-        index = ui->veritcalComboBox->findData(QDT_RIGHT);
+        index = ui->horizontalComboBox->findData(QDT_RIGHT);
     }
-    ui->veritcalComboBox->setCurrentIndex(index);
+    ui->horizontalComboBox->setCurrentIndex(index);
 
     if(QDT_TOP == (nFormat & QDT_TOP))
     {
-        index = ui->horizontalComboBox->findData(QDT_TOP);
+        index = ui->veritcalComboBox->findData(QDT_TOP);
     }
     else if(QDT_VCENTER == (nFormat & QDT_VCENTER))
     {
-        index = ui->horizontalComboBox->findData(QDT_VCENTER);
+        index = ui->veritcalComboBox->findData(QDT_VCENTER);
     }
     else if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
     {
-        index = ui->horizontalComboBox->findData(QDT_BOTTOM);
+        index = ui->veritcalComboBox->findData(QDT_BOTTOM);
     }
-    ui->horizontalComboBox->setCurrentIndex(index);
+    ui->veritcalComboBox->setCurrentIndex(index);
 
     if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
     {
@@ -96,11 +105,41 @@ void HFormatSetDlg::initBaseSet()
     }
 
     //缺少一个合并单元格
+    ui->mergeCellCheckBox->setChecked(pFormatSet->isMergeCell());
 }
 
 void HFormatSetDlg::initPrintSheetSet()
 {
+    //票号格式设置
+    ui->prefixCheck->setChecked(false);
+    ui->suffixCheck->setChecked(false);
+    ui->sheetLencheckBox->setChecked(false);
+    ui->tempSheetcheckBox->setChecked(false);
 
+    ui->firstOpTaskCheckBox->setChecked(false);
+    ui->opTaskOtherLineEdit->setEnabled(false);
+    ui->firststChangeCheckBox->setChecked(false);
+    ui->stChangeOtherLineEdit->setEnabled(false);
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    //票号格式设置
+    ui->prefixCheck->setChecked(pFormatSet->isSheetNoPrefix());
+    ui->prefixLineEdit->setText(pFormatSet->sheetNoPrefix());
+    ui->suffixCheck->setChecked(pFormatSet->isSheetNoSuffix());
+    ui->suffixLineEdit->setText(pFormatSet->sheetNoSuffix());
+    ui->sheetLencheckBox->setChecked(pFormatSet->isSheetNoLength());
+    ui->sheetLenLineEdit->setText(pFormatSet->sheetNoLength());
+    ui->tempSheetcheckBox->setChecked(pFormatSet->isSheetTempNo());
+    ui->tempSheetLineEdit->setText(pFormatSet->sheetTempNo());
+
+    //任务长度设置
+    ui->opTaskLineEdit->setText(QString("%1").arg(pFormatSet->opTaskWordCount()));
+    ui->opItemLineEdit->setText(QString("%1").arg(pFormatSet->opTermWordCount()));
+    ui->stChangeLineEdit->setText(QString("%1").arg(pFormatSet->stateChangeWordCount()));
+    ui->serialNoLineEdit->setText(QString("%1").arg(pFormatSet->serialNumWordCount()));
+
+    //自定义显示
 }
 
 void HFormatSetDlg::initPrintSet()
@@ -125,6 +164,24 @@ void HFormatSetDlg::initPrintSet()
     ui->rowCheck->setChecked(false);
     ui->colCheck->setChecked(false);
     ui->clrColor->setChecked(false);
+
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    ui->topMargin->setText(QString("%1").arg(pFormatSet->pageTopMargin(),0,'f',2));
+    ui->bottomMargin->setText(QString("%1").arg(pFormatSet->pageBottomMargin(),0,'f',2));
+    ui->leftMargin->setText(QString("%1").arg(pFormatSet->pageLeftMargin(),0,'f',2));
+    ui->rightMargin->setText(QString("%1").arg(pFormatSet->pageRightMargin(),0,'f',2));
+    ui->headMargin->setText(QString("%1").arg(pFormatSet->pageHeaderHeight(),0,'f',2));
+    ui->footMargin->setText(QString("%1").arg(pFormatSet->pageFooterHeight(),0,'f',2));
+
+    ui->headText->setText(pFormatSet->pageHeaderText());
+    ui->footText->setText(pFormatSet->pageFooterText());
+
+    ui->gridCheck->setChecked(pFormatSet->isPageShowGrid());
+    ui->rowCheck->setChecked(pFormatSet->isPageShowRowHeader());
+    ui->colCheck->setChecked(pFormatSet->isPageShowColumnHeader());
+    ui->clrColor->setChecked(pFormatSet->isPagePrintColour());
 }
 
 void HFormatSetDlg::onCatagoryListWidget_clicked()

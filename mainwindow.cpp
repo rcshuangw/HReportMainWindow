@@ -105,6 +105,7 @@ void HReportMainWindow::createCategoryMenu()
 {
    // m_ribbonMenuBar->applitionButton()->setText(QStringLiteral("文件"));//menu
     hideRibbonAct = new QAction(QIcon(":/icon/icon/HideRibbon.png"),QStringLiteral("折叠功能区"),this);
+    hideRibbonAct->setCheckable(true);
     informationAct = new QAction(QIcon(":/icon/icon/information.png"),QStringLiteral("信息"),this);
 
     newAct = new QAction(QIcon(":/icon/icon/FileNew.png"),QStringLiteral("新建"),this);
@@ -468,41 +469,18 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     opSheetPannel->addLargeAction(opSheetAct);
 
 
-    optAct = new QAction(this);
-    connect(optAct,&QAction::triggered,this,&HReportMainWindow::option_clicked);
-    optAct->setToolTip(QStringLiteral("单元格格式"));
-    pannel->addOptionAction(optAct);
-    fontPannel->addOptionAction(optAct);
-    aligPannel->addOptionAction(optAct);
-    cellPannel->addOptionAction(optAct);
+    baseOptAct = new QAction(this);
+    connect(baseOptAct,&QAction::triggered,this,&HReportMainWindow::baseOption_clicked);
+    baseOptAct->setToolTip(QStringLiteral("对齐设置"));
+    aligPannel->addOptionAction(baseOptAct);
+
+    fontOptAct = new QAction(this);
+    connect(fontOptAct,&QAction::triggered,this,&HReportMainWindow::fontOption_clicked);
+    fontOptAct->setToolTip(QStringLiteral("字体和边框设置"));
+    fontPannel->addOptionAction(fontOptAct);
 
     return;
-    //btn->setPopupMode(QToolButton::MenuButtonPopup);
 
-    //act = new QAction(this);
-    //act->setIcon(QIcon(":/icon/icon/Bold.png"));
-    //act->setText(QStringLiteral("test 3"));
-    //act->setMenu(menu);
-    //btn = fontPannel->addSmallAction(act);
-    //btn->setPopupMode(QToolButton::MenuButtonPopup);
-
-    //act = new QAction(this);
-    //act->setIcon(QIcon(":/icon/icon/Italic.png"));
-    //act->setText(QStringLiteral("test 4"));
-    //act->setMenu(menu);
-    //btn = fontPannel->addSmallAction(act);
-    //btn->setPopupMode(QToolButton::InstantPopup);
-
-    //act = new QAction(this);
-    //act->setIcon(QIcon(":/icon/icon/Underline.png"));
-    //act->setText(QStringLiteral("test 4"));
-    //act->setMenu(menu);
-    //btn = fontPannel->addSmallAction(act);
-    //btn->setPopupMode(QToolButton::InstantPopup);
-
-
-
-    return;
     /*
     pannel->addSeparator();
 
@@ -707,6 +685,8 @@ void HReportMainWindow::createCategoryPrint(SARibbonCategory* page)
 
 void HReportMainWindow::initReportConnect()
 {
+    //快速
+    connect(hideRibbonAct,SIGNAL(triggered(bool)),this,SLOT(hideRibbon_clicked(bool)));
     //
     connect(m_pReportMainWidget,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
     //树相关的消息

@@ -85,7 +85,7 @@ void HFontSet::initFontFamilies()
     ui->fontStyleList->setCurrentItem(item0);
 
     //字号
-    QStringList fontSizeList = {"6","8","9","10","12","14","16","18","20","22","24","26","28","36","48","72"};
+    QStringList fontSizeList = {"6","8","9","10","11","12","14","16","18","20","22","24","26","28","36","48","72"};
     ui->fontPointSizeList->addItems(fontSizeList);
     QList<QListWidgetItem *>  itemSizeList = ui->fontPointSizeList->findItems(QStringLiteral("10"),Qt::MatchCaseSensitive|Qt::MatchFixedString);
     ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
@@ -101,8 +101,8 @@ void HFontSet::initFontFamilies()
     updateColorListSet();
     connect(ui->fontColorComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onFontClrCurrentIndexChanged(int)));
     connect(ui->moreColorBtn,SIGNAL(clicked(bool)),this,SLOT(onMoreColorBtn_clicked()));
-   //如果单元格不为空 则这里调整单元格初始化配置
 
+    //如果单元格不为空 则这里调整单元格初始化配置
     if(m_pReportManager && m_pReportManager->formatSet())
     {
         HFormatSet* pFormatSet = m_pReportManager->formatSet();
@@ -113,7 +113,6 @@ void HFontSet::initFontFamilies()
         ui->fontFamilyList->setCurrentItem(itemList.at(0));
 
         //字体大小
-        int nSize = font.pointSize();
         itemSizeList = ui->fontPointSizeList->findItems(QString("%1").arg(font.pointSize()),Qt::MatchCaseSensitive|Qt::MatchFixedString);
         ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
 

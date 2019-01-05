@@ -360,6 +360,9 @@ void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
     //行高列宽
     pFormatSet->setCellRowHeight(m_pGridCtrl->rowHeight(cellID.row));
     pFormatSet->setCellColumnWidth(m_pGridCtrl->columnWidth(cellID.col));
+
+    //合并单元格
+    pFormatSet->enableMergeCell(pCell->isMerged());
     //打印相关设置
 
 
