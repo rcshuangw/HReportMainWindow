@@ -64,6 +64,8 @@ void HFormatSetDlg::initBaseSet()
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignLeft.png"),QStringLiteral("左对齐"),QVariant(QDT_LEFT));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignCenter.png"),QStringLiteral("水平居中"),QVariant(QDT_HCENTER));
     ui->horizontalComboBox->addItem(QIcon(":/icon/icon/AlignRight.png"),QStringLiteral("右对齐"),QVariant(QDT_RIGHT));
+    connect(ui->horizontalComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onHorizontalComboBox_changed()));
+    connect(ui->veritcalComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(onVeritcalComboBox_changed()));
 
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
@@ -104,7 +106,6 @@ void HFormatSetDlg::initBaseSet()
         ui->autoWrapTextCheckBox->setChecked(true);
     }
 
-    //缺少一个合并单元格
     ui->mergeCellCheckBox->setChecked(pFormatSet->isMergeCell());
 }
 
@@ -151,14 +152,14 @@ void HFormatSetDlg::initPrintSet()
     ui->topMargin->setValidator(doubleValidator);
     ui->bottomMargin->setValidator(doubleValidator);
     ui->headMargin->setValidator(doubleValidator);
-    ui->tailMargin->setValidator(doubleValidator);
+    ui->footMargin->setValidator(doubleValidator);
 
     ui->leftMargin->setText("0");
     ui->rightMargin->setText("0");
     ui->topMargin->setText("0");
     ui->bottomMargin->setText("0");
     ui->headMargin->setText("0");
-    ui->tailMargin->setText("0");
+    ui->footMargin->setText("0");
 
     ui->gridCheck->setChecked(false);
     ui->rowCheck->setChecked(false);
@@ -205,5 +206,36 @@ void HFormatSetDlg::onCatagoryListWidget_clicked()
         ui->typeListWidget->show();
         ui->typeListWidget->clear();
     }
+}
+
+void HFormatSetDlg::onHorizontalComboBox_changed()
+{
+
+}
+
+void HFormatSetDlg::onVeritcalComboBox_changed()
+{
+
+}
+
+void HFormatSetDlg::save()
+{
+    //1.数字
+    //2.基本
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    quint32 nFormatSet = pFormatSet->format();
+    pFormatSet->enableAutoWrapText(ui->autoWrapTextCheckBox->isChecked());
+    pFormatSet->enableMergeCell(ui->mergeCellCheckBox->isChecked());
+}
+
+void HFormatSetDlg::okBtn_clicked()
+{
+
+}
+
+void HFormatSetDlg::cancleBtn_clicked()
+{
 
 }

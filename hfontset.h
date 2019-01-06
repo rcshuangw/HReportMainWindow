@@ -34,6 +34,7 @@ public:
     void initFontFamilies();
     virtual void paintEvent(QPaintEvent *event);
     void updateColorListSet();
+    void save();
 public slots:
     void onFontFamilyitemChanged();
     void onFontSizeitemChanged();

@@ -64,8 +64,8 @@ public:
     quint16 borderTopPenStyle();
     void setBorderBottomPenStyle(quint16);
     quint16 borderBottomPenStyle();
-    void enableBorder(bool);
-    bool isBorder();
+    void enableBorderOutSide(bool);
+    bool isBorderOutSide();
     void enableBorderLeft(bool);
     bool isBorderLeft();
     void enableBorderRight(bool);
@@ -182,7 +182,7 @@ private:
     quint16 m_nBorderRightPenStyle;      //边框线形
     quint16 m_nBorderTopPenStyle;        //边框线形
     quint16 m_nBorderBottomPenStyle;     //边框线形
-    bool m_bBorder;
+    bool m_bBorderOutSide;
     bool m_bBorderLeft;                  //左边框
     bool m_bBorderTop;                   //上边框
     bool m_bBorderRight;                 //右边框

@@ -215,34 +215,34 @@ void HGridCtrlWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool 
             if((CELL_TYPE_BORDER == formatType) | bAll)
             {
                 //外边框
-                if(pFormatSet->isBorder())
+                if(pFormatSet->isBorderOutSide())
                 {
                     if(rangeRow == range.minRow())
                     {
                         pCell->setBorderTopColor(pFormatSet->borderTopLineColor());
                         pCell->setBorderTopStyle(pFormatSet->borderTopPenStyle());
-                        pCell->setDrawBorderTop(pFormatSet->isBorder());
+                        pCell->setDrawBorderTop(pFormatSet->isBorderOutSide());
                     }
 
                     if(rangeRow == range.maxRow())//最大行的下一个单元格
                     {
                         pCell->setBorderBottomColor(pFormatSet->borderBottomLineColor());
                         pCell->setBorderBottomStyle(pFormatSet->borderBottomPenStyle());
-                        pCell->setDrawBorderBottom(pFormatSet->isBorder());
+                        pCell->setDrawBorderBottom(pFormatSet->isBorderOutSide());
                     }
 
                     if(rangeCol == range.minCol())
                     {
                         pCell->setBorderLeftColor(pFormatSet->borderLeftLineColor());
                         pCell->setBorderLeftStyle(pFormatSet->borderLeftPenStyle());
-                        pCell->setDrawBorderLeft(pFormatSet->isBorder());
+                        pCell->setDrawBorderLeft(pFormatSet->isBorderOutSide());
                     }
 
                     if(rangeCol == range.maxCol())
                     {
                         pCell->setBorderRightColor(pFormatSet->borderRightLineColor());
                         pCell->setBorderRightStyle(pFormatSet->borderRightPenStyle());
-                        pCell->setDrawBorderRight(pFormatSet->isBorder());
+                        pCell->setDrawBorderRight(pFormatSet->isBorderOutSide());
                     }
                 }
                 else

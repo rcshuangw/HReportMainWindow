@@ -159,7 +159,6 @@ void HFontSet::initFontFamilies()
                 break;
             }
         }
-
     }
 
     update();
@@ -302,4 +301,10 @@ void HFontSet::onMoreColorBtn_clicked()
     updateColorListSet();
     m_strFontColor = clr.name();
     update();
+}
+
+void HFontSet::save()
+{
+    m_pReportManager->formatSet()->setFormatFont(m_curFont);
+    m_pReportManager->formatSet()->setTextColor(m_strFontColor);
 }

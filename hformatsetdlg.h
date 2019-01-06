@@ -29,15 +29,19 @@ public:
     void initDigitalSet();//未单独设置qwidget 数字设置
     void initPrintSheetSet();// 主要是大约操作票的相关设置
     void initPrintSet();//打印相关设置
-
+    void save();
 public slots:
     void onCatagoryListWidget_clicked();
+    void onHorizontalComboBox_changed();
+    void onVeritcalComboBox_changed();
     void okBtn_clicked();
     void cancleBtn_clicked();
 private:
     Ui::HFormatSetDlg *ui;
     HReportManager* m_pReportManager;
+    quint32 m_nFormat;
     quint8 m_nTabIndex;
+
 };
 
 #endif // HFORMATSETDLG_H

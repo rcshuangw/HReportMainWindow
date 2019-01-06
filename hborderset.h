@@ -42,7 +42,7 @@ public:
     void updateLineStyleSet();
     void updateColorListSet();
     void instanceBorderSet();
-
+    void save();
 public slots:
     void currentIndexChanged_clicked(int index);
 
@@ -82,7 +82,8 @@ private:
     bool m_bBorderTop;
     bool m_bBorderRight;
     bool m_bBorderBottom;
-
+    bool m_bBorderOutSide;
+    bool m_bBorderInside;
     QStringList m_recentColorList;//最近列表
 };
 

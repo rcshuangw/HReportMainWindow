@@ -292,14 +292,14 @@ void HFormatSet::enableBorderLeft(bool b)
     m_bBorderLeft = b;
 }
 
-bool HFormatSet::isBorder()
+bool HFormatSet::isBorderOutSide()
 {
-    return m_bBorder;
+    return m_bBorderOutSide;
 }
 
-void HFormatSet::enableBorder(bool b)
+void HFormatSet::enableBorderOutSide(bool b)
 {
-    m_bBorder = b;
+    m_bBorderOutSide = b;
 }
 
 bool HFormatSet::isBorderLeft()

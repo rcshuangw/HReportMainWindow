@@ -66,6 +66,8 @@ void HBorderSet::initBorderSet()
     m_bBorderTop = false;
     m_bBorderRight = false;
     m_bBorderBottom = false;
+    m_bBorderInside = false;
+    m_bBorderOutSide = false;
     m_strLineColor = "#000000";
     m_strBorderLeftLineColor = "#000000";//边框左线条颜色
     m_strBorderRightLineColor = "#000000";//边框右线条颜色
@@ -312,7 +314,7 @@ void HBorderSet::paintEvent(QPaintEvent *event)
     painter.drawLine(frameInsideBottomRight,frameInsideBottomRight + QPoint(0,5));
     painter.drawLine(frameInsideBottomRight,frameInsideBottomRight + QPoint(5,0));
 
-    if(m_bBorderLeft)
+    if(m_bBorderLeft || m_bBorderOutSide)
     {
         QColor clr(m_strBorderLeftLineColor);
         QPen lpen(clr);
@@ -320,7 +322,7 @@ void HBorderSet::paintEvent(QPaintEvent *event)
         painter.setPen(lpen);
         painter.drawLine(frameInsideTopLeft,frameInsideBottomLeft);
     }
-    if(m_bBorderRight)
+    if(m_bBorderRight || m_bBorderOutSide)
     {
         QColor clr(m_strBorderRightLineColor);
         QPen rpen(clr);
@@ -328,7 +330,7 @@ void HBorderSet::paintEvent(QPaintEvent *event)
         painter.setPen(rpen);
         painter.drawLine(frameInsideTopRight,frameInsideBottomRight);
     }
-    if(m_bBorderTop)
+    if(m_bBorderTop || m_bBorderOutSide)
     {
         QColor clr(m_strBorderTopLineColor);
         QPen tpen(clr);
@@ -336,7 +338,7 @@ void HBorderSet::paintEvent(QPaintEvent *event)
         painter.setPen(tpen);
         painter.drawLine(frameInsideTopLeft,frameInsideTopRight);
     }
-    if(m_bBorderBottom)
+    if(m_bBorderBottom || m_bBorderOutSide)
     {
         QColor clr(m_strBorderBottomLineColor);
         QPen bpen(clr);
@@ -344,7 +346,6 @@ void HBorderSet::paintEvent(QPaintEvent *event)
         painter.setPen(bpen);
         painter.drawLine(frameInsideBottomLeft,frameInsideBottomRight);
     }
-    //painter.drawText();
 }
 
 void HBorderSet::currentIndexChanged_clicked(int index)
@@ -355,7 +356,6 @@ void HBorderSet::currentIndexChanged_clicked(int index)
     if(model)
     {
         m_strLineColor = model->item(index,0)->data().toString();
-        //m_strLineColor = QColor(Qt::GlobalColor(clrValue)).name();
     }
     updateLineStyleSet();
 }
@@ -373,6 +373,7 @@ void HBorderSet::onBorderLeftBtn_clicked()
     }
     m_nBorderLeftPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
+    m_bBorderOutSide = false;
     update();
 }
 
@@ -383,7 +384,6 @@ void HBorderSet::onBorderVerBtn_clicked()
 
 void HBorderSet::onBorderRightBtn_clicked()
 {
-
     if(m_strLineColor != m_strBorderRightLineColor && m_bBorderRight)
     {
         m_strBorderRightLineColor = m_strLineColor;
@@ -395,6 +395,7 @@ void HBorderSet::onBorderRightBtn_clicked()
     }
     m_nBorderRightPenStyle = m_nBorderPenStyle;
     ui->borderRightBtn->setChecked(m_bBorderRight);
+    m_bBorderOutSide = false;
     update();
 }
 
@@ -411,6 +412,7 @@ void HBorderSet::onBorderTopBtn_clicked()
     }
     m_nBorderTopPenStyle = m_nBorderPenStyle;
     ui->borderTopBtn->setChecked(m_bBorderTop);
+    m_bBorderOutSide = false;
     update();
 
 }
@@ -433,6 +435,7 @@ void HBorderSet::onBorderBottomBtn_clicked()
     }
     m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderBottomBtn->setChecked(m_bBorderBottom);
+    m_bBorderOutSide = false;
     update();
 
 }
@@ -440,6 +443,7 @@ void HBorderSet::onBorderBottomBtn_clicked()
 void HBorderSet::onBorderNoBtn_clicked()
 {
     m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = false;
+    m_bBorderOutSide = false;
     m_nBorderLeftPenStyle = m_nBorderRightPenStyle = m_nBorderPenStyle;
     m_nBorderTopPenStyle = m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
@@ -451,12 +455,24 @@ void HBorderSet::onBorderNoBtn_clicked()
 
 void HBorderSet::onBorderAllBtn_clicked()
 {
-
+    m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = true;
+    m_bBorderOutSide = false;
+    m_nBorderLeftPenStyle = m_nBorderRightPenStyle = m_nBorderPenStyle;
+    m_nBorderTopPenStyle = m_nBorderBottomPenStyle = m_nBorderPenStyle;
+    ui->borderLeftBtn->setChecked(m_bBorderLeft);
+    ui->borderBottomBtn->setChecked(m_bBorderBottom);
+    ui->borderTopBtn->setChecked(m_bBorderTop);
+    ui->borderRightBtn->setChecked(m_bBorderRight);
+    m_strBorderLeftLineColor = m_strLineColor;
+    m_strBorderRightLineColor = m_strLineColor;
+    m_strBorderTopLineColor = m_strLineColor;
+    m_strBorderBottomLineColor = m_strLineColor;
+    update();
 }
 
 void HBorderSet::onBorderOutSideBtn_clicked()
 {
-    m_bBorderLeft = m_bBorderBottom = m_bBorderTop = m_bBorderRight = true;
+    m_bBorderOutSide= true;
     m_nBorderLeftPenStyle = m_nBorderRightPenStyle = m_nBorderPenStyle;
     m_nBorderTopPenStyle = m_nBorderBottomPenStyle = m_nBorderPenStyle;
     ui->borderLeftBtn->setChecked(m_bBorderLeft);
@@ -534,5 +550,27 @@ void HBorderSet::updateLineStyleSet()
     item->setIcon(createPenStyleIcon(Qt::CustomDashLine));
     item->setData(Qt::UserRole,QVariant((quint8)QPS_CUSTOMDASHLINE));
     ui->lineStyleWidget->setItem(7,0,item);
+}
+
+void HBorderSet::save()
+{
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    pFormatSet->setBorderLeftPenStyle(m_nBorderLeftPenStyle);
+    pFormatSet->setBorderRightPenStyle(m_nBorderRightPenStyle);
+    pFormatSet->setBorderTopPenStyle(m_nBorderTopPenStyle);
+    pFormatSet->setBorderBottomPenStyle(m_nBorderBottomPenStyle);
+
+    pFormatSet->enableBorderOutSide(m_bBorderOutSide);
+    pFormatSet->enableBorderLeft(m_bBorderLeft);
+    pFormatSet->enableBorderRight(m_bBorderRight);
+    pFormatSet->enableBorderTop(m_bBorderTop);
+    pFormatSet->enableBorderBottom(m_bBorderBottom);
+
+    pFormatSet->setBorderLeftLineColor(m_strBorderLeftLineColor);
+    pFormatSet->setBorderRightLineColor(m_strBorderRightLineColor);
+    pFormatSet->setBorderTopLineColor(m_strBorderTopLineColor);
+    pFormatSet->setBorderBottomLineColor(m_strBorderBottomLineColor);
 }
 
