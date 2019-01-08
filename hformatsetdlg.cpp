@@ -20,10 +20,10 @@ HFormatSetDlg::HFormatSetDlg(HReportManager *mgr,QWidget *parent) :
     ui->setupUi(this);
     initDigitalSet();
     initBaseSet();
-    HFontSet* font = new HFontSet(m_pReportManager,this);//0
-    HBorderSet* border = new HBorderSet(m_pReportManager,this);//1
-    ui->tabWidget->insertTab(TAB_ATTR_FONT,font,QStringLiteral("字体"));//2
-    ui->tabWidget->insertTab(TAB_ATTR_BORDER,border,QStringLiteral("边框"));//3
+    m_fontSet = new HFontSet(m_pReportManager,this);//0
+    m_borderSet = new HBorderSet(m_pReportManager,this);//1
+    ui->tabWidget->insertTab(TAB_ATTR_FONT,m_fontSet,QStringLiteral("字体"));//2
+    ui->tabWidget->insertTab(TAB_ATTR_BORDER,m_borderSet,QStringLiteral("边框"));//3
     initPrintSheetSet();//4
     initPrintSet();//5
 
@@ -121,6 +121,12 @@ void HFormatSetDlg::initPrintSheetSet()
     ui->opTaskOtherLineEdit->setEnabled(false);
     ui->firststChangeCheckBox->setChecked(false);
     ui->stChangeOtherLineEdit->setEnabled(false);
+    QIntValidator *intValidator = new QIntValidator(0,100);
+    ui->opTaskLineEdit->setValidator(intValidator);
+    ui->opItemLineEdit->setValidator(intValidator);
+    ui->stChangeLineEdit->setValidator(intValidator);
+    ui->serialNoLineEdit->setValidator(intValidator);
+
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     HFormatSet* pFormatSet = m_pReportManager->formatSet();
@@ -210,12 +216,60 @@ void HFormatSetDlg::onCatagoryListWidget_clicked()
 
 void HFormatSetDlg::onHorizontalComboBox_changed()
 {
-
+    quint32 horizontalAlign = ui->horizontalComboBox->currentData().toInt();
+    if(QDT_LEFT == horizontalAlign)
+    {
+        m_nFormat|= QDT_LEFT;
+        if(QDT_HCENTER == (m_nFormat & QDT_HCENTER))
+            m_nFormat &= ~QDT_HCENTER;
+        if(QDT_RIGHT == (m_nFormat & QDT_RIGHT))
+            m_nFormat &= ~QDT_RIGHT;
+    }
+    else if(QDT_HCENTER == horizontalAlign)
+    {
+        m_nFormat|= QDT_HCENTER;
+        if(QDT_LEFT == (m_nFormat & QDT_LEFT))
+            m_nFormat &= ~QDT_LEFT;
+        if(QDT_RIGHT == (m_nFormat & QDT_RIGHT))
+            m_nFormat &= ~QDT_RIGHT;
+    }
+    else if(QDT_RIGHT == horizontalAlign)
+    {
+        m_nFormat|= QDT_RIGHT;
+        if(QDT_LEFT == (m_nFormat & QDT_LEFT))
+            m_nFormat &= ~QDT_LEFT;
+        if(QDT_HCENTER == (m_nFormat & QDT_HCENTER))
+            m_nFormat &= ~QDT_HCENTER;
+    }
 }
 
 void HFormatSetDlg::onVeritcalComboBox_changed()
 {
-
+    quint32 veritcalAlign = ui->veritcalComboBox->currentData().toInt();
+    if(QDT_TOP == veritcalAlign)
+    {
+        m_nFormat|= QDT_TOP;
+        if(QDT_VCENTER == (m_nFormat & QDT_VCENTER))
+            m_nFormat &= ~QDT_VCENTER;
+        if(QDT_BOTTOM == (m_nFormat & QDT_BOTTOM))
+            m_nFormat &= ~QDT_BOTTOM;
+    }
+    else if(QDT_VCENTER == veritcalAlign)
+    {
+        m_nFormat|= QDT_VCENTER;
+        if(QDT_TOP == (m_nFormat & QDT_TOP))
+            m_nFormat &= ~QDT_TOP;
+        if(QDT_BOTTOM == (m_nFormat & QDT_BOTTOM))
+            m_nFormat &= ~QDT_BOTTOM;
+    }
+    else if(QDT_BOTTOM == veritcalAlign)
+    {
+        m_nFormat|= QDT_BOTTOM;
+        if(QDT_TOP == (m_nFormat & QDT_TOP))
+            m_nFormat &= ~QDT_TOP;
+        if(QDT_VCENTER == (m_nFormat & QDT_VCENTER))
+            m_nFormat &= ~QDT_VCENTER;
+    }
 }
 
 void HFormatSetDlg::save()
@@ -225,17 +279,79 @@ void HFormatSetDlg::save()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     HFormatSet* pFormatSet = m_pReportManager->formatSet();
-    quint32 nFormatSet = pFormatSet->format();
+    pFormatSet->setFormat(m_nFormat);
     pFormatSet->enableAutoWrapText(ui->autoWrapTextCheckBox->isChecked());
     pFormatSet->enableMergeCell(ui->mergeCellCheckBox->isChecked());
+
+    //操作票打印显示设置
+    bool b = ui->prefixCheck->isChecked();
+    pFormatSet->enableSheetNoPrefix(b);
+    QString strText = ui->prefixLineEdit->text();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setSheetNoPrefix(strText);
+
+    b = ui->suffixCheck->isChecked();
+    pFormatSet->enableSheetNoSuffix(b);
+    strText = ui->suffixLineEdit->text();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setSheetNoSuffix(strText);
+
+    b = ui->sheetLencheckBox->isChecked();
+    pFormatSet->enableSheetNoLength(b);
+    strText = ui->sheetLenLineEdit->text();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setSheetNoLength(strText);
+
+    b = ui->tempSheetcheckBox->isChecked();
+    pFormatSet->enableSheetTempNo(b);
+    strText = ui->tempSheetLineEdit->text();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setSheetTempNo(strText);
+
+
+    //任务长度设置
+    pFormatSet->setOpTaskWordCount(ui->opTaskLineEdit->text().toUInt());
+    pFormatSet->setOpTermWordCount(ui->opItemLineEdit->text().toUInt());
+    pFormatSet->setStateChangeWordCount(ui->stChangeLineEdit->text().toUInt());
+    pFormatSet->setSerialNumWordCount(ui->serialNoLineEdit->text().toUInt());
+
+    //打印设置
+    pFormatSet->setPageLeftMargin(ui->leftMargin->text().toDouble());
+    pFormatSet->setPageRightMarin(ui->rightMargin->text().toDouble());
+    pFormatSet->setPageTopMargin(ui->topMargin->text().toDouble());
+    pFormatSet->setPageBottomMargin(ui->bottomMargin->text().toDouble());
+    pFormatSet->setPageHeaderHeight(ui->headMargin->text().toDouble());
+    pFormatSet->setPageFooterHeight(ui->footMargin->text().toDouble());
+
+    strText = ui->headText->toPlainText();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setPageHeaderText(strText);
+    strText = ui->footText->toPlainText();
+    if(strText.isNull())
+        strText = "";
+    pFormatSet->setPageFooterText(strText);
+
+    pFormatSet->enablePageShowGrid(ui->gridCheck->isChecked());
+    pFormatSet->enablePageShowColumnHeader(ui->rowCheck->isChecked());
+    pFormatSet->enablePageShowRowHeader(ui->colCheck->isChecked());
+    pFormatSet->enablePagePrintColour(ui->clrColor->isChecked());
 }
 
 void HFormatSetDlg::okBtn_clicked()
 {
+    save();
+    m_fontSet->save();
+    m_borderSet->save();
+    QDialog::accept();
 
 }
 
 void HFormatSetDlg::cancleBtn_clicked()
 {
-
+    QDialog::reject();
 }

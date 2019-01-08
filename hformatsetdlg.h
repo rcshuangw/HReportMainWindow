@@ -10,6 +10,8 @@
 //定义tab页
 #include <QDialog>
 class HReportManager;
+class HFontSet;
+class HBorderSet;
 namespace Ui {
 class HFormatSetDlg;
 }
@@ -39,6 +41,8 @@ public slots:
 private:
     Ui::HFormatSetDlg *ui;
     HReportManager* m_pReportManager;
+    HBorderSet* m_borderSet;
+    HFontSet* m_fontSet;
     quint32 m_nFormat;
     quint8 m_nTabIndex;
 

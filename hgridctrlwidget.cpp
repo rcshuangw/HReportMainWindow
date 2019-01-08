@@ -71,51 +71,53 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
     if(NULL == pItem) return;
     m_pGridCtrlInfo = pItem;//是通过指针赋值还是直接赋值  --huangw
 
-    m_pGridCtrl->setRowCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxRow + 1);
-    m_pGridCtrl->setColumnCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxCol + 1);
+    m_pGridCtrl->setRowCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxRow);
+    m_pGridCtrl->setColumnCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxCol);
     m_pGridCtrl->setFixedColumnCount(1);
     m_pGridCtrl->setFixedRowCount(1);
     int row ,col = 0;
-    if(1)
+    if(!m_bEnableVirtualMode)
     {
         //设置固定行列
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
             HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
-            if(pInfo) continue;
-            pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+            if(!pInfo) continue;
+            pInfo->m_GridCellItem.mask = 0;
             row = pInfo->m_GridCellItem.row;
             col = pInfo->m_GridCellItem.col;
             if (row < 1)
             {
-                pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_WORDBREAK;
-                pInfo->m_GridCellItem.strText = QString("%d").arg(row);
+                pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+                pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
             }
             else if (col < 1)
             {
-                pInfo->m_GridCellItem.nFormat = QDT_RIGHT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
-                pInfo->m_GridCellItem.strText = QString("%d").arg(col);
+                pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+                pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
             }
             else
             {
-                pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
+                pInfo->m_GridCellItem.mask = GVIF_ALL;
+                pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
             }
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
-    //else if(!m_bEnableShowHorHeader && !m_bEnableShowVerHeader)
+    else
     {
         for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
         {
             HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
             if(pInfo) continue;
-            pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+            pInfo->m_GridCellItem.mask = GVIF_ALL;
             row = pInfo->m_GridCellItem.row;
             col = pInfo->m_GridCellItem.col;
-            pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
+            pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
             m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
         }
     }
+    m_pGridCtrl->setColumnWidth(0,25);
     m_pGridCtrl->autoColumnHeader();
     m_pGridCtrl->autoRowHeader();
 }
@@ -337,18 +339,18 @@ void HGridCtrlWidget::cellFormat(HFormatSet* pFormatSet)
     pFormatSet->setTextBkColor(pCell->backClr().name());
 
     //边框
-    pFormatSet->setBorderPenStyle(pCell->borderStyle());
+    //pFormatSet->setBorderPenStyle(pCell->borderStyle());
     pFormatSet->setBorderLeftPenStyle(pCell->borderLeftStyle());
     pFormatSet->setBorderRightPenStyle(pCell->borderRightStyle());
     pFormatSet->setBorderTopPenStyle(pCell->borderTopStyle());
     pFormatSet->setBorderBottomPenStyle(pCell->borderBottomStyle());
 
-    pFormatSet->enableBorder(pCell->isDrawBorder());
+    //pFormatSet->enableBorderOutSide(pCell->isDrawBorderOutSide());
     pFormatSet->enableBorderLeft(pCell->isDrawBorderLeft());
     pFormatSet->enableBorderRight(pCell->isDrawBorderRight());
     pFormatSet->enableBorderTop(pCell->isDrawBorderTop());
     pFormatSet->enableBorderBottom(pCell->isDrawBorderBottom());
-    pFormatSet->setBorderLineColor(pCell->borderColor().name());
+    //pFormatSet->setBorderLineColor(pCell->borderColor().name());
     pFormatSet->setBorderLeftLineColor(pCell->borderLeftColor().name());
     pFormatSet->setBorderRightLineColor(pCell->borderRightColor().name());
     pFormatSet->setBorderTopLineColor(pCell->borderTopColor().name());

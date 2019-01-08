@@ -67,6 +67,7 @@ public:
 public slots:
 
     void new_clicked();
+    void save_clicked();
     void Open(const QString&,const int graphID);
     void Del(const QString&,const int graphID);
     void ImportFile(const QString&);

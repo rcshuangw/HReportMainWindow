@@ -21,8 +21,8 @@ void HReportMainWindow::new_clicked()
     {
         GC_ITEM item;
         item.strReportName = reportNewdlg.strReportName;
-        item.nMaxCol = reportNewdlg.nMaxCol;
-        item.nMaxRow = reportNewdlg.nMaxRow;
+        item.nMaxCol = reportNewdlg.nMaxCol+1;//如果不+1，输入的就是包含行列头的
+        item.nMaxRow = reportNewdlg.nMaxRow+1;
         item.btType = 0;
         item.wReportID = 0;
         m_pReportManager->gridCtrlFile()->addGridCtrlInfo(&item);
@@ -31,6 +31,13 @@ void HReportMainWindow::new_clicked()
         return;
     m_pReportTreeWidget->addReportTreeWidgetItem();
     m_pReportMainWidget->newReportWidget();
+}
+
+void HReportMainWindow::save_clicked()
+{
+    if(!m_pReportManager)
+        return;
+    m_pReportManager->saveGridCtrlFile();
 }
 
 void HReportMainWindow::Open(const QString&,const int graphID)
@@ -244,7 +251,7 @@ void HReportMainWindow::borderNone_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
-    m_pReportManager->formatSet()->enableBorder(false);
+    m_pReportManager->formatSet()->enableBorderOutSide(false);
     m_pReportManager->formatSet()->enableBorderTop(false);
     m_pReportManager->formatSet()->enableBorderBottom(false);
     m_pReportManager->formatSet()->enableBorderLeft(false);
@@ -267,7 +274,7 @@ void HReportMainWindow::borderOutSide_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
-    m_pReportManager->formatSet()->enableBorder(true);
+    m_pReportManager->formatSet()->enableBorderOutSide(true);
     m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_BORDER);
 }
 
@@ -630,7 +637,10 @@ void HReportMainWindow::option_clicked()
         return;
     HFormatSetDlg dlg(m_pReportManager);
     dlg.setTabIndex(TAB_ATTR_PRINTSHEET);
-    dlg.exec();
+    if(QDialog::Accepted == dlg.exec())
+    {
+
+    }
 }
 
 void HReportMainWindow::baseOption_clicked()
@@ -639,7 +649,10 @@ void HReportMainWindow::baseOption_clicked()
         return;
     HFormatSetDlg dlg(m_pReportManager);
     dlg.setTabIndex(TAB_ATTR_BASE);
-    dlg.exec();
+    if(QDialog::Accepted == dlg.exec())
+    {
+
+    }
 }
 
 void HReportMainWindow::fontOption_clicked()
@@ -648,7 +661,10 @@ void HReportMainWindow::fontOption_clicked()
         return;
     HFormatSetDlg dlg(m_pReportManager);
     dlg.setTabIndex(TAB_ATTR_FONT);
-    dlg.exec();
+    if(QDialog::Accepted == dlg.exec())
+    {
+
+    }
 }
 
 void HReportMainWindow::printOption_clicked()

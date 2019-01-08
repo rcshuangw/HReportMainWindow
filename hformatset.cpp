@@ -668,7 +668,7 @@ bool HFormatSet::isPageShowGrid()
     return m_bPageShowGrid;
 }
 
-void HFormatSet::setPageShowColumnHeader(bool b)
+void HFormatSet::enablePageShowColumnHeader(bool b)
 {
     m_bPageShowCol = b;
 }
@@ -678,7 +678,7 @@ bool HFormatSet::isPageShowColumnHeader()
     return m_bPageShowCol;
 }
 
-void HFormatSet::setPageShowRowHeader(bool b)
+void HFormatSet::enablePageShowRowHeader(bool b)
 {
     m_bPageShowRow = b;
 }
@@ -688,7 +688,7 @@ bool HFormatSet::isPageShowRowHeader()
     return m_bPageShowRow;
 }
 
-void HFormatSet::setPagePrintColour(bool b)
+void HFormatSet::enablePagePrintColour(bool b)
 {
     m_bPagePrintColour = b;
 }

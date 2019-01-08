@@ -5,7 +5,7 @@
 #include "hgridglobal.h"
 #include "hgridcelldef.h"
 class HGridCellInfo;
-//表格控件信息
+//表格信息
 class  HGridCtrlInfo
 {
 public:
@@ -16,12 +16,15 @@ public:
     void saveGridCtrlData(int v,QDataStream* ds);
 
     HGridCtrlInfo& operator =(const HGridCtrlInfo&);
+
+public:
+    void newGridCellData(int row,int col);
 public:
     GC_ITEM m_GridCtrlItem;
     QList<HGridCellInfo*> m_pGridCellItemList;
 };
 
-//表格信息
+//单元格信息
 class  HGridCellInfo
 {
 public:
@@ -31,6 +34,8 @@ public:
     //gvItem初始化必须要赋值
     void loadGridCellData(int v,QDataStream* ds);
     void saveGridCellData(int v,QDataStream* ds);
+
+
 public:
     GV_ITEM m_GridCellItem;
 };

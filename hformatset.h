@@ -142,11 +142,11 @@ public:
 
     void enablePageShowGrid(bool);
     bool isPageShowGrid();
-    void setPageShowColumnHeader(bool);
+    void enablePageShowColumnHeader(bool);
     bool isPageShowColumnHeader();
-    void setPageShowRowHeader(bool);
+    void enablePageShowRowHeader(bool);
     bool isPageShowRowHeader();
-    void setPagePrintColour(bool);
+    void enablePagePrintColour(bool);
     bool isPagePrintColour();
 
 signals:
