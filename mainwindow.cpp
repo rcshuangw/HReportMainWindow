@@ -479,125 +479,6 @@ void HReportMainWindow::createCategoryMain(SARibbonCategory *page)
     fontOptAct->setToolTip(QStringLiteral("字体和边框设置"));
     fontPannel->addOptionAction(fontOptAct);
 
-    return;
-
-    /*
-    pannel->addSeparator();
-
-    act = new QAction(this);
-    act->setIcon(QIcon(":/icon/icon/folder.png"));
-    act->setText(QStringLiteral("DelayedPopup"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setPopupMode(QToolButton::DelayedPopup);
-    connect(act,&QAction::triggered,this,&MainWindow::onDelayedPopupCheckabletriggered);
-
-    act = new QAction(this);
-    act->setIcon(QIcon(":/icon/icon/folder.png"));
-    act->setText(QStringLiteral("MenuButtonPopup"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setPopupMode(QToolButton::MenuButtonPopup);
-    connect(act,&QAction::triggered,this,&MainWindow::onMenuButtonPopupCheckabletriggered);
-
-    act = new QAction(this);
-    act->setIcon(QIcon(":/icon/icon/Graph-add.png"));
-    act->setText(QStringLiteral("InstantPopup"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setPopupMode(QToolButton::InstantPopup);
-    connect(act,&QAction::triggered,this,&MainWindow::onInstantPopupCheckabletriggered);
-
-    act = new QAction(this);
-    act->setCheckable(true);
-    act->setIcon(QIcon(":/icon/icon/folder.png"));
-    act->setText(QStringLiteral("DelayedPopup"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setPopupMode(QToolButton::DelayedPopup);
-    btn->setCheckable(true);
-    connect(act,&QAction::triggered,this,&MainWindow::onDelayedPopupCheckableTest);
-
-    act = new QAction(this);
-    act->setCheckable(true);
-    act->setIcon(QIcon(":/icon/icon/folder.png"));
-    act->setText(QStringLiteral("MenuButtonPopup\n checkable"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setPopupMode(QToolButton::MenuButtonPopup);
-    btn->setCheckable(true);
-    connect(act,&QAction::triggered,this,&MainWindow::onMenuButtonPopupCheckableTest);
-
-    act = new QAction(this);
-    act->setCheckable(true);
-    act->setIcon(QIcon(":/icon/icon/Graph-add.png"));
-    act->setText(QStringLiteral("InstantPopup"));
-    act->setMenu(menu);
-    btn = pannel->addLargeAction(act);
-    btn->setCheckable(true);
-    btn->setPopupMode(QToolButton::InstantPopup);
-    connect(act,&QAction::triggered,this,&MainWindow::onInstantPopupCheckableTest);
-
-    SARibbonPannel* panne2 = page->addPannel(QStringLiteral("pannel 2"));
-    act = new QAction(this);
-    act->setCheckable(true);
-    act->setIcon(QIcon(":/icon/icon/Graph-add.png"));
-    act->setText(QStringLiteral("show\nContext"));
-    btn = panne2->addLargeAction(act);
-    btn->setCheckable(true);
-    //btn->setPopupMode(QToolButton::InstantPopup);
-    connect(act,&QAction::triggered,this,[this](bool on){
-        if(on)
-            m_ribbonMenuBar->showContextCategory(this->m_contextCategory);
-        else
-            m_ribbonMenuBar->hideContextCategory(this->m_contextCategory);
-    });
-
-    act = new QAction(this);
-    act->setCheckable(true);
-    act->setIcon(QIcon(":/icon/icon/Graph-add.png"));
-    act->setText(QStringLiteral("unactive"));
-    act->setMenu(menu);
-    btn = panne2->addLargeAction(act);
-    btn->setCheckable(true);
-    btn->setPopupMode(QToolButton::InstantPopup);
-    btn->setEnabled(false);
-
-
-
-
-    com = new SARibbonComboBox(this);
-    com->setSizePolicy(QSizePolicy::Expanding,
-                       QSizePolicy::Fixed);
-    com->setWindowIcon(QIcon(":/icon/icon/folder.png"));
-    com->setWindowTitle("ComboBox Editable");
-    for (int i=0;i<40;++i)
-        com->addItem("111111111111");
-    pannel->addWidget(com);
-
-    SARibbonLineEdit* lineEdit = new SARibbonLineEdit(this);
-    lineEdit->setSizePolicy(QSizePolicy::Expanding,
-                       QSizePolicy::Fixed);
-    lineEdit->setWindowIcon(QIcon(":/icon/icon/folder.png"));
-    lineEdit->setWindowTitle("Line Edit");
-    lineEdit->setText("SARibbonLineEdit");
-    pannel->addWidget(lineEdit);
-QWidget* w = lineEdit->parentWidget();
-while(w)
-{
-    qDebug() << w->metaObject()->className();
-    w = w->parentWidget();
-}
-    SARibbonCheckBox* checkBox = new SARibbonCheckBox(this);
-    checkBox->setSizePolicy(QSizePolicy::Expanding,
-                       QSizePolicy::Fixed);
-    checkBox->setWindowIcon(QIcon(":/icon/icon/folder.png"));
-    checkBox->setText("checkBox");
-    pannel->addWidget(checkBox);*/
-
-    //pannel->setExpanding();
-    //QAction* optAct = new QAction(this);
-    //pannel->addOptionAction(optAct);
 }
 
 void HReportMainWindow::createCategoryOther(SARibbonCategory *page)
@@ -690,7 +571,7 @@ void HReportMainWindow::initReportConnect()
     //
     connect(m_pReportMainWidget,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
     //树相关的消息
-    connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
+    //connect(m_pReportTreeWidget,SIGNAL(reportNew()),this,SLOT(new_clicked));//新建
     connect(m_pReportTreeWidget,SIGNAL(reportOpen(const QString&,const int)),this,SLOT(Open(const QString&,const int)));//打开
     connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
     connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));

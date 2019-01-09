@@ -27,6 +27,11 @@ public:
     void createReportBrowserWidget();
     void createReportEditorWidget();
 
+    void newReportWidget();
+    void updateReportWidget();
+    void openReportWidget();
+    void delReportWidget();
+
 public:
     //操作
     void paste();
@@ -43,14 +48,10 @@ public:
     bool removeGridRow();
     bool removeGridColumn();
     void autoSizeRows();
-    void autoSizeColumns();
-
-
-    void newReportWidget();
+    void autoSizeColumns();   
     void printReportWidget();
     void printPreviewReportWidget();
 
-    void updateReportWidget();
 signals:
      void gridcellclicked();
 private:

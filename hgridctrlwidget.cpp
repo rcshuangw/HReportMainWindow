@@ -75,49 +75,42 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
     m_pGridCtrl->setColumnCount(m_pGridCtrlInfo->m_GridCtrlItem.nMaxCol);
     m_pGridCtrl->setFixedColumnCount(1);
     m_pGridCtrl->setFixedRowCount(1);
-    int row ,col = 0;
+    int row = 0,col = 0;
+    //设置固定行列
+    for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
+    {
+        HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
+        if(!pInfo) continue;
+        pInfo->m_GridCellItem.mask = 0;
+        row = pInfo->m_GridCellItem.row;
+        col = pInfo->m_GridCellItem.col;
+        if (row < 1)
+        {
+            pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+            pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
+        }
+        else if (col < 1)
+        {
+            pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
+            pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
+        }
+        else
+        {
+            pInfo->m_GridCellItem.mask = GVIF_ALL;
+            pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
+        }
+        m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
+    }
     if(!m_bEnableVirtualMode)
     {
-        //设置固定行列
-        for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
-        {
-            HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
-            if(!pInfo) continue;
-            pInfo->m_GridCellItem.mask = 0;
-            row = pInfo->m_GridCellItem.row;
-            col = pInfo->m_GridCellItem.col;
-            if (row < 1)
-            {
-                pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
-                pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
-            }
-            else if (col < 1)
-            {
-                pInfo->m_GridCellItem.mask = GVIF_TEXT|GVIF_FORMAT;
-                pInfo->m_GridCellItem.nFormat = QDT_CENTER|QDT_SINGLELINE|QDT_NOPREFIX;
-            }
-            else
-            {
-                pInfo->m_GridCellItem.mask = GVIF_ALL;
-                pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
-            }
-            m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
-        }
+
+        m_pGridCtrl->setColumnWidth(0,25);
     }
     else
     {
-        for(int i = 0; i < m_pGridCtrlInfo->m_pGridCellItemList.count();i++)
-        {
-            HGridCellInfo* pInfo = (HGridCellInfo*)m_pGridCtrlInfo->m_pGridCellItemList[i];
-            if(pInfo) continue;
-            pInfo->m_GridCellItem.mask = GVIF_ALL;
-            row = pInfo->m_GridCellItem.row;
-            col = pInfo->m_GridCellItem.col;
-            pInfo->m_GridCellItem.nFormat = QDT_LEFT|QDT_VCENTER|QDT_SINGLELINE|QDT_NOPREFIX;
-            m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
-        }
+        m_pGridCtrl->setColumnWidth(0,0);
     }
-    m_pGridCtrl->setColumnWidth(0,25);
+    //m_pGridCtrl->setColumnWidth(0,25);
     m_pGridCtrl->autoColumnHeader();
     m_pGridCtrl->autoRowHeader();
 }
@@ -153,6 +146,7 @@ void HGridCtrlWidget::enableShowTab(bool b)
 
 void HGridCtrlWidget::setVirtualMode(bool b)
 {
+    m_bEnableVirtualMode = b;
     m_pGridCtrl->setVirtualMode(b);
 }
 

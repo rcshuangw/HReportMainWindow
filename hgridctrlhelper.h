@@ -53,8 +53,9 @@ public:
     HGridCtrlInfo* addGridCtrlInfo(GC_ITEM*);
     bool delGridCtrlInfo(int id);
     bool findGridCtrlInfo(int id);
+    bool renameGridCtrlInfo(int id,const QString&);
     HGridCtrlInfo*  getGridCtrlInfoById(int id);//通过模板ID来获取对应的表格控件信息
-    void setGridCtrlInfoById(int id, HGridCtrlInfo *);
+    void setGridCtrlInfoById(int id);
     HGridCtrlInfo*  getCurGridCtrlInfo(){return m_pCurGridCtrlInfo;}
 
 public:

@@ -22,6 +22,23 @@ void HReportBrowserWidget::newReportWidget()
     m_pGridReportWidget->show();
 }
 
+void HReportBrowserWidget::openReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pGridReportWidget->clearGridReportWidget();
+    m_pGridReportWidget->setNumSheet(1);
+    m_pGridReportWidget->updateGridReportWidget();
+    m_pGridReportWidget->show();
+}
+
+void HReportBrowserWidget::delReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pGridReportWidget->clearGridReportWidget();
+}
+
 void HReportBrowserWidget::printReportWidget()
 {
     if(!m_pReportManager)
@@ -49,4 +66,9 @@ void HReportBrowserWidget::cut()
 void HReportBrowserWidget::copy()
 {
 
+}
+
+void HReportBrowserWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
+{
+    m_pGridReportWidget->setCellFormat(pFormatSet,formatType);
 }

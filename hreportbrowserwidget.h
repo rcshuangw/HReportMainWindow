@@ -10,13 +10,20 @@ public:
     HReportBrowserWidget(HReportManager* mgr,QWidget* parent = 0);
 
 public:
+
+    void newReportWidget();
+    void openReportWidget();
+    void delReportWidget();
+
     //操作
     void paste();
     void cut();
     void copy();
-    void newReportWidget();
+
     void printReportWidget();
     void printPreviewReportWidget();
+
+    void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
     /*void initGridReportWidget();
     void updateGridReportWidget();
     void setGridReportType(quint8 uGridReportType);

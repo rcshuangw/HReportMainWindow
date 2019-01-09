@@ -13,6 +13,8 @@ public:
 
 public:
     void newReportWidget();
+    void openReportWidget();
+    void delReportWidget();
 
 public:
     void paste();

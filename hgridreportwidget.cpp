@@ -58,10 +58,11 @@ void HGridReportWidget::updateGridReportWidget()
         for(int i = 0; i < nAddCount; i++)
         {
             HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
+
             connect(w,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
-            w->setGridCtrlItem(pInfo);
             setGridCtrlAttr(w);
+            w->setGridCtrlItem(pInfo);
             w->initReportWidget();
             QString str = QString(QStringLiteral("第%1页")).arg(num+1);
             m_tabWidget->insertTab(i,w,str);

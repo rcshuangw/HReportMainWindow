@@ -65,6 +65,22 @@ void HReportMaiWidget::newReportWidget()
     m_pReportEditorWidget->newReportWidget();
 }
 
+void HReportMaiWidget::openReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pReportBrowserWidget->openReportWidget();
+    m_pReportEditorWidget->openReportWidget();
+}
+
+void HReportMaiWidget::delReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pReportBrowserWidget->delReportWidget();
+    m_pReportEditorWidget->delReportWidget();
+}
+
 void HReportMaiWidget::printReportWidget()
 {
     if(!m_pReportManager)

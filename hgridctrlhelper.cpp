@@ -319,13 +319,15 @@ HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GC_ITEM* pItem)
 bool HGridCtrlFile::delGridCtrlInfo(int id)
 {
     bool bok = findGridCtrlInfo(id);
-    if(!bok) return true;
+    if(!bok) return false;
     HGridCtrlInfo* pInfo = getGridCtrlInfoById(id);
     if(pInfo)
     {
         m_pGridCtrlInfoList.removeOne(pInfo);
         delete pInfo;
+        pInfo = NULL;
     }
+    m_pCurGridCtrlInfo = NULL;
     return true;
 }
 
@@ -342,6 +344,19 @@ bool HGridCtrlFile::findGridCtrlInfo(int id)
     return false;
 }
 
+
+bool HGridCtrlFile::renameGridCtrlInfo(int id,const QString& name)
+{
+    bool bok = findGridCtrlInfo(id);
+    if(!bok) return false;
+    HGridCtrlInfo* pInfo = getGridCtrlInfoById(id);
+    if(pInfo)
+    {
+        pInfo->m_GridCtrlItem.strReportName = name;
+    }
+    return true;
+}
+
 //通过模板ID来获取对应的表格控件信息
 HGridCtrlInfo*  HGridCtrlFile::getGridCtrlInfoById(int id)
 {
@@ -354,16 +369,14 @@ HGridCtrlInfo*  HGridCtrlFile::getGridCtrlInfoById(int id)
         if(pInfo && pInfo->m_GridCtrlItem.wReportID == id)
             break;
     }
-    m_pCurGridCtrlInfo;
     return pInfo;
 }
 
-void HGridCtrlFile::setGridCtrlInfoById(int id, HGridCtrlInfo *pInfo)
+void HGridCtrlFile::setGridCtrlInfoById(int id)
 {
     bool bok = findGridCtrlInfo(id);
     if(!bok) return;
-    HGridCtrlInfo* pSrcInfo = getGridCtrlInfoById(id);
-    *pSrcInfo = *pInfo;
+    m_pCurGridCtrlInfo = getGridCtrlInfoById(id);
 }
 
 

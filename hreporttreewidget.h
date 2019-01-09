@@ -4,6 +4,7 @@
 class HReportManager;
 class HReportTreeWidget : public QTreeWidget
 {
+    Q_OBJECT
 public:
     HReportTreeWidget(HReportManager* mgr,QWidget *parent = Q_NULLPTR);
 
@@ -21,24 +22,18 @@ public:
     void importReportTreeWigetItem();
 
     //根目录右键菜单
-    void initReportMenu(QContextMenuEvent* event);
-
-    //画面右键菜单
-    void intReportFileMenu(QContextMenuEvent* event);
+    void initReportTreeWidgetMenu(QContextMenuEvent* event);
 
 public slots:
 
-    //新建报表
-    void newReport();
+    //重命名报表
+    void renameReport();
 
     //打开报表
     void openReport();
 
     //删除报表
     void delReport();
-
-    //另存报表
-    void saveAsReport();
 
     //导入报表文件
     void importReportFile();

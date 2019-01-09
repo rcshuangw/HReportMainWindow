@@ -29,6 +29,23 @@ void HReportEditorWidget::newReportWidget()
     m_pGridReportWidget->show();
 }
 
+void HReportEditorWidget::openReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pGridReportWidget->clearGridReportWidget();
+    m_pGridReportWidget->setNumSheet(1);
+    m_pGridReportWidget->updateGridReportWidget();
+    m_pGridReportWidget->show();
+}
+
+void HReportEditorWidget::delReportWidget()
+{
+    if(!m_pReportManager)
+        return;
+    m_pGridReportWidget->clearGridReportWidget();
+}
+
 /*
 void HGridReportWidget::initGridReportWidget()
 {

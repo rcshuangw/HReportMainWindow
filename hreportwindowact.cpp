@@ -40,14 +40,20 @@ void HReportMainWindow::save_clicked()
     m_pReportManager->saveGridCtrlFile();
 }
 
-void HReportMainWindow::Open(const QString&,const int graphID)
+void HReportMainWindow::Open(const QString&,const int reportID)
 {
-
+    if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
+        return;
+    m_pReportManager->gridCtrlFile()->setGridCtrlInfoById(reportID);
+    m_pReportMainWidget->openReportWidget();
 }
 
-void HReportMainWindow::Del(const QString&,const int graphID)
+void HReportMainWindow::Del(const QString&,const int reportID)
 {
-
+    if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
+        return;
+    m_pReportManager->gridCtrlFile()->delGridCtrlInfo(reportID);
+    m_pReportMainWidget->delReportWidget();
 }
 
 void HReportMainWindow::ImportFile(const QString&)
