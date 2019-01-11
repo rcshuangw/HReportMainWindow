@@ -38,7 +38,9 @@ public:
 
 signals:
     void gridcellclicked();
-public:
+
+
+private:
     HReportManager* m_pReportManager;
     HGridReportWidget* m_pGridReportWidget;
 };

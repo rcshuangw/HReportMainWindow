@@ -175,35 +175,33 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 break;
 
             HGridCellBase* pCell = pGridCtrl->getCell(m_nCurrPrintRow, col);
-            /*if (pCell)
+            if (pCell)
             {
-                //Used for merge cells
-                //by Huang Wei
                 int row=m_nCurrPrintRow;
-                if(!pCell->IsMerged())
+                if(!pCell->isMerged())
                 {
-                    if(!pCell->IsMergeWithOthers())
+                    if(!pCell->isMergeWithOthers())
                     {
-                        pCell->PrintCell(pDC, row, col, rect);
+                        pCell->printCell(pDC, row, col, rect);
                     }
                 }
                 else
                 {
-                    CRect mergerect=rect;
-                    if(cellRangeRect(pCell->m_MergeRange,&mergerect))
+                    QRect mergerect=rect;
+                    if(pGridCtrl->cellRangeRect(pCell->mergeRange(),mergerect))
                     {
-                        //mergerect.DeflateRect(0,0,1,1);
-                        mergerect.OffsetRect(rect.TopLeft()-mergerect.TopLeft());
-                        pCell->PrintCell(pDC, row, col, mergerect);
+                        //把mergerect的top,left移动到rect位置
+                        mergerect.setTopLeft(rect.topLeft());
+                        pCell->printCell(pDC, row, col, mergerect);
                     }
                 }
-            }*/
+            }
 
-            if (pCell)
-                pCell->printCell(pDC, m_nCurrPrintRow, col, rect);
+            //if (pCell)
+            //    pCell->printCell(pDC, m_nCurrPrintRow, col, rect);
 
             //增加列和行是否允许绘制
-            if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_HORZ)
+            /*if (pGridCtrl->gridLines() == GVL_BOTH || pGridCtrl->gridLines() == GVL_HORZ)
             {
                 int Overlap = (col == 0 || m_nCurrPrintRow == pGridCtrl->fixedRowCount())? 0:0;
                 pDC->drawLine(QPoint(rect.left()-Overlap, rect.bottom()),QPoint(rect.right(), rect.bottom()));
@@ -219,7 +217,7 @@ void HReportPrint::onPrint(QPainter *pDC, HPrintInfo *pInfo)
                 if (col == 0 || col == pGridCtrl->fixedColumnCount()) {
                     pDC->drawLine(QPoint(rect.left(), rect.top()-Overlap),QPoint(rect.left(), rect.bottom()));
                 }
-            }
+            }*/
         }
         m_nCurrPrintRow++;
         bFirstPrintedRow = false;

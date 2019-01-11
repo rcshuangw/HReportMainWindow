@@ -3,6 +3,7 @@
 #include <QWidget>
 class HReportManager;
 class HGridReportWidget;
+class HFormatSet;
 //表格预览窗口
 class HReportBrowserWidget : public QWidget
 {

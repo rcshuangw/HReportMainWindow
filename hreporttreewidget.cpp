@@ -103,6 +103,7 @@ void HReportTreeWidget::initReportTreeWidgetMenu(QContextMenuEvent* event)
     connect(renameAct,SIGNAL(triggered(bool)),this,SLOT(renameReport()));
 
     QAction *delAct = new QAction(QStringLiteral("删除表格文件"),this);
+    delAct->setIcon(QIcon(":/icon/icon/delGrid.png"));
     delAct->setStatusTip(QStringLiteral("删除一个表格模板文件"));
     menu->addAction(delAct);
     connect(delAct,SIGNAL(triggered(bool)),this,SLOT(delReport()));

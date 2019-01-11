@@ -6,6 +6,8 @@
 #include <QTabWidget>
 #include "hgridctrl.h"
 #include "hformatset.h"
+
+
 class HReportManager;
 class HGridReportWidget : public QWidget
 {
@@ -44,6 +46,10 @@ public:
     void enableShowEditBar(bool);
     void enableShowTab(bool);
     void enableVritual(bool);
+    void enableHorizontalHeader(bool bEnable = true);
+    void enableVerticalHeader(bool bEnable = true);
+    void enablePrintColour(bool);
+    void enableShowGrids(bool);
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////操作
@@ -53,6 +59,7 @@ public:
     void copy();
     void setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll = false);
     void cellFormat(HFormatSet* pFormatSet);
+    void setPrintFormat(HFormatSet* pFormatSet);
 
     //操作
     bool mergeCell();
@@ -82,5 +89,9 @@ private:
     bool m_bEnableShowEditBar;
     bool m_bEnableShowTab;
     bool m_bEnableVirtual;
+    bool m_bHorizontalHeader;
+    bool m_bVerticalHeader;
+    bool m_bShowGrids;
+    bool m_bPrintColour;
 };
 #endif // HGRIDREPORTWIDGET_H

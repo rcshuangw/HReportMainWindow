@@ -11,6 +11,10 @@ HGridReportWidget::HGridReportWidget(HReportManager* mgr,QWidget *parent)
     m_bEnableShowEditBar = false;
     m_bEnableShowTab = false;
     m_bEnableVirtual = false;
+    m_bHorizontalHeader = true;
+    m_bVerticalHeader = true;
+    m_bShowGrids = true;
+    m_bPrintColour = true;
     initGridReportWidget();
 }
 
@@ -62,7 +66,7 @@ void HGridReportWidget::updateGridReportWidget()
             connect(w,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             setGridCtrlAttr(w);
-            w->setGridCtrlItem(pInfo);
+            w->setGridCtrlItem(pInfo);         
             w->initReportWidget();
             QString str = QString(QStringLiteral("第%1页")).arg(num+1);
             m_tabWidget->insertTab(i,w,str);
@@ -95,6 +99,10 @@ void HGridReportWidget::setGridCtrlAttr(QWidget *w)
     pGridCtrlWidget->enableShowEditBar(m_bEnableShowEditBar);
     pGridCtrlWidget->enableShowTab(m_bEnableShowTab);
     pGridCtrlWidget->setVirtualMode(m_bEnableVirtual);
+    pGridCtrlWidget->enableHorizontalHeader(m_bHorizontalHeader);
+    pGridCtrlWidget->enableVerticalHeader(m_bVerticalHeader);
+    pGridCtrlWidget->enablePrintColour(m_bPrintColour);
+    pGridCtrlWidget->enableShowGrids(m_bShowGrids);
 }
 
 void HGridReportWidget::setEditorGridReportAttr()
@@ -106,9 +114,24 @@ void HGridReportWidget::setEditorGridReportAttr()
 
 void HGridReportWidget::setBrowserGridReportAttr()
 {
+    //浏览框就是打印页，有很多属性和编辑框是不一样
     enableShowEditBar(false);
     enableShowTab(true);
     enableVritual(true);
+
+    enableHorizontalHeader(false);
+    enableVerticalHeader(false);
+    enableShowGrids(true);
+    enablePrintColour(false);
+    return;
+    if(!m_pReportManager || !m_pReportManager->formatSet())
+        return;
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+    enableHorizontalHeader(pFormatSet->isPageShowRowHeader());
+    enableVerticalHeader(pFormatSet->isPageShowColumnHeader());
+    enableShowGrids(pFormatSet->isPageShowGrid());
+    enablePrintColour(pFormatSet->isPagePrintColour());
+
 }
 
 bool HGridReportWidget::loadGridCtrlFile(const char* filename)
@@ -212,6 +235,62 @@ void HGridReportWidget::enableVritual(bool b)
     }
 }
 
+void HGridReportWidget::enableHorizontalHeader(bool b)
+{
+    m_bHorizontalHeader = b;
+    int nTabNum = m_tabWidget->count();
+    for(int i = 0; i < nTabNum; i++)
+    {
+        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
+        if(w)
+        {
+            w->enableHorizontalHeader(b);
+        }
+    }
+}
+
+void HGridReportWidget::enableVerticalHeader(bool b)
+{
+    m_bVerticalHeader = b;
+    int nTabNum = m_tabWidget->count();
+    for(int i = 0; i < nTabNum; i++)
+    {
+        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
+        if(w)
+        {
+            w->enableVerticalHeader(b);
+        }
+    }
+}
+
+void HGridReportWidget::enablePrintColour(bool b)
+{
+    m_bPrintColour = b;
+    int nTabNum = m_tabWidget->count();
+    for(int i = 0; i < nTabNum; i++)
+    {
+        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
+        if(w)
+        {
+            w->enablePrintColour(b);
+        }
+    }
+}
+
+void HGridReportWidget::enableShowGrids(bool b)
+{
+    m_bShowGrids = b;
+    int nTabNum = m_tabWidget->count();
+    for(int i = 0; i < nTabNum; i++)
+    {
+        HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(i);
+        if(w)
+        {
+            w->enableShowGrids(b);
+        }
+    }
+}
+
 void HGridReportWidget::paste()
 {
     int index = m_tabWidget->currentIndex();
@@ -245,6 +324,16 @@ void HGridReportWidget::copy()
         HGridCtrl* pGridCtrl = w->gridCtrl();
         if(pGridCtrl)
             pGridCtrl->onEditCopy();
+    }
+}
+
+void HGridReportWidget::setPrintFormat(HFormatSet* pFormatSet)
+{
+    int index = m_tabWidget->currentIndex();
+    HGridCtrlWidget* w = (HGridCtrlWidget*)m_tabWidget->widget(index);
+    if(w)
+    {
+        w->setPrintFormat(pFormatSet);
     }
 }
 

@@ -68,6 +68,13 @@
         <file>icon/FileSaveAs.png</file>
         <file>icon/OpSheet.png</file>
         <file>icon/HideRibbon.png</file>
+        <file>icon/delGrid.png</file>
+        <file>icon/insertVar.png</file>
+        <file>icon/removeVar.png</file>
+        <file>icon/Refresh.png</file>
+        <file>icon/nextSheet.png</file>
+        <file>icon/previousSheet.png</file>
+        <file>icon/selectSheet.png</file>
     </qresource>
     <qresource prefix="/tree">
         <file>icon/spreadsheets.png</file>

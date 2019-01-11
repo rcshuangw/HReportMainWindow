@@ -128,6 +128,7 @@ void HReportMaiWidget::copy()
 void HReportMaiWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     m_pReportEditorWidget->setCellFormat(pFormatSet,formatType,bAll);
+    m_pReportBrowserWidget->setCellFormat(pFormatSet,formatType,bAll);
 }
 
 void HReportMaiWidget::cellFormat(HFormatSet* pFormatSet)

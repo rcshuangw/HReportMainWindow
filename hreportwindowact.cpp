@@ -645,7 +645,7 @@ void HReportMainWindow::option_clicked()
     dlg.setTabIndex(TAB_ATTR_PRINTSHEET);
     if(QDialog::Accepted == dlg.exec())
     {
-
+        m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),0,true);
     }
 }
 
@@ -657,7 +657,7 @@ void HReportMainWindow::baseOption_clicked()
     dlg.setTabIndex(TAB_ATTR_BASE);
     if(QDialog::Accepted == dlg.exec())
     {
-
+        m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),0,true);
     }
 }
 
@@ -669,7 +669,7 @@ void HReportMainWindow::fontOption_clicked()
     dlg.setTabIndex(TAB_ATTR_FONT);
     if(QDialog::Accepted == dlg.exec())
     {
-
+        m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),0,true);
     }
 }
 

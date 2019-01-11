@@ -7,6 +7,8 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QMenu>
+#include "SARibbonMenu.h"
 HGridCtrlWidget::HGridCtrlWidget(HReportManager* mgr,QWidget* parent)
  :m_pReportManager(mgr),QWidget(parent)
 {
@@ -55,6 +57,7 @@ void HGridCtrlWidget::initReportWidget()
         vBoxLayout->addWidget(m_pGridCtrl);
         vBoxLayout->setStretch(0,1);
         vBoxLayout->setStretch(1,9);
+        int h = vBoxLayout->heightForWidth(m_inputLineEdit->height());
         connect(m_inputLineEdit,SIGNAL(textEdited(QString)),this,SLOT(lineedit_textEdited(QString)));
     }
     else
@@ -101,16 +104,7 @@ void HGridCtrlWidget::setGridCtrlItem(HGridCtrlInfo* pItem)
         }
         m_pGridCtrl->setItem(&pInfo->m_GridCellItem);
     }
-    if(!m_bEnableVirtualMode)
-    {
-
-        m_pGridCtrl->setColumnWidth(0,25);
-    }
-    else
-    {
-        m_pGridCtrl->setColumnWidth(0,0);
-    }
-    //m_pGridCtrl->setColumnWidth(0,25);
+    rowColRefresh();
     m_pGridCtrl->autoColumnHeader();
     m_pGridCtrl->autoRowHeader();
 }
@@ -150,7 +144,57 @@ void HGridCtrlWidget::setVirtualMode(bool b)
     m_pGridCtrl->setVirtualMode(b);
 }
 
-//设置单项
+//以下属性是打印表格所用
+void HGridCtrlWidget::enableHorizontalHeader(bool bEnable)
+{
+    m_bHorizontalHeader = bEnable;
+}
+
+void HGridCtrlWidget::enableVerticalHeader(bool bEnable)
+{
+
+    m_bVerticalHeader = bEnable;
+}
+
+void HGridCtrlWidget::enablePrintColour(bool b)
+{
+
+}
+
+void HGridCtrlWidget::enableShowGrids(bool b)
+{
+
+}
+
+void HGridCtrlWidget::rowColRefresh()
+{
+    if(m_bHorizontalHeader)
+        m_pGridCtrl->setColumnWidth(0,25);
+    else
+        m_pGridCtrl->setColumnWidth(0,0);
+
+    if(!m_bVerticalHeader)
+        m_pGridCtrl->setRowHeight(0,0);
+    else
+    {
+        m_pGridCtrl->setRowHeight(0,m_pGridCtrl->defCellHeight());
+    }
+}
+
+void HGridCtrlWidget::setPrintFormat(HFormatSet *pFormatSet)
+{
+    if(!pFormatSet)
+        return;
+    enableHorizontalHeader(pFormatSet->isPageShowRowHeader());
+    enableVerticalHeader(pFormatSet->isPageShowColumnHeader());
+    enableShowGrids(pFormatSet->isPageShowGrid());
+    enablePrintColour(pFormatSet->isPagePrintColour());
+    rowColRefresh();
+}
+
+//以上属性是打印表格所用
+
+//设置编辑框单项
 void HGridCtrlWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     if(!pFormatSet)
@@ -392,6 +436,7 @@ bool HGridCtrlWidget::splitCell()
     if(!range.isValid())
         return false;
     m_pGridCtrl->setSplitSelectedCells();
+    return true;
 }
 
 //行列插入最后位置
@@ -484,3 +529,119 @@ void HGridCtrlWidget::lineedit_textEdited(const QString &text)
     if(!pCell) return;
     pCell->setText(text);
 }
+
+
+void HGridCtrlWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+    if(m_bEnableShowEditBar)
+        contextEditorMenuEvent(event);
+    else
+        contextBrowserMenuEvent(event);
+}
+
+void HGridCtrlWidget::contextEditorMenuEvent(QContextMenuEvent* event)
+{
+    QPoint pt = event->pos();
+    pt.setY(pt.y() - 27);//27是QLabel和QLineEdit的高度，直接取控件高度好像不准
+    HCellRange cellRange = m_pGridCtrl->selectedCellRange();
+    if(!cellRange.isValid()) return;
+    QRect cellRect;
+    m_pGridCtrl->cellRangeRect(cellRange,cellRect);
+
+
+    if(!cellRect.contains(pt))
+        return;
+    //
+
+    SARibbonMenu *subMenu = new SARibbonMenu(this);
+
+    QAction* setVarAct = new QAction(QIcon(":/icon/icon/insertVar.png"),QStringLiteral("设置变量"),this);
+    QAction* delVarAct = new QAction(QIcon(":/icon/icon/removeVar.png"),QStringLiteral("删除变量"),this);
+    subMenu->addAction(setVarAct);
+    subMenu->addAction(delVarAct);
+    subMenu->addSeparator();
+
+    QAction* pasteAct = new QAction(this);
+    pasteAct->setIcon(QIcon(":/icon/icon/Paste.png"));
+    pasteAct->setText(QStringLiteral("粘贴"));
+    QAction* cutAct = new QAction(this);
+    cutAct->setIcon(QIcon(":/icon/icon/Cut.png"));
+    cutAct->setText(QStringLiteral("剪切"));
+    QAction* copyAct = new QAction(this);
+    copyAct->setIcon(QIcon(":/icon/icon/Copy.png"));
+    copyAct->setText(QStringLiteral("拷贝"));
+    subMenu->addAction(cutAct);
+    subMenu->addAction(copyAct);
+    subMenu->addAction(pasteAct);
+    subMenu->addSeparator();
+
+    SARibbonMenu* insertMenu = subMenu->addRibbonMenu(QIcon(":/icon/icon/sCellsInsertDialog.png"),QStringLiteral("插入"));
+    QAction* insertRowAct = new QAction(QIcon(":/icon/icon/InsertRow.png"),QStringLiteral("插入行"),this);
+    QAction* insertColAct = new QAction(QIcon(":/icon/icon/InsertColumn.png"),QStringLiteral("插入列"),this);
+    insertMenu->addAction(insertRowAct);
+    insertMenu->addAction(insertColAct);
+    SARibbonMenu* removeMenu = subMenu->addRibbonMenu(QIcon(":/icon/icon/sCellsDelete.png"),QStringLiteral("删除"));
+    QAction* removeRowAct = new QAction(QIcon(":/icon/icon/RemoveRow.png"),QStringLiteral("删除行"),this);
+    QAction* removeColAct = new QAction(QIcon(":/icon/icon/RemoveColumn.png"),QStringLiteral("删除列"),this);
+    removeMenu->addAction(removeRowAct);
+    removeMenu->addAction(removeColAct);
+    QAction *clearFormatingAct = new QAction(QIcon(":/icon/icon/ClearFormatting.png"),QStringLiteral("清除内容"),this);
+    subMenu->addRibbonMenu(insertMenu);
+    subMenu->addRibbonMenu(removeMenu);
+    subMenu->addAction(clearFormatingAct);
+    subMenu->addSeparator();
+
+    subMenu->popup(event->globalPos());
+}
+
+void HGridCtrlWidget::contextBrowserMenuEvent(QContextMenuEvent* event)
+{
+    QPoint pt = event->pos();
+    HCellRange cellRange = m_pGridCtrl->selectedCellRange();
+    if(!cellRange.isValid()) return;
+    QRect cellRect;
+    m_pGridCtrl->cellRangeRect(cellRange,cellRect);
+
+
+    if(!cellRect.contains(pt))
+        return;
+    //
+
+    SARibbonMenu *subMenu = new SARibbonMenu(this);
+
+    QAction* loadAct = new QAction(QIcon(":/icon/icon/selectSheet.png"),QStringLiteral("选择操作票"),this);
+    QAction* preSheetAct = new QAction(QIcon(":/icon/icon/previousSheet.png"),QStringLiteral("前一张操作票"),this);
+    QAction* nextSheetAct = new QAction(QIcon(":/icon/icon/nextSheet.png"),QStringLiteral("后一张操作票"),this);
+    subMenu->addAction(loadAct);
+    subMenu->addAction(preSheetAct);
+    subMenu->addAction(nextSheetAct);
+    subMenu->addSeparator();
+
+    QAction* refreshAct = new QAction(QIcon(":/icon/icon/Refresh.png"),QStringLiteral("刷新"),this);
+    QAction* printAct = new QAction(QIcon(":/icon/icon/OpSheet.png"),QStringLiteral("显示设置"),this);
+    QAction* copyAct = new QAction(QIcon(":/icon/icon/Copy.png"),QStringLiteral("清除内容"),this);
+    subMenu->addAction(refreshAct);
+    subMenu->addAction(printAct);
+    subMenu->addAction(copyAct);
+    subMenu->addSeparator();
+
+
+    QAction* printDialogAct = new QAction(this);
+    printDialogAct->setIcon(QIcon(":/icon/icon/PrintDialogAccess.png"));
+    printDialogAct->setText(QStringLiteral("快速打印"));
+    subMenu->addAction(printDialogAct);
+
+    QAction* printOptionAct = new QAction(this);
+    printOptionAct->setIcon(QIcon(":/icon/icon/PrintOptionsMenuWord.png"));
+    printOptionAct->setText(QStringLiteral("打印选项"));
+    subMenu->addAction(printOptionAct);
+
+    QAction* printPreviewAct = new QAction(this);
+    printPreviewAct->setIcon(QIcon(":/icon/icon/PrintPreviewZoomMenu.png"));
+    printPreviewAct->setText(QStringLiteral("打印预览"));
+    subMenu->addAction(printPreviewAct);
+
+
+    subMenu->popup(event->globalPos());
+}
+

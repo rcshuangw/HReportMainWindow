@@ -46,6 +46,7 @@ void HReportEditorWidget::delReportWidget()
     m_pGridReportWidget->clearGridReportWidget();
 }
 
+
 /*
 void HGridReportWidget::initGridReportWidget()
 {

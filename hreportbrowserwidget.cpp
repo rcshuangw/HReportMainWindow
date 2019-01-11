@@ -1,5 +1,6 @@
 #include "hreportbrowserwidget.h"
 #include "hgridreportwidget.h"
+#include "hformatset.h"
 #include <QHBoxLayout>
 HReportBrowserWidget::HReportBrowserWidget(HReportManager* mgr,QWidget* parent)
     :m_pReportManager(mgr),QWidget(parent)
@@ -70,5 +71,5 @@ void HReportBrowserWidget::copy()
 
 void HReportBrowserWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
-    m_pGridReportWidget->setCellFormat(pFormatSet,formatType);
+    m_pGridReportWidget->setPrintFormat(pFormatSet);
 }

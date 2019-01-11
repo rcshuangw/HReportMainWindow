@@ -2,7 +2,10 @@
 #include <QDataStream>
 HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
 {
-
+    m_bPageShowGrid = false;
+    m_bPageShowCol = false;
+    m_bPageShowRow = false;
+    m_bPagePrintColour = false;
 }
 
 void HFormatSet::loadDefaultFormatSet(int v,QDataStream* ds)
