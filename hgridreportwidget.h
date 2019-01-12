@@ -25,6 +25,7 @@ public:
     void initGridReportWidget();
     void updateGridReportWidget();
     void clearGridReportWidget();
+    void refreshGridReportWidget();
 
 public:
 ///////////////////////////////////////////////////////////////////////////////

@@ -61,8 +61,7 @@ void HGridReportWidget::updateGridReportWidget()
         int num = m_tabWidget->count();
         for(int i = 0; i < nAddCount; i++)
         {
-            HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,m_tabWidget);
-
+            HGridCtrlWidget* w = new HGridCtrlWidget(m_pReportManager,this);
             connect(w,SIGNAL(gridcellclicked()),this,SLOT(gridCell_clicked()));
             HGridCtrlInfo* pInfo = m_pReportManager->gridCtrlFile()->getCurGridCtrlInfo();
             setGridCtrlAttr(w);
@@ -90,6 +89,12 @@ void HGridReportWidget::clearGridReportWidget()
         }
         m_tabWidget->removeTab(index);
     }
+}
+
+void HGridReportWidget::refreshGridReportWidget()
+{
+    clearGridReportWidget();
+    updateGridReportWidget();
 }
 
 void HGridReportWidget::setGridCtrlAttr(QWidget *w)

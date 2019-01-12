@@ -21,6 +21,10 @@ class  HGridCtrlWidget : public QWidget
 public:
     HGridCtrlWidget(HReportManager* mgr,QWidget* parent = 0);
     ~HGridCtrlWidget();
+
+public:
+    void reset();
+    void refreshGridCtrl();
 public:
     void initReportWidget();
     void setGridCtrlItem(HGridCtrlInfo* pItem);

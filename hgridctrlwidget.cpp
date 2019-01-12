@@ -20,12 +20,23 @@ HGridCtrlWidget::HGridCtrlWidget(HReportManager* mgr,QWidget* parent)
 
 HGridCtrlWidget::~HGridCtrlWidget()
 {
+    reset();
+}
+
+void HGridCtrlWidget::reset()
+{
     if(m_pGridCtrl)
     {
         delete m_pGridCtrl;
         m_pGridCtrl = NULL;
     }
 }
+
+void HGridCtrlWidget::refreshGridCtrl()
+{
+
+}
+
 
 void HGridCtrlWidget::initReportWidget()
 {
