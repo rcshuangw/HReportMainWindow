@@ -13,7 +13,8 @@ TEMPLATE = app
 DESTDIR = ..\..\bin
 INCLUDEPATH += \
               ../include \
-              ../SARibbonBar
+              ../SARibbonBar \
+              D:\qt-workspace\include
 
 SOURCES += main.cpp\
     mainwindow.cpp \ 
@@ -27,10 +28,10 @@ SOURCES += main.cpp\
     hreporttreewidget.cpp \
     hreportnewdlg.cpp \
     hgridctrlhelper.cpp \
-    hgridctrlwidget.cpp \
+    #hgridctrlwidget.cpp \
     hreportprint.cpp \
     hreporteditorwidget.cpp \
-    hgridreportwidget.cpp \
+    #hgridreportwidget.cpp \
     hformatset.cpp
 
 HEADERS  += \
@@ -44,10 +45,10 @@ HEADERS  += \
     hreporttreewidget.h \
     hreportnewdlg.h \
     hgridctrlhelper.h \
-    hgridctrlwidget.h \
+    #hgridctrlwidget.h \
     hreportprint.h \
     hreporteditorwidget.h \
-    hgridreportwidget.h \
+    #hgridreportwidget.h \
     hformatset.h \
     hformatdef.h
 
@@ -55,7 +56,7 @@ RESOURCES += \
     saribbonresouce.qrc
 
 
-LIBS += -L..\..\lib -lH5RibbonBar -lgridctrl
+LIBS += -L..\..\lib -lH5RibbonBar -lgridctrl -ldatafile
 
 FORMS += \
     formatsetdlg.ui \

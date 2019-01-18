@@ -12,8 +12,9 @@ public:
     ~HReportEditorWidget();
 
 public:
-    void newReportWidget();
-    void openReportWidget();
+    void newReportWidget(quint16 wReportID);
+    void openReportWidget(quint16 wReportID);
+    void saveReportWidget();
     void delReportWidget();
 
 public:
@@ -39,7 +40,8 @@ public:
 signals:
     void gridcellclicked();
 
-
+private:
+    quint16 m_wReportID;
 private:
     HReportManager* m_pReportManager;
     HGridReportWidget* m_pGridReportWidget;

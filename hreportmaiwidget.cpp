@@ -62,7 +62,7 @@ void HReportMaiWidget::newReportWidget()
     if(!m_pReportManager)
         return;
     m_pReportBrowserWidget->newReportWidget();
-    m_pReportEditorWidget->newReportWidget();
+    //m_pReportEditorWidget->newReportWidget();
 }
 
 void HReportMaiWidget::openReportWidget()
@@ -70,7 +70,7 @@ void HReportMaiWidget::openReportWidget()
     if(!m_pReportManager)
         return;
     m_pReportBrowserWidget->openReportWidget();
-    m_pReportEditorWidget->openReportWidget();
+    //m_pReportEditorWidget->openReportWidget();
 }
 
 void HReportMaiWidget::delReportWidget()
