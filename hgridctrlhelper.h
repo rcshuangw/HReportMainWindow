@@ -76,12 +76,12 @@ public:
     bool saveGridCtrlInfo(int index);
 
     HGridCtrlInfo& operator =(const HGridCtrlInfo&);
-    void saveGCItemInfo(GC_ITEM* item);
+    void saveGCItemInfo(GRIDPREPORT* item);
 
 public:
-    void newGridCellData(int row,int col);
+    //void newGridCellData(int row,int col);
 public:
-    GC_ITEM m_GridCtrlItem;
+    GRIDPREPORT m_GridCtrlItem;
     QList<HGridCellInfo*> m_pGridCellItemList;
 };
 
@@ -94,8 +94,8 @@ public:
     ~HGridCtrlFile();
 
 public:
-    bool loadGridCtrlFile();
-    bool saveGridCtrlFile();
+    //bool loadGridCtrlFile();
+    //bool saveGridCtrlFile();
 
 
     //保存操作
@@ -108,7 +108,7 @@ public:
     bool saveGridCtrlInfoFile();
 
     //表格属性操作
-    HGridCtrlInfo* addGridCtrlInfo(GC_ITEM*);
+    HGridCtrlInfo* addGridCtrlInfo(GRIDPREPORT*);
     bool delGridCtrlInfo(int id);
     bool findGridCtrlInfo(int id);
     bool renameGridCtrlInfo(int id,const QString&);

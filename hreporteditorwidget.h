@@ -37,6 +37,8 @@ public:
 public:
     void setGridCtrlAttr(uint nAttrType,HFormatSet* pFormatSet);
 
+protected:
+    void contextMenuEvent(QContextMenuEvent *event);
 signals:
     void gridcellclicked();
 

@@ -1,5 +1,6 @@
 ﻿#include "hgridctrlhelper.h"
 #include "hgridcelldef.h"
+#include "hfileapi.h"
 #include <QFileInfoList>
 #include <QDir>
 HRelateVar::HRelateVar()
@@ -448,6 +449,25 @@ bool HGridCtrlFile::saveGridCtrlInfoFile()
 {
     int fd = createDB(FILE_TYPE_REPORT);
     if((int)-1 == fd) return false;
+
+    DATAFILEHEADER Header;
+    if( -1 == fd )
+    {
+        return false;
+    }
+    else
+    {
+        loadDataFileHeader( fd, &Header );
+        if( (quint16)0xFFFF == Header.wTotal )
+        {
+            //AfxMessageBox( ID_ERR_TOOMANYREPORT, MB_OK|MB_ICONSTOP );
+            closeDB( FILE_TYPE_REPORT );
+            return NULL;
+        }
+        Header.wTotal = m_pGridCtrlInfoList.count();
+        saveDataFileHeader( fd, &Header );
+    }
+
     for(int i = 0; i < m_pGridCtrlInfoList.count();i++)
     {
         HGridCtrlInfo* pInfo = m_pGridCtrlInfoList[i];
@@ -511,7 +531,7 @@ bool HGridCtrlFile::saveRelateVarFile(int nReportID)
 
 
 
-HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GC_ITEM* pItem)
+HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GRIDPREPORT* pItem)
 {
     if(NULL == pItem)
         return NULL;
@@ -525,7 +545,6 @@ HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GC_ITEM* pItem)
     pInfo->m_GridCtrlItem.btType = pItem->btType;
     pInfo->m_GridCtrlItem.strReportName = pItem->strReportName;
     m_pGridCtrlInfoList.append(pInfo);
-    pInfo->newGridCellData(pItem->nMaxRow,pItem->nMaxCol);
     m_pCurGridCtrlInfo = pInfo;
     return pInfo;
 }

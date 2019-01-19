@@ -57,12 +57,12 @@ void HReportMaiWidget::createReportEditorWidget()
     m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
-void HReportMaiWidget::newReportWidget()
+void HReportMaiWidget::newReportWidget(int nReportID)
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->newReportWidget();
-    //m_pReportEditorWidget->newReportWidget();
+    //m_pReportBrowserWidget->newReportWidget();
+    m_pReportEditorWidget->newReportWidget(nReportID);
 }
 
 void HReportMaiWidget::openReportWidget()

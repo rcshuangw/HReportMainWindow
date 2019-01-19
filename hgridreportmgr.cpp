@@ -24,12 +24,12 @@ bool HReportManager::loadGridCtrlFile()
 {
     if(!m_pGridCtrlFile)
         return false;
-    return m_pGridCtrlFile->loadGridCtrlFile();
+    //return m_pGridCtrlFile->loadGridCtrlFile();
 }
 
 bool HReportManager::saveGridCtrlFile()
 {
     if(!m_pGridCtrlFile)
         return false;
-    return m_pGridCtrlFile->saveGridCtrlFile();
+    //return m_pGridCtrlFile->saveGridCtrlFile();
 }

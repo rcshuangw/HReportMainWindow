@@ -16,21 +16,23 @@ void HReportMainWindow::new_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
         return;
+    int nReportID = (int)-1;
     HReportNewDlg reportNewdlg;
     if(QDialog::Accepted == reportNewdlg.exec())//如果找到名称
     {
-        GC_ITEM item;
+        GRIDPREPORT item;
         item.strReportName = reportNewdlg.strReportName;
         item.nMaxCol = reportNewdlg.nMaxCol+1;//如果不+1，输入的就是包含行列头的
         item.nMaxRow = reportNewdlg.nMaxRow+1;
         item.btType = 0;
         item.wReportID = 0;
         m_pReportManager->gridCtrlFile()->addGridCtrlInfo(&item);
+        nReportID = item.wReportID;
     }
     else
         return;
     m_pReportTreeWidget->addReportTreeWidgetItem();
-    m_pReportMainWidget->newReportWidget();
+    m_pReportMainWidget->newReportWidget(nReportID);
 }
 
 void HReportMainWindow::save_clicked()

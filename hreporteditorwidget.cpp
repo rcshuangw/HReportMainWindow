@@ -5,6 +5,7 @@
 #include "hgridctrlhelper.h"
 #include "hformatdef.h"
 #include "hformatset.h"
+#include "SARibbonMenu.h"
 #include <QHBoxLayout>
 HReportEditorWidget::HReportEditorWidget(HReportManager* mgr,QWidget *parent)
    :m_pReportManager(mgr),QWidget(parent)
@@ -12,6 +13,7 @@ HReportEditorWidget::HReportEditorWidget(HReportManager* mgr,QWidget *parent)
     QHBoxLayout* layout = new QHBoxLayout(this);
     m_pGridReportWidget = new HGridReportWidget(this);
     m_pGridReportWidget->setEditorGridReportAttr();
+    layout->setContentsMargins(3, 3, 3, 3);
     layout->addWidget(m_pGridReportWidget);
     m_pGridReportWidget->hide();
     setLayout(layout);
@@ -48,6 +50,7 @@ void HReportEditorWidget::openReportWidget(quint16 wReportID)
     if(!pInfo) return;
     m_pGridReportWidget->setMaxRow(pInfo->m_GridCtrlItem.nMaxRow);
     m_pGridReportWidget->setMaxCol(pInfo->m_GridCtrlItem.nMaxCol);
+    m_pReportManager->gridCtrlFile()->loadRelateVarFile(m_wReportID);
     m_pGridReportWidget->setNumSheet(1);
     m_pGridReportWidget->update();//需要从文件中读取
     for(int i = 0; i < m_pReportManager->gridCtrlFile()->m_pRelateVarList.count();i++)
@@ -66,11 +69,14 @@ void HReportEditorWidget::saveReportWidget()
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
         return;
+    //先存变量
     m_pReportManager->gridCtrlFile()->saveRelateVarFile(m_wReportID);
     char szFile[256],szPath[256];
     getDataFilePath(DFPATH_REPORT,szPath);
     sprintf(szFile,"%s%s%6u%s",szPath,"RPT",m_wReportID,".rpt");
+    //存表格
     m_pGridReportWidget->save(QString(szFile));
+    //存表格信息
     m_pReportManager->gridCtrlFile()->saveGridCtrlInfoFile();
 }
 
@@ -79,6 +85,55 @@ void HReportEditorWidget::delReportWidget()
     if(!m_pReportManager)
         return;
     m_pGridReportWidget->clear();
+}
+
+void HReportEditorWidget::contextMenuEvent(QContextMenuEvent* event)
+{
+    QPoint pt = event->pos();
+    pt.setY(pt.y() - 30);//27是QLabel和QLineEdit的高度，直接取控件高度好像不准
+    QRect cellRect;
+    m_pGridReportWidget->selectedRect(cellRect);
+    if(!cellRect.contains(pt))
+        return;
+
+    SARibbonMenu *subMenu = new SARibbonMenu(this);
+    QAction* setVarAct = new QAction(QIcon(":/icon/icon/insertVar.png"),QStringLiteral("设置变量"),this);
+    QAction* delVarAct = new QAction(QIcon(":/icon/icon/removeVar.png"),QStringLiteral("删除变量"),this);
+    subMenu->addAction(setVarAct);
+    subMenu->addAction(delVarAct);
+    subMenu->addSeparator();
+
+    QAction* pasteAct = new QAction(this);
+    pasteAct->setIcon(QIcon(":/icon/icon/Paste.png"));
+    pasteAct->setText(QStringLiteral("粘贴"));
+    QAction* cutAct = new QAction(this);
+    cutAct->setIcon(QIcon(":/icon/icon/Cut.png"));
+    cutAct->setText(QStringLiteral("剪切"));
+    QAction* copyAct = new QAction(this);
+    copyAct->setIcon(QIcon(":/icon/icon/Copy.png"));
+    copyAct->setText(QStringLiteral("拷贝"));
+    subMenu->addAction(cutAct);
+    subMenu->addAction(copyAct);
+    subMenu->addAction(pasteAct);
+    subMenu->addSeparator();
+
+    SARibbonMenu* insertMenu = subMenu->addRibbonMenu(QIcon(":/icon/icon/sCellsInsertDialog.png"),QStringLiteral("插入"));
+    QAction* insertRowAct = new QAction(QIcon(":/icon/icon/InsertRow.png"),QStringLiteral("插入行"),this);
+    QAction* insertColAct = new QAction(QIcon(":/icon/icon/InsertColumn.png"),QStringLiteral("插入列"),this);
+    insertMenu->addAction(insertRowAct);
+    insertMenu->addAction(insertColAct);
+    SARibbonMenu* removeMenu = subMenu->addRibbonMenu(QIcon(":/icon/icon/sCellsDelete.png"),QStringLiteral("删除"));
+    QAction* removeRowAct = new QAction(QIcon(":/icon/icon/RemoveRow.png"),QStringLiteral("删除行"),this);
+    QAction* removeColAct = new QAction(QIcon(":/icon/icon/RemoveColumn.png"),QStringLiteral("删除列"),this);
+    removeMenu->addAction(removeRowAct);
+    removeMenu->addAction(removeColAct);
+    QAction *clearFormatingAct = new QAction(QIcon(":/icon/icon/ClearFormatting.png"),QStringLiteral("清除内容"),this);
+    subMenu->addRibbonMenu(insertMenu);
+    subMenu->addRibbonMenu(removeMenu);
+    subMenu->addAction(clearFormatingAct);
+    subMenu->addSeparator();
+
+    subMenu->popup(event->globalPos());
 }
 
 void HReportEditorWidget::paste()

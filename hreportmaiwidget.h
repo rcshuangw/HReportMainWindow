@@ -27,7 +27,7 @@ public:
     void createReportBrowserWidget();
     void createReportEditorWidget();
 
-    void newReportWidget();
+    void newReportWidget(int nReportID);
     void updateReportWidget();
     void openReportWidget();
     void delReportWidget();
