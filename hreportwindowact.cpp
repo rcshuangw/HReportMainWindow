@@ -1,10 +1,13 @@
-﻿#include "mainwindow.h"
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
+#include "mainwindow.h"
 #include "hformatsetdlg.h"
 #include "hreportnewdlg.h"
 #include "hgridreportmgr.h"
 #include "hgridctrlhelper.h"
 #include "hreporttreewidget.h"
-#include "hreportmaiwidget.h"
+#include "hreportmainwidget.h"
 #include "hgridcelldef.h"
 #include "hformatdef.h"
 #include "SARibbonBar.h"
@@ -21,7 +24,10 @@ void HReportMainWindow::new_clicked()
     if(QDialog::Accepted == reportNewdlg.exec())//如果找到名称
     {
         GRIDPREPORT item;
-        item.strReportName = reportNewdlg.strReportName;
+        QByteArray ba = reportNewdlg.strReportName.toLocal8Bit();
+        const char* bdata = ba.data();
+        QString str = QString(bdata);
+        qstrcpy(item.szReportName,bdata);
         item.nMaxCol = reportNewdlg.nMaxCol+1;//如果不+1，输入的就是包含行列头的
         item.nMaxRow = reportNewdlg.nMaxRow+1;
         item.btType = 0;
@@ -46,16 +52,14 @@ void HReportMainWindow::Open(const QString&,const int reportID)
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
         return;
-    m_pReportManager->gridCtrlFile()->setGridCtrlInfoById(reportID);
-    m_pReportMainWidget->openReportWidget();
+    m_pReportMainWidget->openReportWidget(reportID);
 }
 
 void HReportMainWindow::Del(const QString&,const int reportID)
 {
     if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
         return;
-    m_pReportManager->gridCtrlFile()->delGridCtrlInfo(reportID);
-    m_pReportMainWidget->delReportWidget();
+    m_pReportMainWidget->delReportWidget(reportID);
 }
 
 void HReportMainWindow::ImportFile(const QString&)
@@ -713,6 +717,7 @@ void HReportMainWindow::gridCell_clicked()
 {
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    m_pReportMainWidget->cellFormat(m_pReportManager->formatSet());
     //刷新界面
     //设置字体
     HFormatSet* pFormatSet = m_pReportManager->formatSet();

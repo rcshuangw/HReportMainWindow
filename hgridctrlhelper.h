@@ -9,8 +9,8 @@ class HGridReportWidget;
 //操作票\工作票模板前景点定义
 typedef struct _tagRelateVar
 {
-    long nRow;
-    long nCol;
+    int nRow;
+    int nCol;
     quint8 btType;
     quint8 btSubType; //操作票：同类型前景点的个数；工作票:前景点子类型
     quint16 wNo;
@@ -77,12 +77,18 @@ public:
 
     HGridCtrlInfo& operator =(const HGridCtrlInfo&);
     void saveGCItemInfo(GRIDPREPORT* item);
-
-public:
-    //void newGridCellData(int row,int col);
-public:
+    void seGridReportType(quint8 type) {m_GridCtrlItem.btType = type;}
+    quint16 reportType(){return m_GridCtrlItem.btType;}
+    void seGridReportID(quint16 id) {m_GridCtrlItem.wReportID = id;}
+    quint16 reportID(){return m_GridCtrlItem.wReportID;}
+    void setGridReportRow(quint32 row){m_GridCtrlItem.nMaxRow = row;}
+    quint32 gridReportRow(){return m_GridCtrlItem.nMaxRow;}
+    void setGridReportCol(quint32 col){m_GridCtrlItem.nMaxCol = col;}
+    quint32 gridReportCol(){return m_GridCtrlItem.nMaxCol;}
+    void setGridReportName(const char* s){ qstrcpy(m_GridCtrlItem.szReportName,s); }
+    QString gridReportName(){return QString(m_GridCtrlItem.szReportName);}
+protected:
     GRIDPREPORT m_GridCtrlItem;
-    QList<HGridCellInfo*> m_pGridCellItemList;
 };
 
 
@@ -94,8 +100,8 @@ public:
     ~HGridCtrlFile();
 
 public:
-    //bool loadGridCtrlFile();
-    //bool saveGridCtrlFile();
+    bool loadGridCtrlFile();
+    bool saveGridCtrlFile();
 
 
     //保存操作
@@ -108,6 +114,7 @@ public:
     bool saveGridCtrlInfoFile();
 
     //表格属性操作
+    void clearGridCtrlInfoFile();
     HGridCtrlInfo* addGridCtrlInfo(GRIDPREPORT*);
     bool delGridCtrlInfo(int id);
     bool findGridCtrlInfo(int id);

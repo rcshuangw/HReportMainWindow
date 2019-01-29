@@ -8,7 +8,7 @@ class SARibbonContextCategory;
 class SARibbonComboBox;
 class QTextEdit;
 class HReportManager;
-class HReportMaiWidget;
+class HReportMainWidget;
 class HReportTreeWidget;
 //报表窗口
 class HReportMainWindow : public QMainWindow
@@ -60,7 +60,7 @@ private:
     RibbonTheme m_currentRibbonTheme;
 public:
     HReportManager* m_pReportManager;
-    HReportMaiWidget* m_pReportMainWidget;
+    HReportMainWidget* m_pReportMainWidget;
     HReportTreeWidget* m_pReportTreeWidget;
 
 

@@ -2,8 +2,10 @@
 #define HGRIDREPORTMGR_H
 
 #include <QObject>
+#include "hreportmainwidget.h"
 class HGridCtrlFile;
 class HFormatSet;
+class HReportMainWidget;
 class HReportManager : public QObject
 {
     Q_OBJECT
@@ -12,7 +14,8 @@ public:
 
 public:
     HGridCtrlFile* gridCtrlFile() ;
-    //HReportMainWidget *reportMainWidget() ;
+    HReportMainWidget *reportMainWidget(){return m_pReportMainWidget;}
+    void setReportMainWidget(HReportMainWidget* widget){m_pReportMainWidget = widget;}
     HFormatSet* formatSet();
 public:
     bool loadGridCtrlFile();
@@ -23,7 +26,7 @@ public slots:
 
 private:
     HGridCtrlFile* m_pGridCtrlFile;
-    //HReportMainWidget* m_pReportMainWidget;
+    HReportMainWidget* m_pReportMainWidget;
     HFormatSet* m_pFormatSet;
 };
 

@@ -1,4 +1,7 @@
-﻿#include "hreporttreewidget.h"
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
+#include "hreporttreewidget.h"
 #include "hgridctrlhelper.h"
 #include "hgridreportmgr.h"
 #include <QAction>
@@ -34,13 +37,14 @@ void HReportTreeWidget::initReportTreeWidget()
         if(!gridCtrlInfo)
             continue;
         QTreeWidgetItem* newItem = new QTreeWidgetItem(rootItem,1);
-        newItem->setData(0,Qt::UserRole,gridCtrlInfo->m_GridCtrlItem.wReportID);
-        newItem->setText(0,gridCtrlInfo->m_GridCtrlItem.strReportName);
+        newItem->setData(0,Qt::UserRole,gridCtrlInfo->reportID());
+        newItem->setText(0,gridCtrlInfo->gridReportName());
         newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
         rootItem->addChild(newItem);
     }
     //connect(this,SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),SLOT(changedReportItem(QTreeWidgetItem*,QTreeWidgetItem*)));
-    connect(this,SIGNAL(itemClicked(QTreeWidgetItem*,int)),SLOT(clickReportItem(QTreeWidgetItem*,int)));
+    connect(this,SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),SLOT(clickReportItem(QTreeWidgetItem*,int)));
+    expandAll();
 }
 
 void HReportTreeWidget::addReportTreeWidgetItem()
@@ -55,8 +59,8 @@ void HReportTreeWidget::addReportTreeWidgetItem()
     HGridCtrlInfo* pInfo = m_pReportMgr->gridCtrlFile()->getCurGridCtrlInfo();
 
     QTreeWidgetItem* newItem = new QTreeWidgetItem(parentItem,1);
-    newItem->setData(0,Qt::UserRole,pInfo->m_GridCtrlItem.wReportID);
-    newItem->setText(0,pInfo->m_GridCtrlItem.strReportName);
+    newItem->setData(0,Qt::UserRole,pInfo->reportID());
+    newItem->setText(0,pInfo->gridReportName());
     newItem->setIcon(0,QIcon(":/tree/icon/spreadsheets.png"));
     parentItem->addChild(newItem);
     expandItem(newItem);

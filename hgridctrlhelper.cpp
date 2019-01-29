@@ -1,4 +1,7 @@
-﻿#include "hgridctrlhelper.h"
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
+#include "hgridctrlhelper.h"
 #include "hgridcelldef.h"
 #include "hfileapi.h"
 #include <QFileInfoList>
@@ -34,24 +37,39 @@ HRelateVar::~HRelateVar()
 
 }
 
-/*
-bool QRelateVar::ReadFromDB( int nFile, WORD wOrder )
-{
-
-}
-
-bool QRelateVar::WriteToDB( int nFile, WORD wOrder )
-{
-
-}*/
 bool HRelateVar::loadRelateVar(int v,QDataStream* ds)
 {
+    if(!ds) return false;
+    int n;
+    *ds>>n;
+    m_pRelateVar.nRow = n;
+    *ds>>n;
+    m_pRelateVar.nCol = n;
+    quint8 n8;
+    *ds>>n8;
+    m_pRelateVar.btType = n8;
+    *ds>>n8;
+    m_pRelateVar.btSubType = n8;
+    quint16 n16;
+    *ds>>n16;
+    m_pRelateVar.wNo = n16;
+    QString s;
+    *ds>>s;
+    m_pRelateVar.szDesc = s;
     return true;
 }
 
 bool HRelateVar::saveRelateVar(int v,QDataStream* ds)
 {
-    return false;
+    if(!ds)
+        return false;
+    *ds<<(int)m_pRelateVar.nRow;
+    *ds<<(int)m_pRelateVar.nCol;
+    *ds<<(quint8)m_pRelateVar.btType;
+    *ds<<(quint8)m_pRelateVar.btSubType;
+    *ds<<(quint16)m_pRelateVar.wNo;
+    *ds<<(QString)m_pRelateVar.szDesc;
+    return true;
 }
 
 void HRelateVar::getRelateVar( RELATEVAR* pRelateVar )
@@ -94,7 +112,7 @@ HGridCtrlInfo& HGridCtrlInfo::operator =(const HGridCtrlInfo& info)
     m_GridCtrlItem.nMaxCol = info.m_GridCtrlItem.nMaxCol;
     m_GridCtrlItem.nMaxRow = info.m_GridCtrlItem.nMaxRow;
     m_GridCtrlItem.btType = info.m_GridCtrlItem.btType;
-    m_GridCtrlItem.strReportName = info.m_GridCtrlItem.strReportName;
+    qstrcpy(m_GridCtrlItem.szReportName,info.m_GridCtrlItem.szReportName);
     return *this;
 }
 
@@ -334,82 +352,28 @@ HGridCtrlFile::~HGridCtrlFile()
 
 }
 
-/*
+
 
 //从文件路径加载报表文件
 bool HGridCtrlFile::loadGridCtrlFile()
 {
-    QString strReportPath;
-    QDir dirReportsFilePath(strReportPath);
-    if(!dirReportsFilePath.exists())
-        return false;
-    QStringList filters;
-    filters<<"*.rpt";
-    dirReportsFilePath.setNameFilters(filters);
-    QFileInfoList iconsFileInfoList = dirReportsFilePath.entryInfoList(QDir::Files);
-    foreach(QFileInfo info,iconsFileInfoList)
-    {
-        QString strReportFile = strReportPath + "/" + info.fileName();
-        QFile file(strReportFile);
-        if(!file.open(QIODevice::ReadOnly))
-            continue;
-        QDataStream in(&file);
-        int v;
-        HGridCtrlInfo *pGridCtrlInfo = new HGridCtrlInfo;
-        pGridCtrlInfo->loadGridCtrlData(v,&in);
-        m_pGridCtrlInfoList.append(pGridCtrlInfo);
-    }
-
-    return true;
+    return loadGridCtrlInfoFile();
 }
 
 //存储报表文件
 bool HGridCtrlFile::saveGridCtrlFile()
 {
-    QString strReportPath;
-    QDir dirReportsFilePath(strReportPath);
-    if(!dirReportsFilePath.exists())
-        return false;
-    for(int i = 0; i < m_pGridCtrlInfoList.count();i++)
-    {
-        HGridCtrlInfo* pInfo = m_pGridCtrlInfoList[i];
-        if(!pInfo) continue;
-        int ID = (int)pInfo->m_GridCtrlItem.wReportID;
-        QString strID = QString("%1").arg(ID,10,10,QChar('0'));
-        QString strReportFile = strReportPath + "/" + strID;
-        QFile file(strReportFile);
-        if(!file.open(QIODevice::WriteOnly))
-            continue;
-        QDataStream out(&file);
-        int v;
-        pInfo->saveGridCtrlData(v,&out);
-    }
+    bool bok = saveGridCtrlInfoFile();
+    if(!bok) return false;
     return true;
 }
 
-bool HGridCtrlFile::saveGridCtrlFile()
+void HGridCtrlFile::clearGridCtrlInfoFile()
 {
-    QString strReportPath;
-    QDir dirReportsFilePath(strReportPath);
-    if(!dirReportsFilePath.exists())
-        return false;
-    for(int i = 0; i < m_pGridCtrlInfoList.count();i++)
-    {
-        HGridCtrlInfo* pInfo = m_pGridCtrlInfoList[i];
-        if(!pInfo) continue;
-        int ID = (int)pInfo->m_GridCtrlItem.wReportID;
-        QString strID = QString("%1").arg(ID,10,10,QChar('0'));
-        QString strReportFile = strReportPath + "/" + strID;
-        QFile file(strReportFile);
-        if(!file.open(QIODevice::WriteOnly))
-            continue;
-        QDataStream out(&file);
-        int v;
-        pInfo->saveGridCtrlData(v,&out);
-    }
-    return true;
+    while(!m_pGridCtrlInfoList.isEmpty())
+        delete (HGridCtrlInfo*)m_pGridCtrlInfoList.takeFirst();
+    m_pGridCtrlInfoList.clear();
 }
-*/
 
 bool HGridCtrlFile::loadGridCtrlInfoFile()
 {
@@ -418,7 +382,7 @@ bool HGridCtrlFile::loadGridCtrlInfoFile()
     DATAFILEHEADER  Header;
     loadDataFileHeader( fd, &Header );
 
-    //ClearList();
+    clearGridCtrlInfoFile();
 
     for( quint16 i = 0; i < Header.wTotal; i++ )
     {
@@ -433,7 +397,7 @@ bool HGridCtrlFile::loadGridCtrlInfoFile()
             continue;
         }
         quint16 wID;
-        wID = pInfo->m_GridCtrlItem.wReportID;
+        wID = pInfo->reportID();
         if( findGridCtrlInfo(wID))
         {
             delete pInfo;
@@ -441,7 +405,7 @@ bool HGridCtrlFile::loadGridCtrlInfoFile()
         }
         m_pGridCtrlInfoList.append(pInfo);
     }
-
+    closeDB(FILE_TYPE_REPORT);
     return true;
 }
 
@@ -451,10 +415,7 @@ bool HGridCtrlFile::saveGridCtrlInfoFile()
     if((int)-1 == fd) return false;
 
     DATAFILEHEADER Header;
-    if( -1 == fd )
-    {
-        return false;
-    }
+    if( -1 == fd ) return false;
     else
     {
         loadDataFileHeader( fd, &Header );
@@ -472,7 +433,7 @@ bool HGridCtrlFile::saveGridCtrlInfoFile()
     {
         HGridCtrlInfo* pInfo = m_pGridCtrlInfoList[i];
         if(!pInfo) continue;
-        if(!pInfo->saveGridCtrlInfo(i))
+        if(!pInfo->saveGridCtrlInfo(i+1))
             return false;
     }
     closeDB(FILE_TYPE_REPORT);
@@ -485,21 +446,24 @@ bool HGridCtrlFile::loadRelateVarFile(int nReportID)
     HGridCtrlInfo* pInfo = getGridCtrlInfoById(nReportID);
     if(!pInfo) return false;
     clearRelateVarList();
-    int ID = (int)pInfo->m_GridCtrlItem.wReportID;
+    int ID = (int)pInfo->reportID();
     char szFile[256],szPath[256];
     getDataFilePath(DFPATH_REPORT,szPath);
-    sprintf(szFile,"%s%s%6u%s",szPath,"VAR",ID,".var");
+    sprintf(szFile,"%s%s%06d%s",szPath,"VAR",ID,".var");
     QFile file(szFile);
     if(!file.open(QIODevice::ReadOnly))
         return false;
     QDataStream in(&file);
     int v;
-    for(int i = 0; i < m_pRelateVarList.count();i++)
+    int varCount;
+    in>>varCount;
+    for(int i = 0; i < varCount;i++)
     {
-        HRelateVar* pVar = m_pRelateVarList[i];
+        HRelateVar* pVar = new HRelateVar;
         if(!pVar) continue;
         if(!pVar->loadRelateVar(v,&in))
             return false;
+        m_pRelateVarList.append(pVar);
     }
     return true;
 }
@@ -508,15 +472,20 @@ bool HGridCtrlFile::saveRelateVarFile(int nReportID)
 {
     HGridCtrlInfo* pInfo = getGridCtrlInfoById(nReportID);
     if(!pInfo) return false;
-    int ID = (int)pInfo->m_GridCtrlItem.wReportID;
+    int ID = (int)pInfo->reportID();
     char szFile[256],szPath[256];
     getDataFilePath(DFPATH_REPORT,szPath);
-    sprintf(szFile,"%s%s%6u%s",szPath,"VAR",ID,".var");
+    sprintf(szFile,"%s%s%06d%s",szPath,"VAR",ID,".var");
+    if(QFile::exists(szFile))
+        QFile::remove(szFile);
+
     QFile file(szFile);
     if(!file.open(QIODevice::WriteOnly))
         return false;
     QDataStream out(&file);
     int v;
+    int varCount = m_pRelateVarList.count();
+    out<<varCount;
     for(int i = 0; i < m_pRelateVarList.count();i++)
     {
         HRelateVar* pVar = m_pRelateVarList[i];
@@ -527,10 +496,6 @@ bool HGridCtrlFile::saveRelateVarFile(int nReportID)
     return true;
 }
 
-
-
-
-
 HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GRIDPREPORT* pItem)
 {
     if(NULL == pItem)
@@ -539,11 +504,11 @@ HGridCtrlInfo* HGridCtrlFile::addGridCtrlInfo(GRIDPREPORT* pItem)
     while(findGridCtrlInfo(reportID))
         reportID++;
     HGridCtrlInfo* pInfo = new HGridCtrlInfo;
-    pInfo->m_GridCtrlItem.wReportID = reportID;
-    pInfo->m_GridCtrlItem.nMaxCol = pItem->nMaxCol;
-    pInfo->m_GridCtrlItem.nMaxRow = pItem->nMaxRow;
-    pInfo->m_GridCtrlItem.btType = pItem->btType;
-    pInfo->m_GridCtrlItem.strReportName = pItem->strReportName;
+    pInfo->seGridReportID(reportID);
+    pInfo->setGridReportCol(pItem->nMaxCol);
+    pInfo->setGridReportRow(pItem->nMaxRow);
+    pInfo->seGridReportType(pItem->btType);
+    pInfo->setGridReportName(pItem->szReportName);
     m_pGridCtrlInfoList.append(pInfo);
     m_pCurGridCtrlInfo = pInfo;
     return pInfo;
@@ -571,12 +536,11 @@ bool HGridCtrlFile::findGridCtrlInfo(int id)
     for(int i = 0;i < m_pGridCtrlInfoList.count();i++)
     {
         HGridCtrlInfo* pInfo = m_pGridCtrlInfoList[i];
-        if(pInfo && pInfo->m_GridCtrlItem.wReportID == id)
+        if(pInfo && pInfo->reportID() == id)
             return true;
     }
     return false;
 }
-
 
 bool HGridCtrlFile::renameGridCtrlInfo(int id,const QString& name)
 {
@@ -585,7 +549,8 @@ bool HGridCtrlFile::renameGridCtrlInfo(int id,const QString& name)
     HGridCtrlInfo* pInfo = getGridCtrlInfoById(id);
     if(pInfo)
     {
-        pInfo->m_GridCtrlItem.strReportName = name;
+        QByteArray ba = name.toLocal8Bit();
+        pInfo->setGridReportName(ba.data());
     }
     return true;
 }
@@ -599,7 +564,7 @@ HGridCtrlInfo*  HGridCtrlFile::getGridCtrlInfoById(int id)
     for(int i = 0;i < m_pGridCtrlInfoList.count();i++)
     {
         pInfo = m_pGridCtrlInfoList[i];
-        if(pInfo && pInfo->m_GridCtrlItem.wReportID == id)
+        if(pInfo && pInfo->reportID() == id)
             break;
     }
     return pInfo;

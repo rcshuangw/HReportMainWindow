@@ -7,7 +7,7 @@ HReportManager::HReportManager(QObject *parent) : QObject(parent)
     m_pGridCtrlFile = new HGridCtrlFile;
     Q_ASSERT(m_pGridCtrlFile);
     m_pFormatSet = new HFormatSet;
-    //m_pReportMainWidget = new H
+    loadGridCtrlFile();
 }
 
 HGridCtrlFile* HReportManager::gridCtrlFile()
@@ -24,12 +24,16 @@ bool HReportManager::loadGridCtrlFile()
 {
     if(!m_pGridCtrlFile)
         return false;
-    //return m_pGridCtrlFile->loadGridCtrlFile();
+    return m_pGridCtrlFile->loadGridCtrlInfoFile();
 }
 
 bool HReportManager::saveGridCtrlFile()
 {
     if(!m_pGridCtrlFile)
         return false;
-    //return m_pGridCtrlFile->saveGridCtrlFile();
+    m_pGridCtrlFile->saveGridCtrlFile();
+    if(!m_pReportMainWidget)
+        return false;
+    m_pReportMainWidget->saveReportWidget();
+    return true;
 }

@@ -25,7 +25,7 @@
 #include "SARibbonCheckBox.h"
 #include "SARibbonQuickAccessBar.h"
 #include "SARibbonButtonGroupWidget.h"
-#include "hreportmaiwidget.h"
+#include "hreportmainwidget.h"
 #include "hreporttreewidget.h"
 HReportMainWindow::HReportMainWindow(HReportManager* mgr,QWidget *par):
     m_pReportManager(mgr),QMainWindow(par),m_currentRibbonTheme(RibbonTheme::NormalTheme)
@@ -38,7 +38,7 @@ HReportMainWindow::HReportMainWindow(HReportManager* mgr,QWidget *par):
     splitter->addWidget(m_pReportTreeWidget);
 
     //这里应该是一个表格控件
-    m_pReportMainWidget = new HReportMaiWidget(m_pReportManager,this);
+    m_pReportMainWidget = new HReportMainWidget(m_pReportManager,this);
     splitter->addWidget(m_pReportMainWidget);
     splitter->setStretchFactor(0,3);
     splitter->setStretchFactor(1,7);
@@ -576,8 +576,11 @@ void HReportMainWindow::initReportConnect()
     connect(m_pReportTreeWidget,SIGNAL(reportDel(const QString&,const int )),this,SLOT(Del(const QString&,const int)));//删除
     connect(m_pReportTreeWidget,SIGNAL(graphImport(const QString&)),this,SLOT(ImportFile(const QString&)));
 
-    //编辑
+    //文件
     connect(newAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
+    connect(saveAct,SIGNAL(triggered(bool)),this,SLOT(save_clicked()));
+    //connect(openAct,SIGNAL(triggered(bool)),this,SLOT(new_clicked()));
+    //编辑
     connect(cutAct,SIGNAL(triggered(bool)),this,SLOT(cut_clicked()));
     connect(copyAct,SIGNAL(triggered(bool)),this,SLOT(copy_clicked()));
     connect(pasteAct,SIGNAL(triggered(bool)),this,SLOT(paste_clicked()));
