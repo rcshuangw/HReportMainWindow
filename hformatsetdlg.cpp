@@ -7,10 +7,9 @@
 #include "hformatset.h"
 #include <QDoubleValidator>
 
-
-#define QCATAGORY_NORMAL   0
-#define QCATAGORY_DATE     1
-#define QCATAGORY_TIME     2
+#define HCATAGORY_NORMAL   0
+#define HCATAGORY_DATE     1
+#define HCATAGORY_TIME     2
 
 //注意具体配置需要从xml里面读取
 HFormatSetDlg::HFormatSetDlg(HReportManager *mgr,QWidget *parent) :
@@ -46,13 +45,13 @@ void HFormatSetDlg::initDigitalSet()
 {
     QListWidgetItem* item = new QListWidgetItem(ui->catagoryListWidget);
     item->setText(QStringLiteral("常规"));
-    item->setData(Qt::UserRole,QVariant(QCATAGORY_NORMAL));
+    item->setData(Qt::UserRole,QVariant(HCATAGORY_NORMAL));
     item = new QListWidgetItem(ui->catagoryListWidget);
     item->setText(QStringLiteral("日期"));
-    item->setData(Qt::UserRole,QVariant(QCATAGORY_DATE));
+    item->setData(Qt::UserRole,QVariant(HCATAGORY_DATE));
     item = new QListWidgetItem(ui->catagoryListWidget);
     item->setText(QStringLiteral("时间"));
-    item->setData(Qt::UserRole,QVariant(QCATAGORY_TIME));
+    item->setData(Qt::UserRole,QVariant(HCATAGORY_TIME));
     connect(ui->catagoryListWidget,SIGNAL(itemSelectionChanged()),this,SLOT(onCatagoryListWidget_clicked()));
 }
 
@@ -129,8 +128,9 @@ void HFormatSetDlg::initPrintSheetSet()
 
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
-    HFormatSet* pFormatSet = m_pReportManager->formatSet();
+
     //票号格式设置
+    HFormatSet* pFormatSet = m_pReportManager->formatSet();
     ui->prefixCheck->setChecked(pFormatSet->isSheetNoPrefix());
     ui->prefixLineEdit->setText(pFormatSet->sheetNoPrefix());
     ui->suffixCheck->setChecked(pFormatSet->isSheetNoSuffix());
@@ -145,7 +145,6 @@ void HFormatSetDlg::initPrintSheetSet()
     ui->opItemLineEdit->setText(QString("%1").arg(pFormatSet->opTermWordCount()));
     ui->stChangeLineEdit->setText(QString("%1").arg(pFormatSet->stateChangeWordCount()));
     ui->serialNoLineEdit->setText(QString("%1").arg(pFormatSet->serialNumWordCount()));
-
     //自定义显示
 }
 
@@ -181,10 +180,8 @@ void HFormatSetDlg::initPrintSet()
     ui->rightMargin->setText(QString("%1").arg(pFormatSet->pageRightMargin(),0,'f',2));
     ui->headMargin->setText(QString("%1").arg(pFormatSet->pageHeaderHeight(),0,'f',2));
     ui->footMargin->setText(QString("%1").arg(pFormatSet->pageFooterHeight(),0,'f',2));
-
     ui->headText->setText(pFormatSet->pageHeaderText());
     ui->footText->setText(pFormatSet->pageFooterText());
-
     ui->gridCheck->setChecked(pFormatSet->isPageShowGrid());
     ui->rowCheck->setChecked(pFormatSet->isPageShowRowHeader());
     ui->colCheck->setChecked(pFormatSet->isPageShowColumnHeader());
@@ -197,17 +194,17 @@ void HFormatSetDlg::onCatagoryListWidget_clicked()
     if(NULL == item)
         return;
     ui->inforLabel->setText(QStringLiteral("类型"));
-    if(QCATAGORY_NORMAL == item->data(Qt::UserRole).toUInt())
+    if(HCATAGORY_NORMAL == item->data(Qt::UserRole).toUInt())
     {
         ui->inforLabel->setText(QStringLiteral("常规单元格格式不包含任何特定的数字格式。"));
         ui->typeListWidget->hide();
     }
-    else if(QCATAGORY_DATE == item->data(Qt::UserRole).toUInt())
+    else if(HCATAGORY_DATE == item->data(Qt::UserRole).toUInt())
     {
         ui->typeListWidget->show();
         ui->typeListWidget->clear();
     }
-    else if(QCATAGORY_TIME == item->data(Qt::UserRole).toUInt())
+    else if(HCATAGORY_TIME == item->data(Qt::UserRole).toUInt())
     {
         ui->typeListWidget->show();
         ui->typeListWidget->clear();
@@ -285,61 +282,101 @@ void HFormatSetDlg::save()
 
     //操作票打印显示设置
     bool b = ui->prefixCheck->isChecked();
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_PREFIX,QVariant(b),QStringLiteral("票号带前缀"));
     pFormatSet->enableSheetNoPrefix(b);
     QString strText = ui->prefixLineEdit->text();
     if(strText.isNull())
         strText = "";
     pFormatSet->setSheetNoPrefix(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_PREFIX_TEXT,QVariant(strText),QStringLiteral("票号前缀"));
 
     b = ui->suffixCheck->isChecked();
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_SUFFIX,QVariant(b),QStringLiteral("票号带后缀"));
     pFormatSet->enableSheetNoSuffix(b);
     strText = ui->suffixLineEdit->text();
     if(strText.isNull())
         strText = "";
     pFormatSet->setSheetNoSuffix(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_SUFFIX_TEXT,QVariant(strText),QStringLiteral("票号后前缀"));
 
     b = ui->sheetLencheckBox->isChecked();
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_LENGTH,QVariant(b),QStringLiteral("设置票号长度"));
     pFormatSet->enableSheetNoLength(b);
     strText = ui->sheetLenLineEdit->text();
     if(strText.isNull())
         strText = "";
     pFormatSet->setSheetNoLength(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_LENGTH_TEXT,QVariant(strText),QStringLiteral("票号长度"));
 
     b = ui->tempSheetcheckBox->isChecked();
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEET_TEMPNO,QVariant(strText),QStringLiteral("设置临时票号"));
     pFormatSet->enableSheetTempNo(b);
     strText = ui->tempSheetLineEdit->text();
     if(strText.isNull())
         strText = "";
     pFormatSet->setSheetTempNo(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHEET_TEMPNO_TEXT,QVariant(strText),QStringLiteral("设置临时票号"));
 
 
     //任务长度设置
-    pFormatSet->setOpTaskWordCount(ui->opTaskLineEdit->text().toUInt());
-    pFormatSet->setOpTermWordCount(ui->opItemLineEdit->text().toUInt());
-    pFormatSet->setStateChangeWordCount(ui->stChangeLineEdit->text().toUInt());
-    pFormatSet->setSerialNumWordCount(ui->serialNoLineEdit->text().toUInt());
+    quint16 lengthSet = ui->opTaskLineEdit->text().toUInt();
+    pFormatSet->setOpTaskWordCount(lengthSet);
+    setSettingValue(SYS_SET_PRINT,PRINT_OPTASK_LENGTH,QVariant(lengthSet),QStringLiteral("操作任务字符长度"));
+    lengthSet = ui->opItemLineEdit->text().toUInt();
+    pFormatSet->setOpTermWordCount(lengthSet);
+    setSettingValue(SYS_SET_PRINT,PRINT_OPITEM_LENGTH,QVariant(lengthSet),QStringLiteral("操作项目字符长度"));
+    lengthSet = ui->stChangeLineEdit->text().toUInt();
+    pFormatSet->setStateChangeWordCount(lengthSet);
+    setSettingValue(SYS_SET_PRINT,PRINT_STATECHANGE_LENGTH,QVariant(lengthSet),QStringLiteral("状态转换字符长度"));
+    lengthSet = ui->serialNoLineEdit->text().toUInt();
+    pFormatSet->setSerialNumWordCount(lengthSet);
+    setSettingValue(SYS_SET_PRINT,PRINT_SERIALNO_LENGTH,QVariant(lengthSet),QStringLiteral("流水号字符长度"));
 
     //打印设置
-    pFormatSet->setPageLeftMargin(ui->leftMargin->text().toDouble());
-    pFormatSet->setPageRightMarin(ui->rightMargin->text().toDouble());
-    pFormatSet->setPageTopMargin(ui->topMargin->text().toDouble());
-    pFormatSet->setPageBottomMargin(ui->bottomMargin->text().toDouble());
-    pFormatSet->setPageHeaderHeight(ui->headMargin->text().toDouble());
-    pFormatSet->setPageFooterHeight(ui->footMargin->text().toDouble());
+    double dMargin = ui->leftMargin->text().toDouble();
+    pFormatSet->setPageLeftMargin(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_LEFT_MARGIN,QVariant(dMargin),QStringLiteral("左边距"));
+    dMargin = ui->rightMargin->text().toDouble();
+    pFormatSet->setPageRightMargin(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_RIGHT_MARGIN,QVariant(dMargin),QStringLiteral("右边距"));
+    dMargin = ui->topMargin->text().toDouble();
+    pFormatSet->setPageTopMargin(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_TOP_MARGIN,QVariant(dMargin),QStringLiteral("上边距"));
+    dMargin = ui->bottomMargin->text().toDouble();
+    pFormatSet->setPageBottomMargin(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_BOTTOM_MARGIN,QVariant(dMargin),QStringLiteral("下边距"));
+    dMargin = ui->headMargin->text().toDouble();
+    pFormatSet->setPageHeaderHeight(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_HEAD_MARGIN,QVariant(dMargin),QStringLiteral("头边距"));
+    dMargin = ui->footMargin->text().toDouble();
+    pFormatSet->setPageFooterHeight(dMargin);
+    setSettingValue(SYS_SET_PRINT,PRINT_FOOT_MARGIN,QVariant(dMargin),QStringLiteral("尾边距"));
 
     strText = ui->headText->toPlainText();
     if(strText.isNull())
         strText = "";
     pFormatSet->setPageHeaderText(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_HEAD_TEXT,QVariant(strText),QStringLiteral("页头"));
     strText = ui->footText->toPlainText();
     if(strText.isNull())
         strText = "";
     pFormatSet->setPageFooterText(strText);
+    setSettingValue(SYS_SET_PRINT,PRINT_FOOT_TEXT,QVariant(strText),QStringLiteral("页尾"));
 
-    pFormatSet->enablePageShowGrid(ui->gridCheck->isChecked());
-    pFormatSet->enablePageShowColumnHeader(ui->rowCheck->isChecked());
-    pFormatSet->enablePageShowRowHeader(ui->colCheck->isChecked());
-    pFormatSet->enablePagePrintColour(ui->clrColor->isChecked());
+    b = ui->gridCheck->isChecked();
+    pFormatSet->enablePageShowGrid(b);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHOW_GRIDLINE,QVariant(b),QStringLiteral("打印表格"));
+    b = ui->gridCheck->isChecked();
+    pFormatSet->enablePageShowColumnHeader(b);
+    setSettingValue(SYS_SET_PRINT,PRINT_HORIZONTAL_HEAD,QVariant(b),QStringLiteral("打印显示行头"));
+    b = ui->gridCheck->isChecked();
+    pFormatSet->enablePageShowRowHeader(b);
+    setSettingValue(SYS_SET_PRINT,PRINT_VERTICVAL_HEAD,QVariant(b),QStringLiteral("打印显示列头"));
+    b = ui->gridCheck->isChecked();
+    pFormatSet->enablePagePrintColour(b);
+    setSettingValue(SYS_SET_PRINT,PRINT_SHOW_COLOR,QVariant(b),QStringLiteral("彩色打印"));
+
+    saveSysConfig();
 }
 
 void HFormatSetDlg::okBtn_clicked()

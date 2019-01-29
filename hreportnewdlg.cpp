@@ -9,7 +9,7 @@ HReportNewDlg::HReportNewDlg(QWidget *parent) :
     ui(new Ui::HReportNewDlg)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     ui->reportLineEdit->setText(("新模板"));
     ui->rowLineEdit->setText("40");
     ui->rowLineEdit->setValidator(new QIntValidator(0, 1000, this));

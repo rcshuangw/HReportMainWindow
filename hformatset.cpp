@@ -1,4 +1,5 @@
 #include "hformatset.h"
+#include "hconfigapi.h"
 #include <QDataStream>
 HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
 {
@@ -6,192 +7,83 @@ HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
     m_bPageShowCol = false;
     m_bPageShowRow = false;
     m_bPagePrintColour = false;
-}
 
-void HFormatSet::loadDefaultFormatSet(int v,QDataStream* ds)
-{
-    if(!ds) return;
-   /* quint32 n32;
-    *ds>>n32;
-    m_nHorizontalAlign = n32;
-    *ds>>n32;
-    m_nVerticalAlign = n32;
-    bool b;
-    *ds>>b;
-    m_bAutoWrapText = b;
-    *ds>>b;
-    m_bMergeCell = b;
+    m_strText = "";
+    m_nFormatAlign = 0;
 
-    //字体
-    QString s;
-    *ds>>s;
-    m_strFontFamily = s;
-    quint8 n8;
-    *ds>>n8;
-    m_nFontStyle = n8;
-    *ds>>n8;
-    m_nFontSize = n8;
-    *ds>>b;
-    m_bFontUnderline = b;
-    *ds>>b;
-    m_bFontBold = b;
-    *ds>>b;
-    m_bFontItalic = b;
-    *ds>>s;
-    m_strTextColor = s;
-    *ds>>s;
-    m_strTextBkColor = s;
+    m_bAutoWrapText = false;
+    m_bMergeCell = false;
 
     //边框
-    quint16 n16;
-    *ds>>n16;
-    m_nBorderPenStyle = n16;
-    *ds>>b;
-    m_bBorderLeft = b;
-    *ds>>b;
-    m_bBorderTop = b;
-    *ds>>b;
-    m_bBorderRight = b;
-    *ds>>b;
-    m_bBorderBottom = b;
-    *ds>>s;
-    m_strBorderLineColor = s;
-    *ds>>s;
-    m_strBorderLeftLineColor = s;
-    *ds>>s;
-    m_strBorderRightLineColor = s;
-    *ds>>s;
-    m_strBorderTopLineColor = s;
-    *ds>>s;
-    m_strBorderBottomLineColor = s;
 
-    //表格
-    double db;
-    *ds>>db;
-    m_dCellRowHeight = db;
-    *ds>>db;
-    m_dCellColWidth =db;
+    m_bBorderOutSide = false;
+    m_bBorderLeft = false;                  //左边框
+    m_bBorderTop = false;                   //上边框
+    m_bBorderRight = false;                 //右边框
+    m_bBorderBottom = false;                //下边框
 
-    //打印显示
-    *ds>>b;
-    m_bSheetNoPrefix = b;
-    *ds>>b;
-    m_bSheetNoSuffix = b;
-    *ds>>b;
-    m_bSheetNoLength = b;
-    *ds>>b;
-    m_bSheetTempNo = b;
-    *ds>>s;
-    m_strSheetNoPrefix = s;
-    *ds>>s;
-    m_strSheetNoSuffix = s;
-    *ds>>s;
-    m_strSheetNoLength = s;
-    *ds>>s;
-    m_strSheetTempNo = s;
-
-    *ds>>n16;
-    m_nOpTaskWordCount = n16;
-    *ds>>n16;
-    m_nOpTermWordCount = n16;
-    *ds>>n16;
-    m_nStateChangeWordCount = n16;
-    *ds>>n16;
-    m_nSerialNumWordCount = n16;
-
-    //打印设置
-    *ds>>db;
-    m_dPageLeftMargin = db;
-    *ds>>db;
-    m_dPageRightMargin = db;
-    *ds>>db;
-    m_dPageTopMargin = db;
-    *ds>>db;
-    m_dPageBottomMargin = db;
-    *ds>>db;
-    m_dPageHeaderHeight = db;
-    *ds>>db;
-    m_dPageFooterHeight = db;
-
-    *ds>>s;
-    m_strPageHeaderText = s;
-    *ds>>s;
-    m_strPageFooterText = s;
-
-    *ds>>b;
-    m_bPageShowGrid = b;
-    *ds>>b;
-    m_bPageShowCol = b;
-    *ds>>b;
-    m_bPageShowRow = b;
-    *ds>>b;
-    m_bPagePrintColour = b;*/
+    initPrintFormat();
 }
 
-void HFormatSet::saveDefaultFormatSet(int v,QDataStream* ds)
+void HFormatSet::initPrintFormat()
 {
-    if(!ds) return;
-    /**ds<<(quint32)m_nHorizontalAlign;
-    *ds<<(quint32)m_nVerticalAlign;
-    *ds<<(bool)m_bAutoWrapText;
-    *ds<<(bool)m_bMergeCell;
+    QVariant var;
+    getSettingValue(SYS_SET_PRINT,PRINT_TOP_MARGIN,var);
+    setPageTopMargin(var.toDouble());
+    getSettingValue(SYS_SET_PRINT,PRINT_BOTTOM_MARGIN,var);
+    setPageBottomMargin(var.toDouble());
+    getSettingValue(SYS_SET_PRINT,PRINT_LEFT_MARGIN,var);
+    setPageLeftMargin(var.toDouble());
+    getSettingValue(SYS_SET_PRINT,PRINT_RIGHT_MARGIN,var);
+    setPageRightMargin(var.toDouble());
+    getSettingValue(SYS_SET_PRINT,PRINT_HEAD_MARGIN,var);
+    setPageHeaderHeight(var.toDouble());
+    getSettingValue(SYS_SET_PRINT,PRINT_FOOT_MARGIN,var);
+    setPageFooterHeight(var.toDouble());
 
-    //字体
-    *ds<<(QString)m_strFontFamily;
-    *ds<<(quint8)m_nFontStyle;
-    *ds<<(quint8)m_nFontSize;
-    *ds<<(bool)m_bFontUnderline;
-    *ds<<(bool)m_bFontBold;
-    *ds<<(bool)m_bFontItalic;
-    *ds<<(QString)m_strTextColor;
-    *ds<<(QString)m_strTextBkColor;
+    getSettingValue(SYS_SET_PRINT,PRINT_HEAD_TEXT,var);
+    setPageHeaderText(var.toString());
+    getSettingValue(SYS_SET_PRINT,PRINT_FOOT_TEXT,var);
+    setPageFooterText(var.toString());
 
-    //边框
-    *ds<<(quint16)m_nBorderPenStyle;
-    *ds<<(bool)m_bBorderLeft;
-    *ds<<(bool)m_bBorderTop;
-    *ds<<(bool)m_bBorderRight;
-    *ds<<(bool)m_bBorderBottom;
-    *ds<<(QString)m_strBorderLineColor;
-    *ds<<(QString)m_strBorderLeftLineColor;
-    *ds<<(QString)m_strBorderRightLineColor;
-    *ds<<(QString)m_strBorderTopLineColor;
-    *ds<<(QString)m_strBorderBottomLineColor;
+    getSettingValue(SYS_SET_PRINT,PRINT_SHOW_GRIDLINE,var);
+    enablePageShowGrid(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_HORIZONTAL_HEAD,var);
+    enablePageShowRowHeader(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_VERTICVAL_HEAD,var);
+    enablePageShowColumnHeader(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHOW_COLOR,var);
+    enablePagePrintColour(var.toBool());
 
-    //表格
-    *ds<<(double)m_dCellRowHeight;
-    *ds<<(double)m_dCellColWidth;
 
-    //打印显示
-    *ds<<(bool)m_bSheetNoPrefix;
-    *ds<<(bool)m_bSheetNoSuffix;
-    *ds<<(bool)m_bSheetNoLength;
-    *ds<<(bool)m_bSheetTempNo;
-    *ds<<(QString)m_strSheetNoPrefix;
-    *ds<<(QString)m_strSheetNoSuffix;
-    *ds<<(QString)m_strSheetNoLength;
-    *ds<<(QString)m_strSheetTempNo;
+    //QVariant var;
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_PREFIX,var);
+    enableSheetNoPrefix(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_PREFIX_TEXT,var);
+    setSheetNoPrefix(var.toString());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_SUFFIX,var);
+    enableSheetNoSuffix(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_SUFFIX_TEXT,var);
+    setSheetNoSuffix(var.toString());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_LENGTH,var);
+    enableSheetNoLength(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEETNO_LENGTH_TEXT,var);
+    setSheetNoLength(var.toString());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEET_TEMPNO,var);
+    enableSheetTempNo(var.toBool());
+    getSettingValue(SYS_SET_PRINT,PRINT_SHEET_TEMPNO_TEXT,var);
+    setSheetTempNo(var.toString());
+    //任务长度设置
 
-    *ds<<(quint16)m_nOpTaskWordCount;
-    *ds<<(quint16)m_nOpTermWordCount;
-    *ds<<(quint16)m_nStateChangeWordCount;
-    *ds<<(quint16)m_nSerialNumWordCount;
+    getSettingValue(SYS_SET_PRINT,PRINT_OPTASK_LENGTH,var);
+    setOpTaskWordCount(var.toUInt());
+    getSettingValue(SYS_SET_PRINT,PRINT_OPITEM_LENGTH,var);
+    setOpTermWordCount(var.toUInt());
+    getSettingValue(SYS_SET_PRINT,PRINT_STATECHANGE_LENGTH,var);
+    setStateChangeWordCount(var.toUInt());
+    getSettingValue(SYS_SET_PRINT,PRINT_SERIALNO_LENGTH,var);
+    setSerialNumWordCount(var.toUInt());
 
-    //打印设置
-    *ds<<(double)m_dPageLeftMargin;
-    *ds<<(double)m_dPageRightMargin;
-    *ds<<(double)m_dPageTopMargin;
-    *ds<<(double)m_dPageBottomMargin;
-    *ds<<(double)m_dPageHeaderHeight;
-    *ds<<(double)m_dPageFooterHeight;
-
-    *ds<<(QString)m_strPageHeaderText;
-    *ds<<(QString)m_strPageFooterText;
-
-    *ds<<(bool)m_bPageShowGrid;
-    *ds<<(bool)m_bPageShowCol;
-    *ds<<(bool)m_bPageShowRow;
-    *ds<<(bool)m_bPagePrintColour;*/
 }
 
 void HFormatSet::enableAutoWrapText(bool bAutoWrapText)
@@ -591,7 +483,7 @@ double HFormatSet::pageLeftMargin()
     return m_dPageLeftMargin;
 }
 
-void HFormatSet::setPageRightMarin(double d)
+void HFormatSet::setPageRightMargin(double d)
 {
     m_dPageRightMargin = d;
 }

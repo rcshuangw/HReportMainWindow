@@ -58,7 +58,7 @@ RESOURCES += \
     saribbonresouce.qrc
 
 
-LIBS += -L..\..\lib -lH5RibbonBar -lgridctrl -ldatafile
+LIBS += -L..\..\lib -lH5RibbonBar -lgridctrl -ldatafile -lH5ConfigHelp
 
 FORMS += \
     formatsetdlg.ui \

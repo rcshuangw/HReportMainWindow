@@ -12,11 +12,7 @@ class HFormatSet : public QObject
     Q_OBJECT
 public:
     explicit HFormatSet(QObject *parent = 0);
-
-public:
-    void loadDefaultFormatSet(int v,QDataStream* ds);
-    void saveDefaultFormatSet(int v,QDataStream* ds);
-
+    void initPrintFormat();
 public:
     void setText(const QString& str) {m_strText = str;}
     QString text()  {return m_strText;}
@@ -124,7 +120,7 @@ public:
     //打印设置
     void setPageLeftMargin(double);
     double pageLeftMargin();
-    void setPageRightMarin(double);
+    void setPageRightMargin(double);
     double pageRightMargin();
     void setPageTopMargin(double);
     double pageTopMargin();
@@ -148,10 +144,6 @@ public:
     bool isPageShowRowHeader();
     void enablePagePrintColour(bool);
     bool isPagePrintColour();
-
-signals:
-
-public slots:
 
 private:
 

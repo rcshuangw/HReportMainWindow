@@ -110,23 +110,27 @@ void HFontSet::initFontFamilies()
 
         //字体
         itemList = ui->fontFamilyList->findItems(font.family(),Qt::MatchCaseSensitive|Qt::MatchFixedString);
-        ui->fontFamilyList->setCurrentItem(itemList.at(0));
+        if(!itemList.empty())
+            ui->fontFamilyList->setCurrentItem(itemList.at(0));
 
         //字体大小
         itemSizeList = ui->fontPointSizeList->findItems(QString("%1").arg(font.pointSize()),Qt::MatchCaseSensitive|Qt::MatchFixedString);
-        ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
+        if(!itemSizeList.empty())
+            ui->fontPointSizeList->setCurrentItem(itemSizeList.at(0));
 
         //下划线
         int index = (int)-1;
         if(font.underline())
         {
             index = ui->fontUnderlineComboBox->findData(QVariant(UnderlineNormal));
-            ui->fontColorComboBox->setCurrentIndex(index);
+            if((int)-1 != index)
+                ui->fontColorComboBox->setCurrentIndex(index);
         }
         else
         {
             index = ui->fontUnderlineComboBox->findData(QVariant(UnderlineNo));
-            ui->fontColorComboBox->setCurrentIndex(index);
+            if((int)-1 != index)
+                ui->fontColorComboBox->setCurrentIndex(index);
         }
 
         //颜色

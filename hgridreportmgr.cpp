@@ -2,8 +2,10 @@
 #include "hgridctrlhelper.h"
 #include "hreportprint.h"
 #include "hformatset.h"
+
 HReportManager::HReportManager(QObject *parent) : QObject(parent)
 {
+    loadSysConfig();//加载配置文件
     m_pGridCtrlFile = new HGridCtrlFile;
     Q_ASSERT(m_pGridCtrlFile);
     m_pFormatSet = new HFormatSet;

@@ -7,7 +7,7 @@ HOpSheetVarDlg::HOpSheetVarDlg(QWidget *parent) :
     ui(new Ui::HOpSheetVarDlg)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     m_nOpSheetVarType = (quint16)-1;
     initSheetVarDlg();
 }
