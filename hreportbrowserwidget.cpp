@@ -16,8 +16,7 @@ HReportBrowserWidget::HReportBrowserWidget(HReportManager* mgr,QWidget* parent)
     setLayout(layout);
     m_wReportID = (quint16)-1;
     m_wSheetNo = (quint16)-1;
-    if(m_pReportManager && !m_pReportManager->gridCtrlFile())
-        setCellFormat(m_pReportManager->formatSet(),0);
+
 }
 
 void HReportBrowserWidget::newReportWidget(quint16 wReportID)
@@ -141,8 +140,9 @@ void HReportBrowserWidget::printReportWidget()
 
 void HReportBrowserWidget::printPreviewReportWidget()
 {
-    if(!m_pReportManager)
+    if(!m_pReportManager || !m_pReportManager->gridCtrlFile())
         return;
+    setCellFormat(m_pReportManager->formatSet(),0);
     m_pGridReportWidget->printPreview();
 }
 
@@ -153,6 +153,7 @@ void HReportBrowserWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,
     m_pGridReportWidget->setPrintMarginInfo(pFormatSet->pageHeaderHeight(),pFormatSet->pageFooterHeight(),pFormatSet->pageLeftMargin(),
                                             pFormatSet->pageRightMargin(),pFormatSet->pageTopMargin(), pFormatSet->pageBottomMargin());
     m_pGridReportWidget->setPrintHeadFoot(pFormatSet->pageHeaderText(),pFormatSet->pageFooterText());
+    m_pGridReportWidget->setPrintOther(pFormatSet->isPageShowRowHeader(),pFormatSet->isPageShowColumnHeader(),pFormatSet->isPageShowGrid(),pFormatSet->isPagePrintColour());
 }
 
 void HReportBrowserWidget::contextMenuEvent(QContextMenuEvent *event)

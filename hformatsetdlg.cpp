@@ -69,38 +69,38 @@ void HFormatSetDlg::initBaseSet()
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
     HFormatSet* pFormatSet = m_pReportManager->formatSet();
-    quint32 nFormat = pFormatSet->format();
+    m_nFormat = pFormatSet->format();
     int index = (int)-1;
-    if(QDT_LEFT == (nFormat & QDT_LEFT))
+    if(QDT_LEFT == (m_nFormat & QDT_LEFT))
     {
         index = ui->horizontalComboBox->findData(QDT_LEFT);
 
     }
-    else if(QDT_HCENTER == (nFormat & QDT_HCENTER))
+    else if(QDT_HCENTER == (m_nFormat & QDT_HCENTER))
     {
         index = ui->horizontalComboBox->findData(QDT_HCENTER);
     }
-    else if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+    else if(QDT_RIGHT == (m_nFormat & QDT_RIGHT))
     {
         index = ui->horizontalComboBox->findData(QDT_RIGHT);
     }
     ui->horizontalComboBox->setCurrentIndex(index);
 
-    if(QDT_TOP == (nFormat & QDT_TOP))
+    if(QDT_TOP == (m_nFormat & QDT_TOP))
     {
         index = ui->veritcalComboBox->findData(QDT_TOP);
     }
-    else if(QDT_VCENTER == (nFormat & QDT_VCENTER))
+    else if(QDT_VCENTER == (m_nFormat & QDT_VCENTER))
     {
         index = ui->veritcalComboBox->findData(QDT_VCENTER);
     }
-    else if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
+    else if(QDT_BOTTOM == (m_nFormat & QDT_BOTTOM))
     {
         index = ui->veritcalComboBox->findData(QDT_BOTTOM);
     }
     ui->veritcalComboBox->setCurrentIndex(index);
 
-    if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
+    if(QDT_WORDBREAK == (m_nFormat & QDT_WORDBREAK))
     {
         ui->autoWrapTextCheckBox->setChecked(true);
     }
@@ -366,13 +366,13 @@ void HFormatSetDlg::save()
     b = ui->gridCheck->isChecked();
     pFormatSet->enablePageShowGrid(b);
     setSettingValue(SYS_SET_PRINT,PRINT_SHOW_GRIDLINE,QVariant(b),QStringLiteral("打印表格"));
-    b = ui->gridCheck->isChecked();
+    b = ui->rowCheck->isChecked();
     pFormatSet->enablePageShowColumnHeader(b);
     setSettingValue(SYS_SET_PRINT,PRINT_HORIZONTAL_HEAD,QVariant(b),QStringLiteral("打印显示行头"));
-    b = ui->gridCheck->isChecked();
+    b = ui->colCheck->isChecked();
     pFormatSet->enablePageShowRowHeader(b);
     setSettingValue(SYS_SET_PRINT,PRINT_VERTICVAL_HEAD,QVariant(b),QStringLiteral("打印显示列头"));
-    b = ui->gridCheck->isChecked();
+    b = ui->clrColor->isChecked();
     pFormatSet->enablePagePrintColour(b);
     setSettingValue(SYS_SET_PRINT,PRINT_SHOW_COLOR,QVariant(b),QStringLiteral("彩色打印"));
 
