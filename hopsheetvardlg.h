@@ -18,8 +18,10 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *);
+
 public slots:
     void okBtn();
+    void treeWidgetDoubleClick();
 public:
     quint16 m_nOpSheetVarType;
 private:

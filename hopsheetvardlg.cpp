@@ -141,6 +141,14 @@ void HOpSheetVarDlg::initSheetVarDlg()
     item->setText(QStringLiteral("显示日期"));
 }
 
+
+void HOpSheetVarDlg::treeWidgetDoubleClick()
+{
+    //QListWidgetItem* item = ui->listWidget->currentItem();
+    //if()
+    okBtn();
+}
+
 void HOpSheetVarDlg::okBtn()
 {
     QListWidgetItem* item = ui->listWidget->currentItem();

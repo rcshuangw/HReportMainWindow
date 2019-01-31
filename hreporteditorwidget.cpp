@@ -152,6 +152,18 @@ void HReportEditorWidget::contextMenuEvent(QContextMenuEvent* event)
     subMenu->addAction(clearFormatingAct);
     subMenu->addSeparator();
 
+    bool bHasRelateVar = false;
+    int row1,col1,row2,col2;
+    m_pGridReportWidget->selectedRowCol(row1,col1,row2,col2);
+    for(int row = row1;row <= row2;row++)
+        for(int col = col1;col <= col2;col++)
+        {
+            if(m_pReportManager->gridCtrlFile()->hasRelateVar(row,col,row,col))
+            {
+                bHasRelateVar = true;
+            }
+        }
+    delVarAct->setEnabled(bHasRelateVar);
     subMenu->popup(event->globalPos());
 }
 
@@ -205,8 +217,8 @@ void HReportEditorWidget::addGridVarByType(quint8 btType)
             pVar->setNo(nCount);
             pVar->setNum(row2-row1+1);
             QString strDesc = getGridVarName(btType);
-            pVar->setDesc(strDesc);
             strDesc = QString("%1(%2)").arg(strDesc).arg(nCount);
+            pVar->setDesc(strDesc);
             m_pGridReportWidget->setText(row,col1,strDesc);
             m_pGridReportWidget->setTextColor(row,col1,Qt::red);
             m_pReportManager->gridCtrlFile()->m_pRelateVarList.append(pVar);
