@@ -13,7 +13,7 @@ HReportNewDlg::HReportNewDlg(QWidget *parent) :
     ui->reportLineEdit->setText(("新模板"));
     ui->rowLineEdit->setText("40");
     ui->rowLineEdit->setValidator(new QIntValidator(0, 1000, this));
-    ui->colLineEdit->setText("15");
+    ui->colLineEdit->setText("12");
     ui->colLineEdit->setValidator(new QIntValidator(0, 1000, this));
     connect(ui->okBtn,SIGNAL(clicked(bool)),this,SLOT(okBtn_clicked()));
     connect(ui->cancelBtn,SIGNAL(clicked(bool)),this,SLOT(cancelBtn_clicked()));

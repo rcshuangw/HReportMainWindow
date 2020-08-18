@@ -27,6 +27,7 @@ HFormatSet::HFormatSet(QObject *parent) : QObject(parent)
 
 void HFormatSet::initPrintFormat()
 {
+    /*
     QVariant var;
     getSettingValue(SYS_SET_PRINT,PRINT_TOP_MARGIN,var);
     setPageTopMargin(var.toDouble());
@@ -82,7 +83,7 @@ void HFormatSet::initPrintFormat()
     getSettingValue(SYS_SET_PRINT,PRINT_STATECHANGE_LENGTH,var);
     setStateChangeWordCount(var.toUInt());
     getSettingValue(SYS_SET_PRINT,PRINT_SERIALNO_LENGTH,var);
-    setSerialNumWordCount(var.toUInt());
+    setSerialNumWordCount(var.toUInt());*/
 
 }
 

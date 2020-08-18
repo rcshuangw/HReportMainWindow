@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "hreportmainwidget.h"
-#include "hconfigapi.h"
+//#include "hconfigapi.h"
 class HGridCtrlFile;
 class HFormatSet;
 class HReportMainWidget;

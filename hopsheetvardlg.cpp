@@ -1,6 +1,6 @@
 ﻿#include "hopsheetvardlg.h"
 #include "ui_hopsheetvardlg.h"
-#include "hnamespace.h"
+//#include "hnamespace.h"
 #include <QCloseEvent>
 HOpSheetVarDlg::HOpSheetVarDlg(QWidget *parent) :
     QDialog(parent),
@@ -19,6 +19,7 @@ HOpSheetVarDlg::~HOpSheetVarDlg()
 
 void HOpSheetVarDlg::initSheetVarDlg()
 {
+    /*
     QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
     item->setText(QStringLiteral("厂站名称"));
     item->setData(Qt::UserRole,QVariant(HVarFlags::varStName));
@@ -138,7 +139,7 @@ void HOpSheetVarDlg::initSheetVarDlg()
     item->setText(QStringLiteral("流水号"));
     item = new QListWidgetItem(ui->listWidget);
     item->setData(Qt::UserRole,QVariant(HVarFlags::varDate));
-    item->setText(QStringLiteral("显示日期"));
+    item->setText(QStringLiteral("显示日期"));*/
 }
 
 

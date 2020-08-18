@@ -212,7 +212,7 @@ void HReportMainWindow::fontBkColor_clicked()
     QString strTextBkClr = m_pReportManager->formatSet()->textBkColor();
     QColor clr = QColorDialog::getColor(QColor(strTextBkClr),this,QStringLiteral("选择颜色"));
     strTextBkClr = clr.name();
-   //m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
+   m_pReportManager->formatSet()->setTextBkColor(strTextBkClr);
 }
 
 void HReportMainWindow::fontBkColorActGroup_clicked(QAction *action)
@@ -459,10 +459,10 @@ void HReportMainWindow::alignCenter_clicked()
         alignCenterAct->setChecked(true);
         alignRightAct->setChecked(false);
         nFormat|= QDT_HCENTER;
-        if(QDT_TOP == (nFormat & QDT_TOP))
-            nFormat &= ~QDT_TOP;
-        if(QDT_BOTTOM == (nFormat & QDT_BOTTOM))
-            nFormat &= ~QDT_BOTTOM;
+        if(QDT_LEFT == (nFormat & QDT_LEFT))
+            nFormat &= ~QDT_LEFT;
+        if(QDT_RIGHT == (nFormat & QDT_RIGHT))
+            nFormat &= ~QDT_RIGHT;
     }
     m_pReportManager->formatSet()->setFormat(nFormat);
     m_pReportMainWidget->setCellFormat(m_pReportManager->formatSet(),CELL_TYPE_ALIGNMENT);
@@ -770,6 +770,7 @@ void HReportMainWindow::gridCell_clicked()
         alignBottomAct->setChecked(true);
     }
 
+    autoWrapTextAct->setChecked(false);
     if(QDT_WORDBREAK == (nFormat & QDT_WORDBREAK))
     {
         autoWrapTextAct->setChecked(true);

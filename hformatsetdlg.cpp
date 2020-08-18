@@ -275,6 +275,7 @@ void HFormatSetDlg::save()
     //2.基本
     if(!m_pReportManager || !m_pReportManager->formatSet())
         return;
+    /*
     HFormatSet* pFormatSet = m_pReportManager->formatSet();
     pFormatSet->setFormat(m_nFormat);
     pFormatSet->enableAutoWrapText(ui->autoWrapTextCheckBox->isChecked());
@@ -376,7 +377,7 @@ void HFormatSetDlg::save()
     pFormatSet->enablePagePrintColour(b);
     setSettingValue(SYS_SET_PRINT,PRINT_SHOW_COLOR,QVariant(b),QStringLiteral("彩色打印"));
 
-    saveSysConfig();
+    saveSysConfig();*/
 }
 
 void HFormatSetDlg::okBtn_clicked()

@@ -30,7 +30,7 @@ HReportMainWidget::HReportMainWidget(HReportManager* mgr,QWidget *parent) :
     m_pTabWidget->setStyleSheet(strStyleSheet);
     ui->verticalLayout->addWidget(m_pTabWidget);
     m_pReportManager->setReportMainWidget(this);
-    createReportBrowserWidget();
+    //createReportBrowserWidget();
     createReportEditorWidget();
     //setLayout(layout);
 }
@@ -46,7 +46,7 @@ void HReportMainWidget::createReportBrowserWidget()
     m_pReportBrowserWidget = new HReportBrowserWidget(m_pReportManager,m_pTabWidget);
     //layout->addWidget(m_pReportBrowserWidget);
 
-    m_pTabWidget->insertTab(0,m_pReportBrowserWidget,QStringLiteral("浏览窗"));
+    m_pTabWidget->insertTab(1,m_pReportBrowserWidget,QStringLiteral("浏览窗"));
 }
 
 void HReportMainWidget::createReportEditorWidget()
@@ -55,14 +55,14 @@ void HReportMainWidget::createReportEditorWidget()
     m_pReportEditorWidget = new HReportEditorWidget(m_pReportManager,m_pTabWidget);
     connect(m_pReportEditorWidget,SIGNAL(gridcellclicked()),this,SIGNAL(gridcellclicked()));
     //layout->addWidget(m_pReportEditorWidget);
-    m_pTabWidget->insertTab(1,m_pReportEditorWidget,QStringLiteral("编辑框"));
+    m_pTabWidget->insertTab(0,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
 void HReportMainWidget::newReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->newReportWidget(nReportID);
+    //m_pReportBrowserWidget->newReportWidget(nReportID);
     m_pReportEditorWidget->newReportWidget(nReportID);
 }
 
@@ -70,7 +70,7 @@ void HReportMainWidget::openReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->openReportWidget(nReportID);
+    //m_pReportBrowserWidget->openReportWidget(nReportID);
     m_pReportEditorWidget->openReportWidget(nReportID);
 }
 
@@ -85,7 +85,7 @@ void HReportMainWidget::delReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->delReportWidget(nReportID);
+    //m_pReportBrowserWidget->delReportWidget(nReportID);
     m_pReportEditorWidget->delReportWidget(nReportID);
 }
 
@@ -93,14 +93,14 @@ void HReportMainWidget::printReportWidget()
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->printReportWidget();
+    //m_pReportBrowserWidget->printReportWidget();
 }
 
 void HReportMainWidget::printPreviewReportWidget()
 {
     if(!m_pReportManager)
         return;
-    m_pReportBrowserWidget->printPreviewReportWidget();
+    //m_pReportBrowserWidget->printPreviewReportWidget();
 }
 
 void HReportMainWidget::updateReportWidget()
@@ -132,7 +132,7 @@ void HReportMainWidget::copy()
 void HReportMainWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     m_pReportEditorWidget->setCellFormat(pFormatSet,formatType,bAll);
-    m_pReportBrowserWidget->setCellFormat(pFormatSet,formatType,bAll);
+    //m_pReportBrowserWidget->setCellFormat(pFormatSet,formatType,bAll);
 }
 
 void HReportMainWidget::cellFormat(HFormatSet* pFormatSet)

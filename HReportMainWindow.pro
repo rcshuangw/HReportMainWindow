@@ -14,7 +14,6 @@ DESTDIR = ..\..\bin
 INCLUDEPATH += \
               ../include \
               ../SARibbonBar \
-              D:\qt-workspace\include
 
 SOURCES += main.cpp\
     mainwindow.cpp \ 
