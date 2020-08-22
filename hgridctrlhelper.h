@@ -123,7 +123,7 @@ public:
     void setGridCtrlInfoById(int id);
     HGridCtrlInfo*  getCurGridCtrlInfo(){return m_pCurGridCtrlInfo;}
 
-    //关联变量操作(必须放到此处因为流浪框和编辑框都需要)
+    //关联变量操作(必须放到此处因为浏览框和编辑框都需要)
     void clearRelateVarList();
     HRelateVar *findRelateVar( long nRow,long nCol );
     int indexOfRelateVar( long nRow, long nCol );

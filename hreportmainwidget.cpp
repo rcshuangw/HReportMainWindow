@@ -12,7 +12,7 @@
 QString strStyleSheet = " QTabWidget::pane {border-top: 1px solid #C9D9ED;} \
                           QTabWidget::tab-bar {left: 2px; } \
         QTabBar::tab {  background-color:#D5E4F2; \
-        border: 1px solid #C9D9ED; min-width: 200px;margin-left: 2px; border-top-left-radius: 4px; \
+        border: 2px solid #C9D9ED; min-height:5px;min-width: 200px;margin-left: 2px; border-top-left-radius: 4px; \
         border-top-right-radius: 4px;padding: 2px;} \
         QTabBar::tab:selected, QTabBar::tab:hover { \
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \
@@ -30,7 +30,7 @@ HReportMainWidget::HReportMainWidget(HReportManager* mgr,QWidget *parent) :
     m_pTabWidget->setStyleSheet(strStyleSheet);
     ui->verticalLayout->addWidget(m_pTabWidget);
     m_pReportManager->setReportMainWidget(this);
-    //createReportBrowserWidget();
+    createReportBrowserWidget();
     createReportEditorWidget();
     //setLayout(layout);
 }
@@ -42,19 +42,14 @@ HReportMainWidget::~HReportMainWidget()
 
 void HReportMainWidget::createReportBrowserWidget()
 {
-    //QHBoxLayout *layout = new QHBoxLayout(m_pTabWidget);
     m_pReportBrowserWidget = new HReportBrowserWidget(m_pReportManager,m_pTabWidget);
-    //layout->addWidget(m_pReportBrowserWidget);
-
     m_pTabWidget->insertTab(1,m_pReportBrowserWidget,QStringLiteral("浏览窗"));
 }
 
 void HReportMainWidget::createReportEditorWidget()
 {
-    //QHBoxLayout *layout = new QHBoxLayout(m_pTabWidget);
     m_pReportEditorWidget = new HReportEditorWidget(m_pReportManager,m_pTabWidget);
     connect(m_pReportEditorWidget,SIGNAL(gridcellclicked()),this,SIGNAL(gridcellclicked()));
-    //layout->addWidget(m_pReportEditorWidget);
     m_pTabWidget->insertTab(0,m_pReportEditorWidget,QStringLiteral("编辑框"));
 }
 
@@ -62,7 +57,7 @@ void HReportMainWidget::newReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->newReportWidget(nReportID);
+    m_pReportBrowserWidget->newReportWidget(nReportID);
     m_pReportEditorWidget->newReportWidget(nReportID);
 }
 
@@ -70,7 +65,7 @@ void HReportMainWidget::openReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->openReportWidget(nReportID);
+    m_pReportBrowserWidget->openReportWidget(nReportID);
     m_pReportEditorWidget->openReportWidget(nReportID);
 }
 
@@ -85,7 +80,7 @@ void HReportMainWidget::delReportWidget(quint16 nReportID)
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->delReportWidget(nReportID);
+    m_pReportBrowserWidget->delReportWidget(nReportID);
     m_pReportEditorWidget->delReportWidget(nReportID);
 }
 
@@ -93,14 +88,14 @@ void HReportMainWidget::printReportWidget()
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->printReportWidget();
+    m_pReportBrowserWidget->printReportWidget();
 }
 
 void HReportMainWidget::printPreviewReportWidget()
 {
     if(!m_pReportManager)
         return;
-    //m_pReportBrowserWidget->printPreviewReportWidget();
+    m_pReportBrowserWidget->printPreviewReportWidget();
 }
 
 void HReportMainWidget::updateReportWidget()
@@ -132,7 +127,7 @@ void HReportMainWidget::copy()
 void HReportMainWidget::setCellFormat(HFormatSet* pFormatSet,uint formatType,bool bAll)
 {
     m_pReportEditorWidget->setCellFormat(pFormatSet,formatType,bAll);
-    //m_pReportBrowserWidget->setCellFormat(pFormatSet,formatType,bAll);
+    m_pReportBrowserWidget->setCellFormat(pFormatSet,formatType,bAll);
 }
 
 void HReportMainWidget::cellFormat(HFormatSet* pFormatSet)

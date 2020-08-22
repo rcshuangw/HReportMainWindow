@@ -340,8 +340,8 @@ void HGridCellInfo::saveGridCellData(int v,QDataStream* ds)
 }
 */
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //表格文件，不是报表文件
-
 HGridCtrlFile::HGridCtrlFile()
 {
     m_pCurGridCtrlInfo = NULL;
@@ -351,8 +351,6 @@ HGridCtrlFile::~HGridCtrlFile()
 {
 
 }
-
-
 
 //从文件路径加载报表文件
 bool HGridCtrlFile::loadGridCtrlFile()
